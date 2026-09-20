@@ -1,0 +1,585 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body style="margin:0"><title>Meu Diário do Parque</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2b3a5a;
+  --ink-soft:#56648a;
+  --sky:#8fd3ff;
+  --grass:#7fcf6b;
+  --paper:#f3f9ff;
+  --card:#ffffff;
+  --line:#d3e3f5;
+  --coral:#d9432f;
+  --coral-soft:#ffe2dc;
+  --sun:#ffd43b;
+  --mint:#dff6e3;
+  --radius:20px;
+  --display:'Baloo 2','Trebuchet MS','Comic Sans MS',system-ui,sans-serif;
+  --body:'Nunito','Trebuchet MS',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{background:#dff4ff;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45;overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:4px solid #5c7cfa;outline-offset:2px}
+
+#app{position:relative;height:100%;overflow:hidden;background:linear-gradient(#8fd3ff 0 40%,#7fcf6b 40%)}
+
+/* ---------- Parque ---------- */
+#park{position:absolute;inset:0}
+#parkSvg{width:100%;height:100%;display:block;overflow:visible}
+.hot{cursor:pointer;outline:none}
+.hot .lift{transition:transform .18s ease;transform-box:fill-box;transform-origin:center bottom}
+.hot:hover .lift,.hot:focus-visible .lift{transform:scale(1.06)}
+.hot:focus-visible .pill rect{stroke:#5c7cfa;stroke-width:4}
+.pill text{font-family:var(--display);font-weight:700;font-size:15px;fill:#fff;text-anchor:middle}
+.pill rect{fill:var(--ink)}
+.cloud{animation:drift 60s linear infinite alternate}
+.cloud.b{animation-duration:80s}
+@keyframes drift{from{transform:translateX(-14px)}to{transform:translateX(26px)}}
+.sway{animation:sway 3.2s ease-in-out infinite alternate;transform-box:view-box}
+@keyframes sway{from{transform:rotate(7deg)}to{transform:rotate(-7deg)}}
+@media (prefers-reduced-motion:reduce){.cloud,.sway{animation:none}.hot .lift{transition:none}}
+
+.top{position:absolute;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top,0px) + 6px) 16px 0;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
+.top h1{margin:0;font-family:var(--display);font-weight:800;font-size:2.1rem;line-height:1.1;color:var(--ink);text-shadow:0 2px 0 rgba(255,255,255,.7)}
+.top p{margin:0;font-weight:700;color:var(--ink);opacity:.85}
+.gear{pointer-events:auto;width:48px;height:48px;border-radius:50%;border:0;background:#fff;box-shadow:0 3px 0 rgba(43,58,90,.18);display:grid;place-items:center}
+
+/* ---------- Painéis ---------- */
+#sheet{position:absolute;inset:0;background:var(--paper);overflow-y:auto;overscroll-behavior:contain}
+.bar{position:sticky;top:0;z-index:2;background:var(--paper);padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 10px;display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--line)}
+.bar h2{margin:0;font-family:var(--display);font-weight:800;font-size:1.6rem;line-height:1.1}
+.back{border:0;background:var(--sky);color:var(--ink);font-weight:800;border-radius:999px;min-height:48px;padding:0 18px 0 14px;display:flex;align-items:center;gap:6px;flex:none}
+.wrap{max-width:720px;margin:0 auto;padding:18px 16px calc(env(safe-area-inset-bottom,0px) + 48px)}
+.wrap h3{font-family:var(--display);font-weight:700;font-size:1.25rem;margin:22px 0 10px}
+.wrap h3:first-child{margin-top:0}
+.hint{color:var(--ink-soft);font-size:.95rem;margin:4px 0 0}
+
+.btn{border:0;border-radius:999px;min-height:56px;padding:0 26px;font-family:var(--display);font-weight:700;font-size:1.2rem;background:var(--coral);color:#fff;box-shadow:0 4px 0 #9d2b1c;display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #9d2b1c}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:0 4px 0 var(--line);border:2px solid var(--line)}
+.btn.green{background:#1f8a4c;box-shadow:0 4px 0 #14653a}
+.btn.small{min-height:44px;font-size:1rem;padding:0 18px;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+
+textarea,input[type=text],input[type=date],input[type=tel],input[type=number],select{width:100%;border:3px solid var(--line);border-radius:16px;background:#fff;padding:12px 14px;min-height:52px}
+textarea{min-height:170px;resize:vertical;line-height:1.5}
+label.f{display:block;font-weight:800;margin:14px 0 6px}
+
+.moods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(min-width:560px){.moods{grid-template-columns:repeat(6,1fr)}}
+.mood{border:3px solid var(--line);background:#fff;border-radius:var(--radius);padding:8px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:800;font-size:.95rem}
+.mood[aria-pressed=true]{border-color:var(--ink);background:#fff6c9;box-shadow:0 4px 0 var(--ink)}
+
+.chars{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(min-width:560px){.chars{grid-template-columns:repeat(6,1fr)}}
+.char{border:3px solid var(--line);background:#fff;border-radius:var(--radius);padding:6px 4px;font-weight:800;font-size:.9rem;display:flex;flex-direction:column;align-items:center}
+.char[aria-pressed=true]{border-color:var(--ink);background:var(--mint);box-shadow:0 4px 0 var(--ink)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:3px solid var(--line);background:#fff;border-radius:999px;min-height:46px;padding:0 16px;font-weight:800;display:inline-flex;align-items:center;gap:6px}
+.chip[aria-pressed=true]{border-color:var(--ink);background:#fff6c9}
+.chip .x{opacity:.6}
+
+.mic{display:flex;align-items:center;gap:12px;margin-top:10px}
+.micbtn{width:64px;height:64px;border-radius:50%;border:0;background:var(--coral);color:#fff;display:grid;place-items:center;box-shadow:0 4px 0 #9d2b1c;flex:none}
+.micbtn[aria-pressed=true]{background:#1f8a4c;box-shadow:0 4px 0 #14653a;animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.micbtn[aria-pressed=true]{animation:none}}
+
+.card{background:#fff;border:3px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.list{display:grid;gap:12px}
+.row{border:3px solid var(--line);background:#fff;border-radius:var(--radius);padding:10px 14px;display:flex;gap:14px;align-items:center;text-align:left;width:100%}
+.row .meta{min-width:0;flex:1}
+.row .d{font-weight:800}
+.row .s{color:var(--ink-soft);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.row[aria-pressed=true]{border-color:var(--ink);background:#fff6c9;box-shadow:0 4px 0 var(--ink)}
+.tag{display:inline-block;font-size:.78rem;font-weight:800;background:#e8eefb;color:var(--ink-soft);border-radius:999px;padding:1px 9px;margin-left:6px;vertical-align:middle}
+.tag.warn{background:var(--coral-soft);color:#8f2a1b}
+.empty{text-align:center;padding:26px 10px;color:var(--ink-soft);font-weight:700}
+.dayhead{display:flex;gap:16px;align-items:center;margin-bottom:12px}
+.dayhead h3{margin:0}
+.diarytext{white-space:pre-wrap;font-size:1.2rem;line-height:1.6;background:#fff;border:3px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+.inline{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.inline>*{flex:1 1 180px}
+.inline>.btn{flex:0 0 auto}
+.linkbtn{background:none;border:0;color:var(--ink-soft);text-decoration:underline;font-weight:700;padding:10px 4px;min-height:44px}
+
+.welcome{min-height:100%;display:grid;place-content:center;justify-items:center;gap:8px;text-align:center;padding:calc(env(safe-area-inset-top,0px) + 24px) 16px calc(env(safe-area-inset-bottom,0px) + 24px);background:linear-gradient(#8fd3ff 0 46%,#7fcf6b 46%)}
+.welcome h1{margin:0;font-family:var(--display);font-weight:800;font-size:2.8rem;line-height:1.05;text-shadow:0 3px 0 rgba(255,255,255,.7)}
+.welcome .crew{display:flex;gap:6px;align-items:flex-end;justify-content:center;margin:6px 0 10px}
+.welcome .box{background:#fff;border:3px solid var(--line);border-radius:28px;padding:20px 20px 22px;width:min(100%,420px);box-shadow:0 6px 0 rgba(43,58,90,.14)}
+.welcome .box label{display:block;font-family:var(--display);font-weight:800;font-size:1.5rem;margin-bottom:10px}
+.welcome .box input{text-align:center;font-size:1.4rem;font-weight:800}
+.welcome .box .btn{width:100%;margin-top:16px}
+#toast{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);transform:translate(-50%,30px);opacity:0;background:var(--ink);color:#fff;font-weight:800;border-radius:999px;padding:12px 22px;pointer-events:none;transition:.25s;max-width:calc(100% - 32px);text-align:center;z-index:5}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+
+<div id="app">
+  <main id="park" aria-label="Parque do diário">
+    <svg id="parkSvg" viewBox="0 0 400 640" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Cenário do parque">
+      <defs>
+        <linearGradient id="skyg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="300">
+          <stop offset="0" stop-color="#8fd3ff"/><stop offset="1" stop-color="#e2f5ff"/>
+        </linearGradient>
+      </defs>
+      <rect x="-2000" y="-2000" width="4400" height="2300" fill="url(#skyg)"/>
+      <circle cx="335" cy="78" r="48" fill="#ffd43b" opacity=".35"/>
+      <circle cx="335" cy="78" r="34" fill="#ffd43b"/>
+      <g class="cloud"><ellipse cx="70" cy="80" rx="34" ry="14" fill="#fff"/><ellipse cx="92" cy="70" rx="24" ry="14" fill="#fff"/><ellipse cx="52" cy="72" rx="20" ry="11" fill="#fff"/></g>
+      <g class="cloud b"><ellipse cx="220" cy="150" rx="30" ry="12" fill="#fff" opacity=".9"/><ellipse cx="240" cy="142" rx="20" ry="12" fill="#fff" opacity=".9"/></g>
+      <ellipse cx="90" cy="292" rx="230" ry="62" fill="#9bdc84"/>
+      <ellipse cx="330" cy="288" rx="210" ry="52" fill="#8ad374"/>
+      <rect x="-2000" y="272" width="4400" height="2400" fill="#7fcf6b"/>
+      <path d="M150 700 C 170 560, 270 520, 240 430 S 190 330, 205 285" stroke="#f3dfb0" stroke-width="54" fill="none" stroke-linecap="round"/>
+      <path d="M150 700 C 170 560, 270 520, 240 430 S 190 330, 205 285" stroke="#ead49a" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="2 22" opacity=".8"/>
+
+      <!-- árvores -->
+      <g>
+        <rect x="150" y="246" width="9" height="40" rx="3" fill="#9a6a3f"/>
+        <circle cx="154" cy="236" r="24" fill="#4fb864"/><circle cx="138" cy="250" r="17" fill="#3fae5a"/><circle cx="171" cy="250" r="17" fill="#3fae5a"/>
+        <rect x="49" y="240" width="13" height="70" rx="4" fill="#9a6a3f"/>
+        <circle cx="55" cy="222" r="36" fill="#56c26b"/><circle cx="32" cy="246" r="25" fill="#3fae5a"/><circle cx="80" cy="246" r="25" fill="#3fae5a"/><circle cx="60" cy="205" r="12" fill="#6fd184" opacity=".8"/>
+        <rect x="341" y="222" width="15" height="84" rx="4" fill="#9a6a3f"/>
+        <circle cx="349" cy="200" r="42" fill="#4fb864"/><circle cx="322" cy="230" r="28" fill="#3fae5a"/><circle cx="376" cy="230" r="28" fill="#3fae5a"/><circle cx="335" cy="182" r="13" fill="#6fd184" opacity=".8"/>
+        <circle cx="343" cy="212" r="4" fill="#ff6b6b"/><circle cx="360" cy="196" r="4" fill="#ff6b6b"/><circle cx="330" cy="200" r="4" fill="#ff6b6b"/>
+      </g>
+
+      <!-- personagens de enfeite -->
+      <svg x="150" y="352" width="46" height="46" viewBox="0 0 100 100" style="pointer-events:none" id="decoA"></svg>
+      <svg x="208" y="316" width="50" height="50" viewBox="0 0 100 100" style="pointer-events:none" id="decoB"></svg>
+
+      <!-- placa: lembretes -->
+      <g class="hot" id="hotSign" tabindex="0" role="button" aria-label="Lembretes de datas importantes" data-go="reminders">
+        <g class="lift">
+          <rect x="66" y="372" width="9" height="66" rx="3" fill="#9a6a3f"/>
+          <rect x="16" y="304" width="118" height="72" rx="12" fill="#ffe8a3" stroke="#d9a441" stroke-width="4"/>
+          <g id="signText" font-family="Baloo 2, Trebuchet MS, sans-serif" fill="#2b3a5a" text-anchor="middle"></g>
+        </g>
+        <g id="signBadge"></g>
+      </g>
+
+      <!-- balanço: escrever -->
+      <g class="hot" id="hotWrite" tabindex="0" role="button" aria-label="Escrever ou falar sobre o meu dia" data-go="write">
+        <g class="lift">
+          <polyline points="252,446 277,346 302,446" fill="none" stroke="#e5533f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="338,446 363,346 388,446" fill="none" stroke="#e5533f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="277" y1="346" x2="363" y2="346" stroke="#e5533f" stroke-width="9" stroke-linecap="round"/>
+          <g class="sway" style="transform-origin:320px 346px">
+            <line x1="300" y1="348" x2="300" y2="406" stroke="#6b4f3a" stroke-width="2.5"/>
+            <line x1="340" y1="348" x2="340" y2="406" stroke="#6b4f3a" stroke-width="2.5"/>
+            <rect x="290" y="404" width="60" height="11" rx="5" fill="#ffb703"/>
+          </g>
+        </g>
+        <g class="pill"><rect x="272" y="452" width="96" height="26" rx="13"/><text x="320" y="471">Escrever</text></g>
+      </g>
+
+      <!-- escorregador: amigos -->
+      <g class="hot" id="hotFriends" tabindex="0" role="button" aria-label="Meus amigos" data-go="friends">
+        <g class="lift">
+          <line x1="50" y1="470" x2="50" y2="548" stroke="#5c7cfa" stroke-width="6" stroke-linecap="round"/>
+          <line x1="72" y1="470" x2="72" y2="548" stroke="#5c7cfa" stroke-width="6" stroke-linecap="round"/>
+          <line x1="50" y1="490" x2="72" y2="490" stroke="#5c7cfa" stroke-width="4"/><line x1="50" y1="512" x2="72" y2="512" stroke="#5c7cfa" stroke-width="4"/><line x1="50" y1="534" x2="72" y2="534" stroke="#5c7cfa" stroke-width="4"/>
+          <rect x="44" y="464" width="36" height="8" rx="4" fill="#ffb703"/>
+          <path d="M80 472 Q126 478 156 548" stroke="#4dabf7" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <path d="M80 468 Q126 474 154 542" stroke="#a5d8ff" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </g>
+        <g class="pill"><rect x="52" y="558" width="88" height="26" rx="13"/><text x="96" y="577">Amigos</text></g>
+      </g>
+
+      <!-- banco com livro: meus dias -->
+      <g class="hot" id="hotDays" transform="translate(240 632) scale(1.28) translate(-232 -632)" tabindex="0" role="button" aria-label="Ver meus dias no diário" data-go="days">
+        <g class="lift">
+          <rect x="176" y="532" width="112" height="9" rx="4" fill="#b5763a"/>
+          <rect x="172" y="562" width="120" height="12" rx="6" fill="#b5763a"/>
+          <rect x="184" y="574" width="9" height="24" rx="3" fill="#8f5a2a"/><rect x="271" y="574" width="9" height="24" rx="3" fill="#8f5a2a"/>
+          <rect x="200" y="536" width="64" height="28" rx="5" fill="#4c6ef5"/>
+          <rect x="204" y="540" width="26" height="20" rx="3" fill="#fff"/><rect x="234" y="540" width="26" height="20" rx="3" fill="#fff"/>
+          <line x1="208" y1="547" x2="226" y2="547" stroke="#a5b4fc" stroke-width="2"/><line x1="208" y1="553" x2="226" y2="553" stroke="#a5b4fc" stroke-width="2"/>
+          <line x1="238" y1="547" x2="256" y2="547" stroke="#a5b4fc" stroke-width="2"/><line x1="238" y1="553" x2="256" y2="553" stroke="#a5b4fc" stroke-width="2"/>
+        </g>
+        <g class="pill"><rect x="184" y="606" width="96" height="26" rx="13"/><text x="232" y="625">Meus dias</text></g>
+      </g>
+
+      <!-- lixeira -->
+      <g class="hot" id="hotTrash" transform="translate(396 636) scale(.72) translate(-396 -636)" tabindex="0" role="button" aria-label="Lixeira, dias apagados" data-go="trash">
+        <g class="lift">
+          <rect x="328" y="538" width="56" height="9" rx="4" fill="#3b5bdb"/>
+          <rect x="348" y="530" width="16" height="8" rx="3" fill="#3b5bdb"/>
+          <path d="M333 549 H379 L373 600 H339 Z" fill="#5c7cfa"/>
+          <line x1="347" y1="558" x2="349" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/><line x1="356" y1="558" x2="356" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/><line x1="365" y1="558" x2="363" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        <g class="pill"><rect x="312" y="606" width="86" height="26" rx="13"/><text x="355" y="625">Lixeira</text></g>
+      </g>
+    </svg>
+    <div class="top">
+      <div><h1>Meu Diário</h1><p id="hello">Toque em um brinquedo!</p></div>
+      <button class="gear" data-act="go" data-v="mom" aria-label="Área da mamãe">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2b3a5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </button>
+    </div>
+  </main>
+  <section id="sheet" hidden aria-live="polite"></section>
+  <div id="toast" role="status"></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var DAY=86400000, KEY='diario-parque-v1', TRASH_DAYS=30;
+var cap=function(s){return s.charAt(0).toUpperCase()+s.slice(1)};
+function z(n){return String(n).padStart(2,'0')}
+function dstr(d){d=d||new Date();return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())}
+function pd(s){var p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])}
+function addDays(n){var d=new Date();d.setDate(d.getDate()+n);return dstr(d)}
+function longDate(s){return cap(pd(s).toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}))}
+function shortDate(s){return pd(s).toLocaleDateString('pt-BR',{day:'numeric',month:'short'}).replace('.','')}
+function daysUntil(s){return Math.round((pd(s)-pd(dstr()))/DAY)}
+function uid(){return Math.random().toString(36).slice(2,9)+Date.now().toString(36)}
+
+/* ---------- Carinhas de humor ---------- */
+var MOODS=[
+ {id:'feliz',label:'Feliz',bg:'#ffd93d'},
+ {id:'animado',label:'Animado',bg:'#ffb347'},
+ {id:'calmo',label:'Calmo',bg:'#8fe0c9'},
+ {id:'medo',label:'Com medo',bg:'#b9a7ff'},
+ {id:'triste',label:'Triste',bg:'#7fb8ff'},
+ {id:'bravo',label:'Bravo',bg:'#ff8a7a'}
+];
+function moodOf(id){for(var i=0;i<MOODS.length;i++)if(MOODS[i].id===id)return MOODS[i];return null}
+var FEATS={
+ feliz:'<circle cx="23" cy="26" r="3.6" fill="#2b3a5a"/><circle cx="41" cy="26" r="3.6" fill="#2b3a5a"/><path d="M18 38 Q32 52 46 38" fill="none" stroke="#2b3a5a" stroke-width="3.5" stroke-linecap="round"/>',
+ animado:'<path d="M17 28 Q23 19 29 28 M35 28 Q41 19 47 28" fill="none" stroke="#2b3a5a" stroke-width="3.5" stroke-linecap="round"/><path d="M18 36 Q32 60 46 36 Z" fill="#7a2e1d" stroke="#2b3a5a" stroke-width="2.5" stroke-linejoin="round"/>',
+ calmo:'<path d="M17 28 Q23 33 29 28 M35 28 Q41 33 47 28" fill="none" stroke="#2b3a5a" stroke-width="3.5" stroke-linecap="round"/><path d="M24 42 Q32 48 40 42" fill="none" stroke="#2b3a5a" stroke-width="3.5" stroke-linecap="round"/>',
+ medo:'<circle cx="23" cy="26" r="6.5" fill="#fff" stroke="#2b3a5a" stroke-width="2"/><circle cx="41" cy="26" r="6.5" fill="#fff" stroke="#2b3a5a" stroke-width="2"/><circle cx="23" cy="27" r="2.6" fill="#2b3a5a"/><circle cx="41" cy="27" r="2.6" fill="#2b3a5a"/><ellipse cx="32" cy="46" rx="5" ry="6" fill="#2b3a5a"/>',
+ triste:'<circle cx="23" cy="27" r="3.6" fill="#2b3a5a"/><circle cx="41" cy="27" r="3.6" fill="#2b3a5a"/><path d="M22 47 Q32 38 42 47" fill="none" stroke="#2b3a5a" stroke-width="3.5" stroke-linecap="round"/><path d="M19 34 Q16 39 19 41 Q22 39 19 34Z" fill="#e8f4ff" stroke="#2b3a5a" stroke-width="1.2"/>',
+ bravo:'<path d="M15 19 L28 25 M49 19 L36 25" stroke="#2b3a5a" stroke-width="3.5" stroke-linecap="round"/><circle cx="23" cy="30" r="3.4" fill="#2b3a5a"/><circle cx="41" cy="30" r="3.4" fill="#2b3a5a"/><path d="M22 47 Q32 39 42 47" fill="none" stroke="#2b3a5a" stroke-width="3.5" stroke-linecap="round"/>'
+};
+function face(id,size){
+  var m=moodOf(id); if(!m)return '';
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 64 64" role="img" aria-label="'+esc(m.label)+'"><circle cx="32" cy="32" r="29" fill="'+m.bg+'" stroke="#2b3a5a" stroke-width="3"/>'+FEATS[id]+'</svg>';
+}
+
+/* ---------- Personagens (originais) ---------- */
+var CHARS=[
+ {id:'ursinho',label:'Ursinho'},{id:'coelha',label:'Coelhinha'},{id:'gato',label:'Gatinho'},
+ {id:'sapo',label:'Sapinho'},{id:'pintinho',label:'Pintinho'},{id:'monstro',label:'Monstrinho'}
+];
+var EYES='<circle cx="38" cy="52" r="4.2" fill="#2b3a5a"/><circle cx="62" cy="52" r="4.2" fill="#2b3a5a"/><circle cx="39.4" cy="50.6" r="1.4" fill="#fff"/><circle cx="63.4" cy="50.6" r="1.4" fill="#fff"/>';
+var CHAR_INNER={
+ ursinho:'<circle cx="25" cy="27" r="14" fill="#b77b47"/><circle cx="75" cy="27" r="14" fill="#b77b47"/><circle cx="25" cy="27" r="7" fill="#f0c9a0"/><circle cx="75" cy="27" r="7" fill="#f0c9a0"/><circle cx="50" cy="56" r="37" fill="#c98e57" stroke="#2b3a5a" stroke-width="2.5"/>'+EYES+'<ellipse cx="50" cy="68" rx="15" ry="11" fill="#f0d2ae"/><ellipse cx="50" cy="63" rx="5.5" ry="3.8" fill="#3b2a20"/><path d="M44 72 Q50 78 56 72" fill="none" stroke="#3b2a20" stroke-width="2.5" stroke-linecap="round"/>',
+ coelha:'<ellipse cx="36" cy="24" rx="9" ry="22" fill="#f4e6f0" stroke="#2b3a5a" stroke-width="2.5"/><ellipse cx="64" cy="24" rx="9" ry="22" fill="#f4e6f0" stroke="#2b3a5a" stroke-width="2.5"/><ellipse cx="36" cy="26" rx="4" ry="14" fill="#ffb8cf"/><ellipse cx="64" cy="26" rx="4" ry="14" fill="#ffb8cf"/><circle cx="50" cy="62" r="31" fill="#f4e6f0" stroke="#2b3a5a" stroke-width="2.5"/><circle cx="39" cy="58" r="4.2" fill="#2b3a5a"/><circle cx="61" cy="58" r="4.2" fill="#2b3a5a"/><circle cx="40.4" cy="56.6" r="1.4" fill="#fff"/><circle cx="62.4" cy="56.6" r="1.4" fill="#fff"/><circle cx="32" cy="70" r="5" fill="#ffb8cf" opacity=".8"/><circle cx="68" cy="70" r="5" fill="#ffb8cf" opacity=".8"/><ellipse cx="50" cy="66" rx="4.5" ry="3.2" fill="#ff7fa5"/><path d="M44 72 Q50 78 56 72" fill="none" stroke="#2b3a5a" stroke-width="2.5" stroke-linecap="round"/>',
+ gato:'<polygon points="18,44 22,10 46,28" fill="#f6a94b" stroke="#2b3a5a" stroke-width="2.5" stroke-linejoin="round"/><polygon points="82,44 78,10 54,28" fill="#f6a94b" stroke="#2b3a5a" stroke-width="2.5" stroke-linejoin="round"/><polygon points="24,36 25,20 37,29" fill="#ffc9c9"/><polygon points="76,36 75,20 63,29" fill="#ffc9c9"/><circle cx="50" cy="58" r="34" fill="#f6a94b" stroke="#2b3a5a" stroke-width="2.5"/><path d="M40 27 L42 36 M50 25 L50 35 M60 27 L58 36" stroke="#d9822b" stroke-width="3.5" stroke-linecap="round"/>'+EYES+'<polygon points="46,63 54,63 50,68" fill="#ff7fa5"/><path d="M50 68 Q44 75 38 71 M50 68 Q56 75 62 71" fill="none" stroke="#2b3a5a" stroke-width="2.3" stroke-linecap="round"/><path d="M14 60 L32 63 M14 70 L32 68 M86 60 L68 63 M86 70 L68 68" stroke="#2b3a5a" stroke-width="1.8" stroke-linecap="round"/>',
+ sapo:'<ellipse cx="50" cy="62" rx="40" ry="31" fill="#6fcf6b" stroke="#2b3a5a" stroke-width="2.5"/><circle cx="31" cy="34" r="15" fill="#6fcf6b" stroke="#2b3a5a" stroke-width="2.5"/><circle cx="69" cy="34" r="15" fill="#6fcf6b" stroke="#2b3a5a" stroke-width="2.5"/><circle cx="31" cy="34" r="9.5" fill="#fff"/><circle cx="69" cy="34" r="9.5" fill="#fff"/><circle cx="32" cy="35" r="4.6" fill="#2b3a5a"/><circle cx="68" cy="35" r="4.6" fill="#2b3a5a"/><circle cx="26" cy="68" r="6" fill="#ff9aa2" opacity=".75"/><circle cx="74" cy="68" r="6" fill="#ff9aa2" opacity=".75"/><path d="M28 62 Q50 84 72 62" fill="none" stroke="#2b3a5a" stroke-width="3" stroke-linecap="round"/><circle cx="45" cy="55" r="1.6" fill="#2b3a5a"/><circle cx="55" cy="55" r="1.6" fill="#2b3a5a"/>',
+ pintinho:'<path d="M44 22 Q40 10 48 12 Q50 6 54 13 Q62 10 56 24" fill="#ffd54a" stroke="#2b3a5a" stroke-width="2.3" stroke-linejoin="round"/><circle cx="50" cy="58" r="36" fill="#ffd54a" stroke="#2b3a5a" stroke-width="2.5"/><ellipse cx="17" cy="62" rx="8" ry="13" fill="#ffc21f" stroke="#2b3a5a" stroke-width="2" transform="rotate(-18 17 62)"/><ellipse cx="83" cy="62" rx="8" ry="13" fill="#ffc21f" stroke="#2b3a5a" stroke-width="2" transform="rotate(18 83 62)"/>'+EYES+'<polygon points="43,62 57,62 50,74" fill="#ff8f3c" stroke="#2b3a5a" stroke-width="2" stroke-linejoin="round"/><circle cx="30" cy="66" r="5" fill="#ff9aa2" opacity=".7"/><circle cx="70" cy="66" r="5" fill="#ff9aa2" opacity=".7"/>',
+ monstro:'<polygon points="28,30 22,6 42,22" fill="#7c5cf0" stroke="#2b3a5a" stroke-width="2.3" stroke-linejoin="round"/><polygon points="72,30 78,6 58,22" fill="#7c5cf0" stroke="#2b3a5a" stroke-width="2.3" stroke-linejoin="round"/><path d="M50 18 C78 18 92 40 90 62 C88 84 68 94 50 94 C32 94 12 84 10 62 C8 40 22 18 50 18Z" fill="#a78bfa" stroke="#2b3a5a" stroke-width="2.5"/><circle cx="38" cy="50" r="10" fill="#fff" stroke="#2b3a5a" stroke-width="2"/><circle cx="62" cy="50" r="10" fill="#fff" stroke="#2b3a5a" stroke-width="2"/><circle cx="40" cy="52" r="4.5" fill="#2b3a5a"/><circle cx="60" cy="52" r="4.5" fill="#2b3a5a"/><path d="M32 70 Q50 88 68 70 Z" fill="#5b2a86" stroke="#2b3a5a" stroke-width="2.3" stroke-linejoin="round"/><polygon points="40,72 44,79 48,73" fill="#fff"/><polygon points="52,73 56,79 60,72" fill="#fff"/>'
+};
+function charSvg(id,size){
+  if(!CHAR_INNER[id])return '';
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 100 100" role="img" aria-label="'+esc(charLabel(id))+'">'+CHAR_INNER[id]+'</svg>';
+}
+function charLabel(id){for(var i=0;i<CHARS.length;i++)if(CHARS[i].id===id)return CHARS[i].label;return ''}
+
+/* ---------- Dados (guardados neste aparelho por enquanto) ---------- */
+function seed(){
+  var f1=uid(), f2=uid();
+  return {
+    v:1,
+    settings:{name:'',momPhone:''},
+    friends:[{id:f1,name:'Ana'},{id:f2,name:'Pedro'}],
+    reminders:[{id:uid(),title:'Aniversário da Ana',date:addDays(5),example:true}],
+    entries:[
+      {id:uid(),date:addDays(-1),mood:'feliz',character:'ursinho',friends:[f1],text:'Hoje brinquei de esconde-esconde no parquinho com a Ana. Ganhei uma vez e perdi duas!',createdAt:Date.now()-DAY,deletedAt:null,example:true},
+      {id:uid(),date:addDays(-3),mood:'triste',character:'gato',friends:[],text:'Choveu e eu não pude sair. Fiquei desenhando um dragão azul.',createdAt:Date.now()-3*DAY,deletedAt:null,example:true},
+      {id:uid(),date:addDays(-6),mood:'bravo',character:'monstro',friends:[],text:'Meu irmão pegou meu brinquedo sem pedir.',createdAt:Date.now()-6*DAY,deletedAt:Date.now()-3*DAY,example:true}
+    ]
+  };
+}
+var S;
+function load(){
+  try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.entries)return o}}catch(e){}
+  return seed();
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+S=load();
+S.entries=S.entries.filter(function(e){return !e.deletedAt||Date.now()-e.deletedAt<TRASH_DAYS*DAY});
+save();
+function entry(id){for(var i=0;i<S.entries.length;i++)if(S.entries[i].id===id)return S.entries[i];return null}
+function friendName(id){for(var i=0;i<S.friends.length;i++)if(S.friends[i].id===id)return S.friends[i].name;return null}
+function friendNames(e){return (e.friends||[]).map(friendName).filter(Boolean)}
+
+/* ---------- Aviso rápido ---------- */
+var toastT;
+function toast(msg){var t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show')},3200)}
+
+/* ---------- Voz ---------- */
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+var rec=null;
+function stopRec(){if(rec){try{rec.onend=null;rec.onerror=null;rec.abort()}catch(e){}rec=null}var m=$('#mic');if(m)m.setAttribute('aria-pressed','false');var lab=$('#micLabel');if(lab)lab.textContent='Toque para falar'}
+function voiceErr(code){
+  if(code==='not-allowed'||code==='service-not-allowed')return 'O microfone não foi liberado neste aparelho. Peça ajuda para liberar.';
+  if(code==='no-speech')return 'Não ouvi nada. Tente de novo!';
+  if(code==='network')return 'A voz precisa de internet. Tente de novo mais tarde.';
+  return 'A voz não funcionou agora. Você pode escrever!';
+}
+function dictate(){
+  var btn=$('#mic');
+  if(!SR){toast('A voz não funciona neste navegador. Você pode escrever!');return}
+  if(rec){stopRec();return}
+  rec=new SR();rec.lang='pt-BR';rec.continuous=true;rec.interimResults=false;
+  rec.onresult=function(ev){
+    var ta=$('#txt');if(!ta)return;
+    for(var i=ev.resultIndex;i<ev.results.length;i++){
+      if(ev.results[i].isFinal){
+        var t=ev.results[i][0].transcript.trim();
+        if(t){ta.value+=(ta.value&&!/\s$/.test(ta.value)?' ':'')+(ta.value&&!/[.!?]\s*$/.test(ta.value)?t:cap(t));draft.text=ta.value}
+      }
+    }
+  };
+  rec.onerror=function(ev){stopRec();toast(voiceErr(ev.error))};
+  rec.onend=function(){stopRec()};
+  try{rec.start();btn.setAttribute('aria-pressed','true');$('#micLabel').textContent='Estou ouvindo... toque para parar'}catch(e){stopRec();toast('A voz não funcionou agora. Você pode escrever!')}
+}
+function listenRestore(id){
+  if(!SR){restore(id);return}
+  if(rec){stopRec();return}
+  rec=new SR();rec.lang='pt-BR';rec.continuous=false;rec.interimResults=false;rec.maxAlternatives=4;
+  rec.onresult=function(ev){
+    var heard='';
+    for(var i=0;i<ev.results.length;i++)for(var j=0;j<ev.results[i].length;j++)heard+=' '+ev.results[i][j].transcript;
+    stopRec();
+    if(/volt|restaur|traz|recuper|devolv/i.test(heard))restore(id);
+    else toast('Não entendi. Diga: voltar');
+  };
+  rec.onerror=function(ev){stopRec();toast(voiceErr(ev.error))};
+  rec.onend=function(){stopRec()};
+  try{rec.start();var b=$('#micR');if(b)b.setAttribute('aria-pressed','true');var l=$('#micRLabel');if(l)l.textContent='Estou ouvindo... diga: voltar'}catch(e){stopRec();toast('A voz não funcionou agora.')}
+}
+
+/* ---------- Navegação ---------- */
+var view='park',vArg=null,draft=null,selTrash=null,filt={mood:'',friend:''},momOK=false,gate=null;
+function go(v,arg){
+  stopRec();view=v;vArg=arg||null;
+  if(v==='write')initDraft(arg);
+  if(v==='days'&&!arg){/* mantém filtros */}
+  if(v==='trash')selTrash=null;
+  if(v==='mom'){momOK=false;gate=null}
+  render();
+}
+function head(title,back){
+  return '<header class="bar"><button class="back" data-act="go" data-v="'+(back||'park')+'"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b3a5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'+(back&&back!=='park'?'Voltar':'Parque')+'</button><h2>'+title+'</h2></header>';
+}
+function render(){
+  var sh=$('#sheet');
+  if(view==='park'){sh.hidden=true;sh.innerHTML='';updatePark();return}
+  sh.hidden=false;sh.innerHTML=VIEWS[view](vArg);sh.scrollTop=0;
+}
+
+/* ---------- Parque: placa e enfeites ---------- */
+function upcoming(){return S.reminders.filter(function(r){return daysUntil(r.date)>=0}).sort(function(a,b){return a.date<b.date?-1:1})}
+function trunc(s,n){return s.length>n?s.slice(0,n-1)+'…':s}
+function updatePark(){
+  var up=upcoming(),g=$('#signText'),b=$('#signBadge');
+  var l2='',l3='';
+  if(up.length){var r=up[0],n=daysUntil(r.date);l2=trunc(r.title,14);l3=n===0?'É hoje!':n===1?'É amanhã':'em '+n+' dias'}
+  else{l2='Nada por perto';l3='Toque para criar'}
+  g.innerHTML='<text x="72" y="326" font-size="16" font-weight="700">Lembretes</text><text x="75" y="347" font-size="12" font-weight="600">'+esc(l2)+'</text><text x="75" y="366" font-size="13" font-weight="700" fill="#b03a28">'+esc(l3)+'</text>';
+  b.innerHTML=up.length?'<circle cx="134" cy="304" r="13" fill="#d9432f" stroke="#fff" stroke-width="3"/><text x="134" y="309" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="14" fill="#fff">'+up.length+'</text>':'';
+  $('#hello').textContent=S.settings.name?('Oi, '+S.settings.name+'! Toque em um brinquedo.'):'Toque em um brinquedo!';
+}
+$('#decoA').innerHTML=CHAR_INNER.pintinho;
+$('#decoB').innerHTML=CHAR_INNER.coelha;
+
+/* ---------- Telas ---------- */
+var VIEWS={};
+
+function initDraft(id){
+  var e=id&&entry(id);
+  draft=e?{id:e.id,date:e.date,text:e.text,mood:e.mood,character:e.character,friends:(e.friends||[]).slice()}
+         :{id:null,date:dstr(),text:'',mood:null,character:null,friends:[]};
+}
+VIEWS.write=function(){
+  var moods=MOODS.map(function(m){return '<button class="mood" data-act="mood" data-mood="'+m.id+'" aria-pressed="'+(draft.mood===m.id)+'">'+face(m.id,58)+'<span>'+m.label+'</span></button>'}).join('');
+  var chars=CHARS.map(function(c){return '<button class="char" data-act="char" data-char="'+c.id+'" aria-pressed="'+(draft.character===c.id)+'">'+charSvg(c.id,64)+'<span>'+c.label+'</span></button>'}).join('');
+  var fr=S.friends.length?S.friends.map(function(f){return '<button class="chip" data-act="fpick" data-id="'+f.id+'" aria-pressed="'+(draft.friends.indexOf(f.id)>-1)+'">'+esc(f.name)+'</button>'}).join(''):'<p class="hint">Você ainda não cadastrou amigos. Toque no escorregador, no parque, para cadastrar.</p>';
+  return head(draft.id?'Mudar meu dia':'Meu dia')+'<div class="wrap">'+
+   '<h3>Como você está se sentindo?</h3><div class="moods">'+moods+'</div>'+
+   '<h3>Conte como foi o seu dia</h3>'+
+   '<textarea id="txt" aria-label="Meu dia" placeholder="Escreva aqui, ou toque no microfone e fale...">'+esc(draft.text)+'</textarea>'+
+   '<div class="mic"><button class="micbtn" id="mic" data-act="mic" aria-pressed="false" aria-label="Falar"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><strong id="micLabel">Toque para falar</strong></div>'+
+   '<h3>Quem estava com você?</h3><div class="chips">'+fr+'</div>'+
+   '<h3>Escolha um amiguinho de desenho</h3><div class="chars">'+chars+'</div>'+
+   '<label class="f" for="dt">Dia</label><input type="date" id="dt" value="'+draft.date+'" max="'+dstr()+'">'+
+   '<div class="actions"><button class="btn" data-act="save-entry">Guardar no diário</button><button class="btn ghost" data-act="go" data-v="park">Cancelar</button></div>'+
+   '</div>';
+};
+
+VIEWS.days=function(){
+  var list=S.entries.filter(function(e){return !e.deletedAt}).sort(function(a,b){return a.date===b.date?b.createdAt-a.createdAt:(a.date<b.date?1:-1)});
+  if(filt.mood)list=list.filter(function(e){return e.mood===filt.mood});
+  if(filt.friend)list=list.filter(function(e){return (e.friends||[]).indexOf(filt.friend)>-1});
+  var mchips='<button class="chip" data-act="fmood" data-mood="" aria-pressed="'+(!filt.mood)+'">Todos</button>'+MOODS.map(function(m){return '<button class="chip" data-act="fmood" data-mood="'+m.id+'" aria-pressed="'+(filt.mood===m.id)+'" aria-label="'+m.label+'">'+face(m.id,30)+'</button>'}).join('');
+  var fchips=S.friends.length?'<h3>Com quem</h3><div class="chips"><button class="chip" data-act="ffriend" data-id="" aria-pressed="'+(!filt.friend)+'">Todos</button>'+S.friends.map(function(f){return '<button class="chip" data-act="ffriend" data-id="'+f.id+'" aria-pressed="'+(filt.friend===f.id)+'">'+esc(f.name)+'</button>'}).join('')+'</div>':'';
+  var rows=list.length?list.map(function(e){
+    return '<button class="row" data-act="go" data-v="day" data-id="'+e.id+'">'+face(e.mood,52)+'<span class="meta"><span class="d">'+esc(longDate(e.date))+(e.example?'<span class="tag">exemplo</span>':'')+'</span><br><span class="s">'+esc(e.text)+'</span></span>'+(e.character?charSvg(e.character,44):'')+'</button>';
+  }).join(''):'<div class="empty">Nenhum dia por aqui ainda.<br>Que tal escrever no balanço?</div>';
+  return head('Meus dias')+'<div class="wrap"><h3>Como eu estava</h3><div class="chips">'+mchips+'</div>'+fchips+'<h3>'+list.length+(list.length===1?' dia':' dias')+'</h3><div class="list">'+rows+'</div></div>';
+};
+
+function shareUrl(e){
+  var m=moodOf(e.mood),quando=e.date===dstr()?'Hoje':'No dia '+shortDate(e.date);
+  var fn=friendNames(e);
+  var msg='Oi, mamãe! '+quando+' eu me senti: '+(m?m.label:'')+'.\n\n“'+e.text+'”'+(fn.length?'\n\nEstive com: '+fn.join(', ')+'.':'')+'\n\n— '+(S.settings.name?S.settings.name+', ':'')+'do meu Diário';
+  var phone=(S.settings.momPhone||'').replace(/\D/g,'');
+  return 'https://wa.me/'+phone+'?text='+encodeURIComponent(msg);
+}
+VIEWS.day=function(id){
+  var e=entry(id);if(!e||e.deletedAt)return head('Meu dia','days')+'<div class="wrap"><div class="empty">Esse dia não está mais aqui.</div></div>';
+  var m=moodOf(e.mood),fn=friendNames(e);
+  var hasPhone=(S.settings.momPhone||'').replace(/\D/g,'').length>=8;
+  return head('Meu dia','days')+'<div class="wrap">'+
+   '<div class="dayhead">'+face(e.mood,84)+'<div><h3>'+esc(longDate(e.date))+'</h3><div class="hint">Me senti: <strong>'+(m?m.label:'')+'</strong>'+(e.example?'<span class="tag">exemplo</span>':'')+'</div></div>'+(e.character?'<div style="margin-left:auto">'+charSvg(e.character,76)+'</div>':'')+'</div>'+
+   '<div class="diarytext">'+esc(e.text)+'</div>'+
+   (fn.length?'<p class="hint" style="margin-top:12px">Estive com: <strong>'+fn.map(esc).join(', ')+'</strong></p>':'')+
+   '<div class="actions"><a class="btn green" href="'+shareUrl(e)+'" target="_blank" rel="noopener noreferrer"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 16-3-7z"/></svg>Compartilhar com a mamãe</a>'+
+   '<button class="btn ghost" data-act="go" data-v="write" data-id="'+e.id+'">Mudar</button>'+
+   '<button class="btn ghost" data-act="del-entry" data-id="'+e.id+'">Apagar este dia</button></div>'+
+   (hasPhone?'':'<p class="hint">A mamãe ainda não cadastrou o número dela. Toque na engrenagem, no parque, para cadastrar. Por enquanto o WhatsApp vai pedir para escolher quem recebe.</p>')+
+   '</div>';
+};
+
+VIEWS.reminders=function(){
+  var up=upcoming(),past=S.reminders.filter(function(r){return daysUntil(r.date)<0}).sort(function(a,b){return a.date<b.date?1:-1});
+  function row(r){
+    var n=daysUntil(r.date),when=n===0?'É hoje!':n===1?'É amanhã':n>1?'Faltam '+n+' dias':'Já passou';
+    return '<div class="row" style="cursor:default"><span class="meta"><span class="d">'+esc(r.title)+(r.example?'<span class="tag">exemplo</span>':'')+'</span><br><span class="s">'+esc(longDate(r.date))+' · <strong>'+when+'</strong></span></span><button class="btn ghost small" data-act="del-rem" data-id="'+r.id+'" aria-label="Tirar lembrete '+esc(r.title)+'">Tirar</button></div>';
+  }
+  return head('Lembretes')+'<div class="wrap">'+
+   '<h3>Datas importantes</h3>'+(up.length?'<div class="list">'+up.map(row).join('')+'</div>':'<div class="empty">Nenhuma data por perto.</div>')+
+   (past.length?'<h3>Já passaram</h3><div class="list">'+past.map(row).join('')+'</div>':'')+
+   '<h3>Novo lembrete</h3><div class="card"><label class="f" for="rt" style="margin-top:0">O que vai acontecer?</label><input type="text" id="rt" maxlength="40" placeholder="Ex.: festa da Ana">'+
+   '<label class="f" for="rd">Que dia?</label><input type="date" id="rd" value="'+addDays(1)+'">'+
+   '<div class="actions" style="margin-top:16px"><button class="btn" data-act="add-rem">Guardar lembrete</button></div></div>'+
+   '<p class="hint" style="margin-top:14px">Os lembretes aparecem aqui e na placa do parque.</p></div>';
+};
+
+VIEWS.friends=function(){
+  var rows=S.friends.length?S.friends.map(function(f){return '<span class="chip">'+esc(f.name)+' <button class="linkbtn x" style="padding:0 0 0 6px;min-height:0;text-decoration:none;font-size:1.3rem" data-act="del-friend" data-id="'+f.id+'" aria-label="Tirar '+esc(f.name)+'">×</button></span>'}).join(''):'<div class="empty">Ainda não tem amigos por aqui.</div>';
+  return head('Meus amigos')+'<div class="wrap"><h3>Amigos do diário</h3><div class="chips">'+rows+'</div>'+
+   '<h3>Novo amigo ou amiga</h3><div class="inline"><div><label class="f" for="fn" style="margin-top:0">Nome</label><input type="text" id="fn" maxlength="30" placeholder="Ex.: Lia"></div><button class="btn" data-act="add-friend">Adicionar</button></div>'+
+   '<p class="hint" style="margin-top:14px">Quando você escrever um dia, é só tocar no nome de quem estava com você.</p></div>';
+};
+
+function daysLeft(e){return Math.max(0,TRASH_DAYS-Math.floor((Date.now()-e.deletedAt)/DAY))}
+VIEWS.trash=function(){
+  var list=S.entries.filter(function(e){return e.deletedAt}).sort(function(a,b){return b.deletedAt-a.deletedAt});
+  var rows=list.length?list.map(function(e){
+    var d=daysLeft(e);
+    return '<button class="row" data-act="sel-trash" data-id="'+e.id+'" aria-pressed="'+(selTrash===e.id)+'">'+face(e.mood,48)+'<span class="meta"><span class="d">'+esc(longDate(e.date))+(e.example?'<span class="tag">exemplo</span>':'')+'</span><br><span class="s">'+esc(e.text)+'</span><span class="tag warn" style="margin:4px 0 0">Some de vez em '+d+(d===1?' dia':' dias')+'</span></span></button>';
+  }).join(''):'<div class="empty">A lixeira está vazia.</div>';
+  var sel=selTrash&&entry(selTrash);
+  var micBlock='';
+  if(list.length){
+    micBlock='<h3>Trazer de volta</h3><p class="hint" style="margin:0 0 8px">'+(sel?'Toque no microfone e diga <strong>“voltar”</strong>.':'Toque em um dia da lista.')+'</p>'+
+      '<div class="mic"><button class="micbtn" id="micR" data-act="mic-restore" aria-pressed="false" aria-label="Falar voltar" '+(sel?'':'disabled style="opacity:.4"')+'><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><strong id="micRLabel">'+(SR?'Diga: voltar':'A voz não funciona aqui')+'</strong></div>'+
+      '<button class="linkbtn" data-act="restore-btn" '+(sel?'':'disabled')+'>A voz não funcionou? Toque aqui para trazer de volta</button>';
+  }
+  return head('Lixeira')+'<div class="wrap"><p class="hint" style="margin:0 0 14px">Os dias apagados ficam guardados por '+TRASH_DAYS+' dias. Depois somem para sempre.</p><div class="list">'+rows+'</div>'+micBlock+'</div>';
+};
+
+VIEWS.welcome=function(){
+  return '<div class="welcome"><h1>Meu Diário</h1><div class="crew">'+charSvg('coelha',84)+charSvg('ursinho',104)+charSvg('pintinho',84)+'</div>'+
+   '<div class="box"><label for="nm">Qual é o seu nome?</label><input type="text" id="nm" maxlength="24" autocomplete="off" autocapitalize="words" placeholder="Escreva aqui" value="'+esc(S.settings.name)+'"><button class="btn" data-act="enter">Entrar no parque</button></div></div>';
+};
+
+VIEWS.mom=function(){
+  if(!momOK){
+    if(!gate){var a=6+Math.floor(Math.random()*4),b=4+Math.floor(Math.random()*5);gate={a:a,b:b}}
+    return head('Área da mamãe')+'<div class="wrap"><div class="card"><h3>Só para adultos</h3><p style="margin-top:0">Quanto é <strong>'+gate.a+' + '+gate.b+'</strong>?</p><input type="number" id="ans" inputmode="numeric" aria-label="Resposta"><div class="actions" style="margin-top:14px"><button class="btn" data-act="gate">Entrar</button></div></div></div>';
+  }
+  return head('Área da mamãe')+'<div class="wrap">'+
+   '<h3>Sobre a criança</h3><label class="f" for="cn" style="margin-top:0">Nome no diário</label><input type="text" id="cn" maxlength="24" value="'+esc(S.settings.name)+'" placeholder="Como devemos chamar?">'+
+   '<h3>WhatsApp da mamãe</h3><label class="f" for="mp" style="margin-top:0">Número com país e DDD</label><input type="tel" id="mp" inputmode="tel" value="'+esc(S.settings.momPhone)+'" placeholder="5511999998888">'+
+   '<p class="hint">Quando a criança tocar em “Compartilhar com a mamãe”, o WhatsApp abre com o texto do dia pronto para enviar. Nada é enviado sozinho.</p>'+
+   '<h3>Onde os dias ficam guardados</h3><div class="card"><strong>Neste aparelho (teste).</strong><p class="hint" style="margin:6px 0 0">A conta do Google Drive ainda será escolhida. Enquanto isso, o diário fica salvo só neste navegador.</p></div>'+
+   '<div class="actions"><button class="btn" data-act="save-mom">Guardar</button></div></div>';
+};
+
+/* ---------- Ações ---------- */
+function restore(id){
+  var e=entry(id);if(!e)return;
+  e.deletedAt=null;save();selTrash=null;toast('Pronto! O dia voltou para o diário.');render();
+}
+document.addEventListener('click',function(ev){
+  var el=ev.target.closest('[data-act]');
+  if(!el)return;
+  var a=el.dataset.act,id=el.dataset.id;
+  if(a==='go'){go(el.dataset.v,id);return}
+  if(a==='mood'){draft.mood=el.dataset.mood;$$('.mood').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mood===draft.mood))});return}
+  if(a==='char'){draft.character=draft.character===el.dataset.char?null:el.dataset.char;$$('.char').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.char===draft.character))});return}
+  if(a==='fpick'){var i=draft.friends.indexOf(id);if(i>-1)draft.friends.splice(i,1);else draft.friends.push(id);el.setAttribute('aria-pressed',String(i===-1));return}
+  if(a==='enter'){
+    var nm=$('#nm').value.trim();
+    if(!nm){toast('Escreva o seu nome para entrar.');$('#nm').focus();return}
+    S.settings.name=nm;save();go('park');toast('Oi, '+nm+'! Bem-vindo ao parque.');return
+  }
+  if(a==='mic'){dictate();return}
+  if(a==='save-entry'){
+    var ta=$('#txt');draft.text=ta.value.trim();draft.date=$('#dt').value||dstr();
+    if(!draft.mood){toast('Escolha uma carinha: como você está?');return}
+    if(!draft.text){toast('Escreva ou fale um pouquinho sobre o seu dia.');return}
+    stopRec();
+    var e=draft.id&&entry(draft.id);
+    if(e){e.date=draft.date;e.text=draft.text;e.mood=draft.mood;e.character=draft.character;e.friends=draft.friends.slice();e.example=false}
+    else{e={id:uid(),date:draft.date,text:draft.text,mood:draft.mood,character:draft.character,friends:draft.friends.slice(),createdAt:Date.now(),deletedAt:null};S.entries.push(e)}
+    save();toast('Dia guardado no diário!');go('day',e.id);return
+  }
+  if(a==='fmood'){filt.mood=el.dataset.mood;render();return}
+  if(a==='ffriend'){filt.friend=id;render();return}
+  if(a==='del-entry'){var d=entry(id);if(d){d.deletedAt=Date.now();save();toast('Apagado. Fica na lixeira por '+TRASH_DAYS+' dias.');go('days')}return}
+  if(a==='sel-trash'){selTrash=id;render();return}
+  if(a==='mic-restore'){if(selTrash)listenRestore(selTrash);return}
+  if(a==='restore-btn'){if(selTrash)restore(selTrash);return}
+  if(a==='add-rem'){
+    var t=$('#rt').value.trim(),dd=$('#rd').value;
+    if(!t){toast('Diga o que vai acontecer.');return}
+    if(!dd){toast('Escolha o dia.');return}
+    S.reminders.push({id:uid(),title:t,date:dd});save();toast('Lembrete guardado!');render();return
+  }
+  if(a==='del-rem'){S.reminders=S.reminders.filter(function(r){return r.id!==id});save();render();return}
+  if(a==='add-friend'){
+    var n=$('#fn').value.trim();if(!n){toast('Escreva o nome do amigo.');return}
+    S.friends.push({id:uid(),name:n});save();toast('Amigo adicionado!');render();return
+  }
+  if(a==='del-friend'){S.friends=S.friends.filter(function(f){return f.id!==id});S.entries.forEach(function(e){e.friends=(e.friends||[]).filter(function(x){return x!==id})});if(filt.friend===id)filt.friend='';save();render();return}
+  if(a==='gate'){var v=parseInt($('#ans').value,10);if(v===gate.a+gate.b){momOK=true;render()}else{gate=null;toast('Ops, essa não é a resposta.');render()}return}
+  if(a==='save-mom'){S.settings.name=$('#cn').value.trim();S.settings.momPhone=$('#mp').value.trim();save();toast('Guardado!');go(S.settings.name?'park':'welcome');return}
+});
+$$('.hot').forEach(function(h){
+  try{
+    var bb=h.getBBox(),hit=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    hit.setAttribute('x',bb.x-6);hit.setAttribute('y',bb.y-6);hit.setAttribute('width',bb.width+12);hit.setAttribute('height',bb.height+12);
+    hit.setAttribute('fill','transparent');h.insertBefore(hit,h.firstChild);
+  }catch(e){}
+  var open=function(){go(h.dataset.go)};
+  h.addEventListener('click',open);
+  h.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();open()}});
+});
+document.addEventListener('keydown',function(ev){
+  if(ev.key==='Enter'&&view==='welcome'&&ev.target.id==='nm'){ev.preventDefault();var b=$('[data-act=enter]');if(b)b.click();return}
+  if(ev.key==='Escape'&&view!=='park'&&view!=='welcome')go('park');
+});
+updatePark();
+if(!S.settings.name)go('welcome');
+})();
+</script>
+</body></html>
