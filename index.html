@@ -1,4 +1,13 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body style="margin:0"><title>Meu Diário do Parque</title>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Meu Diário do Parque</title>
+<meta name="description" content="Um diário infantil no parque: conte como foi o seu dia, escolha uma carinha e guarde suas lembranças.">
+<meta name="theme-color" content="#8fd3ff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Meu Diário">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
@@ -119,7 +128,116 @@ label.f{display:block;font-weight:800;margin:14px 0 6px}
 .welcome .box .btn{width:100%;margin-top:16px}
 #toast{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);transform:translate(-50%,30px);opacity:0;background:var(--ink);color:#fff;font-weight:800;border-radius:999px;padding:12px 22px;pointer-events:none;transition:.25s;max-width:calc(100% - 32px);text-align:center;z-index:5}
 #toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Calendário de humores ---------- */
+.cal{background:#fff;border:3px solid var(--line);border-radius:var(--radius);padding:10px 10px 12px}
+.calnav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.calnav strong{font-family:var(--display);font-size:1.25rem}
+.calnav button{width:44px;height:44px;border-radius:50%;border:0;background:var(--sky);display:grid;place-items:center;font-weight:800}
+.calnav button[disabled]{opacity:.35;pointer-events:none}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.calgrid .wd{font-size:.8rem;font-weight:800;color:var(--ink-soft);padding:2px 0}
+.cday{aspect-ratio:1;border:2px solid transparent;border-radius:12px;background:#f5f9ff;display:grid;place-items:center;font-weight:800;font-size:.9rem;padding:0;min-width:0;position:relative}
+.cday svg{width:82%;height:82%}
+.cday.today{border-color:var(--coral)}
+.cday[aria-pressed=true]{border-color:var(--ink);background:#fff6c9}
+.cday.future{opacity:.35;pointer-events:none}
+.cday .n{position:absolute;right:2px;bottom:0;font-size:.62rem;color:var(--ink-soft)}
+.streak{margin:10px 2px 0;font-weight:800;color:var(--ink-soft)}
+.draftnote{background:#fff6c9;border:2px dashed #d9a441;border-radius:14px;padding:8px 12px;font-weight:700;margin:0 0 10px}
+
+/* ---------- Visual para crianças: cores por tela ---------- */
+#sheet{--th:#4dabf7;--th-bg:#e3f3ff;--th-dot:rgba(77,171,247,.14)}
+#sheet[data-theme=sun]{--th:#ff9f1c;--th-bg:#fff3d9;--th-dot:rgba(255,159,28,.16)}
+#sheet[data-theme=grape]{--th:#9775fa;--th-bg:#f1ebff;--th-dot:rgba(151,117,250,.15)}
+#sheet[data-theme=sky]{--th:#339af0;--th-bg:#e3f3ff;--th-dot:rgba(51,154,240,.14)}
+#sheet[data-theme=lemon]{--th:#f2b705;--th-bg:#fffbe0;--th-dot:rgba(242,183,5,.18)}
+#sheet[data-theme=slate]{--th:#748ffc;--th-bg:#eef1fb;--th-dot:rgba(116,143,252,.14)}
+#sheet[data-theme=mint]{--th:#20c997;--th-bg:#e3faf2;--th-dot:rgba(32,201,151,.15)}
+#sheet{background-color:var(--th-bg);background-image:radial-gradient(var(--th-dot) 2.5px,transparent 3px);background-size:26px 26px}
+#sheet .bar{background:var(--th);border-bottom:0;border-radius:0 0 26px 26px;box-shadow:0 5px 0 rgba(43,58,90,.12);padding-bottom:12px;margin-bottom:6px}
+#sheet .bar h2{color:#fff;text-shadow:0 2px 0 rgba(43,58,90,.25);flex:1;min-width:0}
+#sheet .bar .back{background:#fff;box-shadow:0 3px 0 rgba(43,58,90,.2)}
+.mascot{flex:none;margin:-6px -2px -14px 0;animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px) rotate(-4deg)}}
+
+.step{display:flex;align-items:center;gap:10px}
+.step .num{flex:none;width:36px;height:36px;border-radius:50%;background:var(--th);color:#fff;display:grid;place-items:center;font-size:1.15rem;box-shadow:0 3px 0 rgba(43,58,90,.2)}
+.wrap h3{font-size:1.35rem}
+
+.buddy{display:flex;align-items:flex-end;gap:6px;margin:4px 0 6px}
+.buddy>span{flex:none;animation:bob 2.6s ease-in-out infinite}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:20px;padding:10px 14px;margin:0 0 30px;font-family:var(--display);font-weight:700;font-size:1.2rem;line-height:1.2}
+.bubble::before{content:"";position:absolute;left:-13px;bottom:12px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;bottom:14px;border:8px solid transparent;border-right-color:#fff}
+.bubble.pop{animation:pop .35s ease}
+@keyframes pop{40%{transform:scale(1.08)}}
+
+.mood,.char{box-shadow:0 4px 0 var(--line);transition:transform .12s}
+.mood:active,.char:active{transform:translateY(3px)}
+.mood[aria-pressed=true],.char[aria-pressed=true]{animation:wiggle .45s ease}
+.mood[aria-pressed=true] svg{transform:scale(1.08)}
+@keyframes wiggle{25%{transform:rotate(-6deg) scale(1.05)}60%{transform:rotate(5deg) scale(1.05)}}
+
+.chip{box-shadow:0 3px 0 var(--line)}
+.chip.idea{background:#fff;border-style:dashed;font-size:.95rem;min-height:42px}
+.chip.shuffle{width:46px;padding:0;justify-content:center;font-size:1.3rem}
+
+textarea.notebook,.diarytext.notebook{border-color:var(--line);background-color:#fffefa;
+  background-image:linear-gradient(90deg,transparent 30px,#ffb3b3 30px,#ffb3b3 32px,transparent 32px),repeating-linear-gradient(transparent 0 calc(1.6em - 2px),#cfe3f7 calc(1.6em - 2px) 1.6em);
+  background-attachment:local;line-height:1.6em;padding:8px 14px 8px 42px;font-size:1.2rem}
+textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
+.diarytext.notebook{padding-top:8px}
+
+.btn{transition:transform .1s}
+.btn.big{min-height:64px;font-size:1.35rem;padding:0 30px}
+.btn.big svg{flex:none}
+.card,.row,.cal,.diarytext{box-shadow:0 5px 0 rgba(43,58,90,.08)}
+.tag.vid{background:#ffe3ec;color:#a61e4d}
+
+/* vídeo */
+.vidwrap{position:relative;border-radius:22px;overflow:hidden;background:#1d2539;border:3px solid var(--ink)}
+.vidwrap video{display:block;width:100%;max-height:62vh;background:#1d2539}
+.vidwrap.live video{transform:scaleX(-1)}
+.vidwrap.recording{border-color:#e03131;box-shadow:0 0 0 4px rgba(224,49,49,.3)}
+.vidwrap .tip{position:absolute;left:10px;right:10px;bottom:10px;background:rgba(255,255,255,.92);border-radius:999px;padding:6px 12px;font-weight:800;text-align:center;font-size:.95rem}
+.recdot{position:absolute;left:10px;top:10px;background:#e03131;color:#fff;font-weight:800;font-size:.85rem;border-radius:999px;padding:4px 12px 4px 26px}
+.recdot::before{content:"";position:absolute;left:10px;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:#fff;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.recprog{position:absolute;left:0;right:0;bottom:0;height:8px;background:rgba(255,255,255,.3)}
+.recprog span{display:block;height:100%;width:0;background:#ffd43b;transition:width .25s linear}
+.btn .dot{width:18px;height:18px;border-radius:50%;background:#fff}
+.btn .sq{width:16px;height:16px;border-radius:3px;background:#fff}
+.btn .rt{font-family:var(--body);font-size:.9rem;opacity:.9}
+.bigcam{width:100%;display:flex;align-items:center;gap:14px;text-align:left;border:3px dashed var(--th);background:#fff;border-radius:var(--radius);padding:14px 16px;box-shadow:0 4px 0 var(--line)}
+.bigcam .ic{flex:none;width:58px;height:58px;border-radius:50%;background:#e64980;display:grid;place-items:center;box-shadow:0 4px 0 #a61e4d}
+.bigcam strong{font-family:var(--display);font-size:1.25rem}
+.bigcam small{color:var(--ink-soft);font-weight:700;font-size:.95rem}
+
+/* parque: estrelas */
+.stars{pointer-events:none;display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;background:rgba(255,255,255,.88);border-radius:999px;padding:4px 12px 4px 6px;font-weight:800;box-shadow:0 3px 0 rgba(43,58,90,.15)}
+.stars:empty{display:none}
+.stars b{font-family:var(--display);font-size:1.15rem}
+.stars .fire{background:#ff922b;color:#fff;border-radius:999px;padding:0 10px;font-size:.85rem}
+
+/* festa ao guardar */
+#sheet[data-theme=party]{background:linear-gradient(#8fd3ff 0 52%,#7fcf6b 52%)}
+.yay{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(env(safe-area-inset-top,0px) + 24px) 16px calc(env(safe-area-inset-bottom,0px) + 28px);gap:4px}
+.yay h2{margin:0;font-family:var(--display);font-weight:800;font-size:3rem;line-height:1;color:#fff;text-shadow:0 3px 0 var(--ink),0 6px 0 rgba(43,58,90,.25)}
+.yaychar{animation:jump .8s ease-in-out 3}
+@keyframes jump{30%{transform:translateY(-34px) rotate(-6deg)}60%{transform:translateY(0) scaleY(.92)}}
+.yaysub{margin:6px 0 10px;font-weight:800;font-size:1.15rem;background:#fff;border-radius:999px;padding:6px 16px}
+.yaystar{display:flex;align-items:center;gap:10px;background:#fff;border:3px solid var(--line);border-radius:22px;padding:10px 18px;font-family:var(--display);font-weight:800;font-size:1.4rem;line-height:1.1;text-align:left;box-shadow:0 5px 0 rgba(43,58,90,.12)}
+.yaystar svg{animation:spin 1.2s ease-out}
+.yaystar small{font-family:var(--body);font-size:.9rem;color:var(--ink-soft)}
+@keyframes spin{from{transform:scale(0) rotate(-180deg)}70%{transform:scale(1.25) rotate(10deg)}to{transform:none}}
+.yaystreak{margin:12px 0 0;background:#ff922b;color:#fff;font-weight:800;border-radius:999px;padding:6px 16px}
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:6}
+.confetti i{position:absolute;top:-16px;width:10px;height:14px;border-radius:3px;animation:fall linear forwards}
+@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(var(--r))}}
+@media (prefers-reduced-motion:reduce){.mascot,.buddy>span,.yaychar,.yaystar svg,.mood[aria-pressed=true],.char[aria-pressed=true],.bubble.pop{animation:none}}
 </style>
+</head><body style="margin:0">
 
 <div id="app">
   <main id="park" aria-label="Parque do diário">
@@ -219,13 +337,13 @@ label.f{display:block;font-weight:800;margin:14px 0 6px}
       </g>
     </svg>
     <div class="top">
-      <div><h1>Meu Diário</h1><p id="hello">Toque em um brinquedo!</p></div>
+      <div><h1>Meu Diário</h1><p id="hello">Toque em um brinquedo!</p><div id="stars" class="stars" role="status"></div></div>
       <button class="gear" data-act="go" data-v="mom" aria-label="Área da mamãe">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2b3a5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
       </button>
     </div>
   </main>
-  <section id="sheet" hidden aria-live="polite"></section>
+  <section id="sheet" hidden></section>
   <div id="toast" role="status"></div>
 </div>
 
@@ -311,8 +429,10 @@ function load(){
 }
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 S=load();
-S.entries=S.entries.filter(function(e){return !e.deletedAt||Date.now()-e.deletedAt<TRASH_DAYS*DAY});
+var gone=S.entries.filter(function(e){return e.deletedAt&&Date.now()-e.deletedAt>=TRASH_DAYS*DAY});
+S.entries=S.entries.filter(function(e){return gone.indexOf(e)<0});
 save();
+setTimeout(function(){gone.forEach(function(e){if(e.hasVideo)vidDel(e.id)})},0);
 function entry(id){for(var i=0;i<S.entries.length;i++)if(S.entries[i].id===id)return S.entries[i];return null}
 function friendName(id){for(var i=0;i<S.friends.length;i++)if(S.friends[i].id===id)return S.friends[i].name;return null}
 function friendNames(e){return (e.friends||[]).map(friendName).filter(Boolean)}
@@ -341,7 +461,7 @@ function dictate(){
     for(var i=ev.resultIndex;i<ev.results.length;i++){
       if(ev.results[i].isFinal){
         var t=ev.results[i][0].transcript.trim();
-        if(t){ta.value+=(ta.value&&!/\s$/.test(ta.value)?' ':'')+(ta.value&&!/[.!?]\s*$/.test(ta.value)?t:cap(t));draft.text=ta.value}
+        if(t){ta.value+=(ta.value&&!/\s$/.test(ta.value)?' ':'')+(ta.value&&!/[.!?]\s*$/.test(ta.value)?t:cap(t));draft.text=ta.value;keepDraft()}
       }
     }
   };
@@ -366,22 +486,30 @@ function listenRestore(id){
 }
 
 /* ---------- Navegação ---------- */
-var view='park',vArg=null,draft=null,selTrash=null,filt={mood:'',friend:''},momOK=false,gate=null;
+var view='park',vArg=null,draft=null,selTrash=null,filt={mood:'',friend:'',date:''},momOK=false,gate=null;
+var calMonth=dstr().slice(0,7);
+function shiftMonth(ym,n){var p=ym.split('-').map(Number),d=new Date(p[0],p[1]-1+n,1);return d.getFullYear()+'-'+z(d.getMonth()+1)}
 function go(v,arg){
-  stopRec();view=v;vArg=arg||null;
+  stopRec();stopCam();view=v;vArg=arg||null;
+  if(v!=='yay')$$('.confetti').forEach(function(c){c.remove()});
   if(v==='write')initDraft(arg);
-  if(v==='days'&&!arg){/* mantém filtros */}
   if(v==='trash')selTrash=null;
   if(v==='mom'){momOK=false;gate=null}
   render();
 }
+/* cada tela tem sua cor e um amiguinho no cantinho */
+var THEME={write:['sun','coelha'],day:['grape','ursinho'],days:['grape','ursinho'],friends:['sky','sapo'],reminders:['lemon','pintinho'],trash:['slate','gato'],mom:['mint',''],yay:['party',''],welcome:['party','']};
 function head(title,back){
-  return '<header class="bar"><button class="back" data-act="go" data-v="'+(back||'park')+'"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b3a5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'+(back&&back!=='park'?'Voltar':'Parque')+'</button><h2>'+title+'</h2></header>';
+  var th=THEME[view]||[];
+  return '<header class="bar"><button class="back" data-act="go" data-v="'+(back||'park')+'"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b3a5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'+(back&&back!=='park'?'Voltar':'Parque')+'</button><h2>'+title+'</h2>'+(th[1]?'<span class="mascot" aria-hidden="true">'+charSvg(th[1],54)+'</span>':'')+'</header>';
 }
 function render(){
   var sh=$('#sheet');
-  if(view==='park'){sh.hidden=true;sh.innerHTML='';updatePark();return}
+  if(view==='park'){sh.hidden=true;sh.innerHTML='';sh.removeAttribute('data-theme');updatePark();return}
+  sh.setAttribute('data-theme',(THEME[view]||['sky'])[0]);
   sh.hidden=false;sh.innerHTML=VIEWS[view](vArg);sh.scrollTop=0;
+  if(view==='write')renderVid();
+  if(view==='day')loadDayVideo(vArg);
 }
 
 /* ---------- Parque: placa e enfeites ---------- */
@@ -394,53 +522,126 @@ function updatePark(){
   else{l2='Nada por perto';l3='Toque para criar'}
   g.innerHTML='<text x="72" y="326" font-size="16" font-weight="700">Lembretes</text><text x="75" y="347" font-size="12" font-weight="600">'+esc(l2)+'</text><text x="75" y="366" font-size="13" font-weight="700" fill="#b03a28">'+esc(l3)+'</text>';
   b.innerHTML=up.length?'<circle cx="134" cy="304" r="13" fill="#d9432f" stroke="#fff" stroke-width="3"/><text x="134" y="309" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="14" fill="#fff">'+up.length+'</text>':'';
-  $('#hello').textContent=S.settings.name?('Oi, '+S.settings.name+'! Toque em um brinquedo.'):'Toque em um brinquedo!';
+  var wroteToday=S.entries.some(function(e){return !e.deletedAt&&e.date===dstr()});
+  var oi=S.settings.name?('Oi, '+S.settings.name+'! '):'';
+  $('#hello').textContent=oi+(wroteToday?'Você já contou sobre hoje!':S.draft?'Seu dia está esperando no balanço.':'Que tal contar sobre hoje no balanço?');
+  var stars=S.entries.filter(function(e){return !e.deletedAt&&!e.example}).length,st=streak();
+  $('#stars').innerHTML=STAR+'<span><b>'+stars+'</b> '+(stars===1?'estrela':'estrelas')+'</span>'+(st>1?'<span class="fire">'+st+' dias seguidos!</span>':'');
+  $('#stars').setAttribute('aria-label',stars+(stars===1?' estrela':' estrelas')+(st>1?', '+st+' dias seguidos':''));
 }
+var STAR='<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5L2.5 9.3l6.6-.8z" fill="#ffd43b" stroke="#2b3a5a" stroke-width="1.6" stroke-linejoin="round"/></svg>';
 $('#decoA').innerHTML=CHAR_INNER.pintinho;
 $('#decoB').innerHTML=CHAR_INNER.coelha;
 
 /* ---------- Telas ---------- */
 var VIEWS={};
 
+var draftRestored=false;
 function initDraft(id){
-  var e=id&&entry(id);
-  draft=e?{id:e.id,date:e.date,text:e.text,mood:e.mood,character:e.character,friends:(e.friends||[]).slice()}
-         :{id:null,date:dstr(),text:'',mood:null,character:null,friends:[]};
+  draftRestored=false;
+  var e=id&&id.indexOf('d:')!==0&&entry(id),sv=S.draft,key=null;
+  if(id&&id.indexOf('d:')===0){
+    draft={id:null,date:id.slice(2),text:'',mood:null,character:null,friends:[]};
+  }else if(e){
+    draft={id:e.id,date:e.date,text:e.text,mood:e.mood,character:e.character,friends:(e.friends||[]).slice()};
+    if(e.hasVideo)key=e.id;
+  }else if(sv&&(sv.text||sv.mood||sv.video)){
+    draft={id:null,date:sv.date||dstr(),text:sv.text||'',mood:sv.mood||null,character:sv.character||null,friends:(sv.friends||[]).filter(friendName)};
+    draftRestored=true;if(sv.video)key='__draft';
+  }else{
+    draft={id:null,date:dstr(),text:'',mood:null,character:null,friends:[]};
+  }
+  draft.video=null;draft.videoTouched=false;vidState='idle';
+  if(key){var d0=draft;vidGet(key).then(function(b){if(draft===d0&&!d0.videoTouched&&b){d0.video=b;renderVid()}})}
 }
+/* guarda o rascunho de um dia novo enquanto a criança escreve */
+var draftT;
+function keepDraft(){
+  if(!draft||draft.id)return;
+  clearTimeout(draftT);
+  draftT=setTimeout(function(){
+    var ta=$('#txt');if(ta)draft.text=ta.value;
+    var dt=$('#dt');if(dt&&dt.value)draft.date=dt.value;
+    S.draft=(draft.text.trim()||draft.mood||draft.video)?{date:draft.date,text:draft.text,mood:draft.mood,character:draft.character,friends:draft.friends.slice(),video:!!draft.video}:null;
+    save();
+  },400);
+}
+var IDEAS=['A melhor parte do meu dia foi','Hoje eu aprendi','Uma coisa engraçada que aconteceu foi','Eu fiquei orgulhoso quando','Hoje eu brinquei de','Uma coisa difícil hoje foi','Amanhã eu quero','Hoje eu comi','Eu ajudei alguém quando','Se meu dia fosse um filme, ele se chamaria'];
+var SAY={feliz:'Que legal! Me conta tudo!',animado:'Uau! O que te deixou tão animado?',calmo:'Que dia tranquilo! Como foi?',medo:'Você é corajoso de contar. O que deu medo?',triste:'Tudo bem ficar triste. Quer me contar o que houve?',bravo:'Ficar bravo acontece. O que aconteceu?'};
+function bubbleText(){return draft&&draft.mood?SAY[draft.mood]:'Oi! Como foi o seu dia hoje?'}
+function pickIdeas(){var a=IDEAS.slice(),out=[];while(out.length<3&&a.length)out.push(a.splice(Math.floor(Math.random()*a.length),1)[0]);return out}
+function ideaChips(){return pickIdeas().map(function(t){return '<button class="chip idea" data-act="idea" data-t="'+esc(t)+'">'+esc(t)+'…</button>'}).join('')+'<button class="chip shuffle" data-act="ideas-more" aria-label="Outras ideias">↻</button>'}
+function step(n,t){return '<h3 class="step"><span class="num">'+n+'</span>'+t+'</h3>'}
 VIEWS.write=function(){
   var moods=MOODS.map(function(m){return '<button class="mood" data-act="mood" data-mood="'+m.id+'" aria-pressed="'+(draft.mood===m.id)+'">'+face(m.id,58)+'<span>'+m.label+'</span></button>'}).join('');
   var chars=CHARS.map(function(c){return '<button class="char" data-act="char" data-char="'+c.id+'" aria-pressed="'+(draft.character===c.id)+'">'+charSvg(c.id,64)+'<span>'+c.label+'</span></button>'}).join('');
   var fr=S.friends.length?S.friends.map(function(f){return '<button class="chip" data-act="fpick" data-id="'+f.id+'" aria-pressed="'+(draft.friends.indexOf(f.id)>-1)+'">'+esc(f.name)+'</button>'}).join(''):'<p class="hint">Você ainda não cadastrou amigos. Toque no escorregador, no parque, para cadastrar.</p>';
   return head(draft.id?'Mudar meu dia':'Meu dia')+'<div class="wrap">'+
-   '<h3>Como você está se sentindo?</h3><div class="moods">'+moods+'</div>'+
-   '<h3>Conte como foi o seu dia</h3>'+
-   '<textarea id="txt" aria-label="Meu dia" placeholder="Escreva aqui, ou toque no microfone e fale...">'+esc(draft.text)+'</textarea>'+
+   (draftRestored?'<p class="draftnote">Guardei o que você tinha começado. Pode continuar! <button class="linkbtn" style="min-height:0;padding:0 4px" data-act="clear-draft">Começar de novo</button></p>':'')+
+   '<div class="buddy"><span id="buddyPic">'+charSvg(draft.character||'coelha',72)+'</span><p class="bubble" id="bubble">'+esc(bubbleText())+'</p></div>'+
+   step(1,'Como você está se sentindo?')+'<div class="moods">'+moods+'</div>'+
+   step(2,'Conte como foi o seu dia')+
+   '<p class="hint" style="margin:0 0 8px">Sem ideia? Toque em um começo:</p><div class="chips ideas" id="ideas">'+ideaChips()+'</div>'+
+   '<textarea id="txt" class="notebook" aria-label="Meu dia" placeholder="Escreva aqui, ou toque no microfone e fale...">'+esc(draft.text)+'</textarea>'+
    '<div class="mic"><button class="micbtn" id="mic" data-act="mic" aria-pressed="false" aria-label="Falar"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><strong id="micLabel">Toque para falar</strong></div>'+
-   '<h3>Quem estava com você?</h3><div class="chips">'+fr+'</div>'+
-   '<h3>Escolha um amiguinho de desenho</h3><div class="chars">'+chars+'</div>'+
-   '<label class="f" for="dt">Dia</label><input type="date" id="dt" value="'+draft.date+'" max="'+dstr()+'">'+
-   '<div class="actions"><button class="btn" data-act="save-entry">Guardar no diário</button><button class="btn ghost" data-act="go" data-v="park">Cancelar</button></div>'+
+   step(3,'Quer gravar um vídeo?')+'<div id="vidBox"></div>'+
+   step(4,'Quem estava com você?')+'<div class="chips">'+fr+'</div>'+
+   step(5,'Escolha um amiguinho de desenho')+'<div class="chars">'+chars+'</div>'+
+   '<label class="f" for="dt">Que dia foi?</label><input type="date" id="dt" value="'+draft.date+'" max="'+dstr()+'">'+
+   '<div class="actions"><button class="btn big" data-act="save-entry">'+STAR+'Guardar no diário</button><button class="btn ghost" data-act="go" data-v="park">Cancelar</button></div>'+
    '</div>';
 };
 
+function liveEntries(){return S.entries.filter(function(e){return !e.deletedAt}).sort(function(a,b){return a.date===b.date?b.createdAt-a.createdAt:(a.date<b.date?1:-1)})}
+/* dias seguidos escrevendo, contando até hoje (ou até ontem, se hoje ainda não escreveu) */
+function streak(){
+  var have={};liveEntries().forEach(function(e){if(!e.example)have[e.date]=1});
+  var d=new Date();if(!have[dstr(d)])d.setDate(d.getDate()-1);
+  var n=0;while(have[dstr(d)]){n++;d.setDate(d.getDate()-1)}
+  return n;
+}
+function calendar(){
+  var byDay={};
+  liveEntries().forEach(function(e){(byDay[e.date]=byDay[e.date]||[]).push(e)});
+  var p=calMonth.split('-').map(Number),first=new Date(p[0],p[1]-1,1),days=new Date(p[0],p[1],0).getDate();
+  var today=dstr(),isNow=calMonth===today.slice(0,7);
+  var title=cap(first.toLocaleDateString('pt-BR',{month:'long',year:'numeric'}));
+  var h='<div class="calgrid">'+['D','S','T','Q','Q','S','S'].map(function(w){return '<span class="wd" aria-hidden="true">'+w+'</span>'}).join('');
+  for(var i=0;i<first.getDay();i++)h+='<span></span>';
+  for(var d=1;d<=days;d++){
+    var ds=calMonth+'-'+z(d),es=byDay[ds],fut=ds>today;
+    var lab=longDate(ds)+(es?', me senti '+moodOf(es[0].mood).label:fut?'':', toque para escrever');
+    h+='<button class="cday'+(ds===today?' today':'')+(fut?' future':'')+'" data-act="cal-day" data-date="'+ds+'" data-has="'+(es?1:0)+'" aria-pressed="'+(filt.date===ds)+'" aria-label="'+esc(lab)+'"'+(fut?' tabindex="-1"':'')+'>'+
+      (es?face(es[0].mood,40)+(es.length>1?'<span class="n">'+es.length+'</span>':''):d)+'</button>';
+  }
+  h+='</div>';
+  var s=streak();
+  return '<div class="cal"><div class="calnav"><button data-act="cal-prev" aria-label="Mês anterior">‹</button><strong>'+title+'</strong><button data-act="cal-next" aria-label="Próximo mês"'+(isNow?' disabled':'')+'>›</button></div>'+h+
+    (s>1?'<p class="streak">Você escreveu '+s+' dias seguidos!</p>':'')+'</div>';
+}
 VIEWS.days=function(){
-  var list=S.entries.filter(function(e){return !e.deletedAt}).sort(function(a,b){return a.date===b.date?b.createdAt-a.createdAt:(a.date<b.date?1:-1)});
+  var list=liveEntries();
+  if(filt.date)list=list.filter(function(e){return e.date===filt.date});
   if(filt.mood)list=list.filter(function(e){return e.mood===filt.mood});
   if(filt.friend)list=list.filter(function(e){return (e.friends||[]).indexOf(filt.friend)>-1});
   var mchips='<button class="chip" data-act="fmood" data-mood="" aria-pressed="'+(!filt.mood)+'">Todos</button>'+MOODS.map(function(m){return '<button class="chip" data-act="fmood" data-mood="'+m.id+'" aria-pressed="'+(filt.mood===m.id)+'" aria-label="'+m.label+'">'+face(m.id,30)+'</button>'}).join('');
   var fchips=S.friends.length?'<h3>Com quem</h3><div class="chips"><button class="chip" data-act="ffriend" data-id="" aria-pressed="'+(!filt.friend)+'">Todos</button>'+S.friends.map(function(f){return '<button class="chip" data-act="ffriend" data-id="'+f.id+'" aria-pressed="'+(filt.friend===f.id)+'">'+esc(f.name)+'</button>'}).join('')+'</div>':'';
   var rows=list.length?list.map(function(e){
-    return '<button class="row" data-act="go" data-v="day" data-id="'+e.id+'">'+face(e.mood,52)+'<span class="meta"><span class="d">'+esc(longDate(e.date))+(e.example?'<span class="tag">exemplo</span>':'')+'</span><br><span class="s">'+esc(e.text)+'</span></span>'+(e.character?charSvg(e.character,44):'')+'</button>';
+    return '<button class="row" data-act="go" data-v="day" data-id="'+e.id+'">'+face(e.mood,52)+'<span class="meta"><span class="d">'+esc(longDate(e.date))+(e.example?'<span class="tag">exemplo</span>':'')+(e.hasVideo?'<span class="tag vid">vídeo</span>':'')+'</span><br><span class="s">'+esc(e.text||'Dia contado em vídeo')+'</span></span>'+(e.character?charSvg(e.character,44):'')+'</button>';
   }).join(''):'<div class="empty">Nenhum dia por aqui ainda.<br>Que tal escrever no balanço?</div>';
-  return head('Meus dias')+'<div class="wrap"><h3>Como eu estava</h3><div class="chips">'+mchips+'</div>'+fchips+'<h3>'+list.length+(list.length===1?' dia':' dias')+'</h3><div class="list">'+rows+'</div></div>';
+  var dchip=filt.date?'<div class="chips" style="margin-bottom:10px"><button class="chip" data-act="fdate" aria-pressed="true" aria-label="Só '+esc(longDate(filt.date))+'. Toque para ver todos os dias">'+esc(shortDate(filt.date))+' <span class="x" aria-hidden="true">×</span></button></div>':'';
+  return head('Meus dias')+'<div class="wrap"><h3>Meu mês</h3>'+calendar()+'<p class="hint">Toque em uma carinha para ver o dia, ou em um número para escrever sobre ele.</p>'+
+    '<h3>Como eu estava</h3><div class="chips">'+mchips+'</div>'+fchips+'<h3 id="listHead">'+list.length+(list.length===1?' dia':' dias')+'</h3>'+dchip+'<div class="list">'+rows+'</div></div>';
 };
 
-function shareUrl(e){
+function shareText(e){
   var m=moodOf(e.mood),quando=e.date===dstr()?'Hoje':'No dia '+shortDate(e.date);
   var fn=friendNames(e);
-  var msg='Oi, mamãe! '+quando+' eu me senti: '+(m?m.label:'')+'.\n\n“'+e.text+'”'+(fn.length?'\n\nEstive com: '+fn.join(', ')+'.':'')+'\n\n— '+(S.settings.name?S.settings.name+', ':'')+'do meu Diário';
+  return 'Oi, mamãe! '+quando+' eu me senti: '+(m?m.label:'')+'.'+(e.text?'\n\n“'+e.text+'”':'')+(fn.length?'\n\nEstive com: '+fn.join(', ')+'.':'')+'\n\n— '+(S.settings.name?S.settings.name+', ':'')+'do meu Diário';
+}
+function shareUrl(e){
   var phone=(S.settings.momPhone||'').replace(/\D/g,'');
-  return 'https://wa.me/'+phone+'?text='+encodeURIComponent(msg);
+  return 'https://wa.me/'+phone+'?text='+encodeURIComponent(shareText(e));
 }
 VIEWS.day=function(id){
   var e=entry(id);if(!e||e.deletedAt)return head('Meu dia','days')+'<div class="wrap"><div class="empty">Esse dia não está mais aqui.</div></div>';
@@ -448,9 +649,12 @@ VIEWS.day=function(id){
   var hasPhone=(S.settings.momPhone||'').replace(/\D/g,'').length>=8;
   return head('Meu dia','days')+'<div class="wrap">'+
    '<div class="dayhead">'+face(e.mood,84)+'<div><h3>'+esc(longDate(e.date))+'</h3><div class="hint">Me senti: <strong>'+(m?m.label:'')+'</strong>'+(e.example?'<span class="tag">exemplo</span>':'')+'</div></div>'+(e.character?'<div style="margin-left:auto">'+charSvg(e.character,76)+'</div>':'')+'</div>'+
-   '<div class="diarytext">'+esc(e.text)+'</div>'+
+   (e.text?'<div class="diarytext notebook">'+esc(e.text)+'</div>':'')+
+   (e.hasVideo?'<div class="vidwrap" id="dayVid" style="margin-top:12px"><div class="empty" style="padding:14px">Carregando o vídeo...</div></div>':'')+
    (fn.length?'<p class="hint" style="margin-top:12px">Estive com: <strong>'+fn.map(esc).join(', ')+'</strong></p>':'')+
-   '<div class="actions"><a class="btn green" href="'+shareUrl(e)+'" target="_blank" rel="noopener noreferrer"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 16-3-7z"/></svg>Compartilhar com a mamãe</a>'+
+   '<div class="actions">'+
+   (e.hasVideo?'<button class="btn green" id="shareVid" data-act="share-vid" data-id="'+e.id+'"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="14" height="12" rx="3"/><path d="M16 10l6-3v10l-6-3z"/></svg>Enviar o vídeo</button>':'')+
+   '<a class="btn green" href="'+shareUrl(e)+'" target="_blank" rel="noopener noreferrer"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 16-3-7z"/></svg>'+(e.hasVideo?'Enviar o texto':'Compartilhar com a mamãe')+'</a>'+
    '<button class="btn ghost" data-act="go" data-v="write" data-id="'+e.id+'">Mudar</button>'+
    '<button class="btn ghost" data-act="del-entry" data-id="'+e.id+'">Apagar este dia</button></div>'+
    (hasPhone?'':'<p class="hint">A mamãe ainda não cadastrou o número dela. Toque na engrenagem, no parque, para cadastrar. Por enquanto o WhatsApp vai pedir para escolher quem recebe.</p>')+
@@ -506,13 +710,214 @@ VIEWS.mom=function(){
     if(!gate){var a=6+Math.floor(Math.random()*4),b=4+Math.floor(Math.random()*5);gate={a:a,b:b}}
     return head('Área da mamãe')+'<div class="wrap"><div class="card"><h3>Só para adultos</h3><p style="margin-top:0">Quanto é <strong>'+gate.a+' + '+gate.b+'</strong>?</p><input type="number" id="ans" inputmode="numeric" aria-label="Resposta"><div class="actions" style="margin-top:14px"><button class="btn" data-act="gate">Entrar</button></div></div></div>';
   }
+  var nLive=S.entries.filter(function(e){return !e.deletedAt}).length,nTrash=S.entries.length-nLive;
+  var hasEx=S.entries.some(function(e){return e.example})||S.reminders.some(function(r){return r.example});
+  var lastBk=S.settings.lastBackup||'';
   return head('Área da mamãe')+'<div class="wrap">'+
    '<h3>Sobre a criança</h3><label class="f" for="cn" style="margin-top:0">Nome no diário</label><input type="text" id="cn" maxlength="24" value="'+esc(S.settings.name)+'" placeholder="Como devemos chamar?">'+
    '<h3>WhatsApp da mamãe</h3><label class="f" for="mp" style="margin-top:0">Número com país e DDD</label><input type="tel" id="mp" inputmode="tel" value="'+esc(S.settings.momPhone)+'" placeholder="5511999998888">'+
    '<p class="hint">Quando a criança tocar em “Compartilhar com a mamãe”, o WhatsApp abre com o texto do dia pronto para enviar. Nada é enviado sozinho.</p>'+
-   '<h3>Onde os dias ficam guardados</h3><div class="card"><strong>Neste aparelho (teste).</strong><p class="hint" style="margin:6px 0 0">A conta do Google Drive ainda será escolhida. Enquanto isso, o diário fica salvo só neste navegador.</p></div>'+
-   '<div class="actions"><button class="btn" data-act="save-mom">Guardar</button></div></div>';
+   '<div class="actions"><button class="btn" data-act="save-mom">Guardar</button></div>'+
+   '<h3>Sons</h3><button class="chip" data-act="sound" aria-pressed="'+(S.settings.sound!==false)+'">'+(S.settings.sound!==false?'Sons ligados':'Sons desligados')+'</button>'+
+   '<h3>Onde os dias ficam guardados</h3><div class="card"><strong>Neste aparelho.</strong><p class="hint" style="margin:6px 0 10px">O diário fica salvo só neste navegador. Se limpar os dados do navegador ou trocar de aparelho, os dias se perdem — por isso, baixe uma cópia de vez em quando. Os vídeos não entram na cópia (são grandes): para guardar um vídeo, use “Enviar o vídeo” na página do dia.</p>'+
+   '<p class="hint" style="margin:0 0 4px">'+nLive+(nLive===1?' dia':' dias')+' no diário'+(nTrash?' · '+nTrash+' na lixeira':'')+(lastBk?' · última cópia em '+esc(shortDate(lastBk)):' · nenhuma cópia ainda')+'</p>'+
+   '<div class="actions" style="margin-top:10px"><button class="btn green small" data-act="backup">Baixar cópia</button><button class="btn ghost small" data-act="restore-file">Restaurar uma cópia</button></div>'+
+   '<input type="file" id="bkfile" accept=".json,application/json" hidden></div>'+
+   ((hasEx||nTrash)?'<h3>Arrumar</h3><div class="actions" style="margin-top:0">'+
+     (hasEx?'<button class="btn ghost small" data-act="clear-examples">Tirar os exemplos</button>':'')+
+     (nTrash?'<button class="btn ghost small" data-act="empty-trash">Esvaziar a lixeira</button>':'')+'</div>':'')+
+   '</div>';
 };
+
+/* ---------- Vídeos (ficam neste aparelho, no IndexedDB) ---------- */
+var VDB=null;
+function vdb(){return VDB||(VDB=new Promise(function(res,rej){
+  if(!window.indexedDB){rej(new Error('sem idb'));return}
+  var r=indexedDB.open('diario-videos',1);
+  r.onupgradeneeded=function(){r.result.createObjectStore('v')};
+  r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)};
+}))}
+function vtx(mode,fn){return vdb().then(function(db){return new Promise(function(res,rej){
+  var t=db.transaction('v',mode),q=fn(t.objectStore('v'));
+  t.oncomplete=function(){res(q&&q.result)};t.onerror=t.onabort=function(){rej(t.error)};
+})})}
+function vidGet(k){return vtx('readonly',function(s){return s.get(k)}).catch(function(){return null})}
+function vidPut(k,b){return vtx('readwrite',function(s){s.put(b,k)})}
+function vidDel(k){return vtx('readwrite',function(s){s.delete(k)}).catch(function(){})}
+function vidExt(b){return b&&b.type&&b.type.indexOf('mp4')>-1?'mp4':'webm'}
+
+var MAXV=60,cam={stream:null,rec:null,chunks:[],timer:null,t0:0,discard:false},vidState='idle',vidUrl=null;
+function pickMime(){
+  if(!window.MediaRecorder)return null;
+  var c=['video/mp4;codecs=avc1,mp4a','video/mp4','video/webm;codecs=vp8,opus','video/webm'];
+  for(var i=0;i<c.length;i++)if(MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(c[i]))return c[i];
+  return '';
+}
+function stopCam(){
+  clearInterval(cam.timer);
+  if(cam.rec&&cam.rec.state!=='inactive'){cam.discard=true;try{cam.rec.stop()}catch(e){}}
+  cam.rec=null;
+  if(cam.stream){cam.stream.getTracks().forEach(function(t){t.stop()});cam.stream=null}
+  if(vidState!=='idle')vidState='idle';
+}
+function camErr(e){
+  var n=e&&e.name;
+  if(n==='NotAllowedError'||n==='SecurityError')return 'A câmera não foi liberada. Peça para um adulto liberar a câmera.';
+  if(n==='NotFoundError'||n==='OverconstrainedError')return 'Não achei uma câmera neste aparelho.';
+  if(n==='NotReadableError')return 'A câmera está sendo usada por outro app.';
+  return 'Não consegui abrir a câmera agora.';
+}
+function openCam(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||pickMime()===null){toast('Este navegador não grava vídeo. Tente no Chrome ou no Safari.');return}
+  stopRec();
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:true}).then(function(st){
+    if(view!=='write'){st.getTracks().forEach(function(t){t.stop()});return}
+    cam.stream=st;vidState='live';renderVid();
+    var v=$('#live');if(v){v.srcObject=st;v.play().catch(function(){})}
+  }).catch(function(e){toast(camErr(e))});
+}
+function startRecording(){
+  if(!cam.stream)return;
+  var mime=pickMime(),opts={videoBitsPerSecond:900000};if(mime)opts.mimeType=mime;
+  try{cam.rec=new MediaRecorder(cam.stream,opts)}catch(e){try{cam.rec=new MediaRecorder(cam.stream)}catch(e2){toast('Não consegui gravar neste aparelho.');return}}
+  cam.chunks=[];cam.discard=false;
+  var r=cam.rec;
+  r.ondataavailable=function(ev){if(ev.data&&ev.data.size)cam.chunks.push(ev.data)};
+  r.onstop=function(){
+    var chunks=cam.chunks;cam.chunks=[];
+    if(cam.discard){cam.discard=false;return}
+    if(cam.stream){cam.stream.getTracks().forEach(function(t){t.stop()});cam.stream=null}
+    var blob=new Blob(chunks,{type:(r.mimeType||mime||'video/webm')});
+    if(!blob.size){toast('O vídeo ficou vazio. Tente de novo!');vidState='idle';renderVid();return}
+    draft.video=blob;draft.videoTouched=true;vidState='idle';
+    if(!draft.id)vidPut('__draft',blob).catch(function(){});
+    keepDraft();renderVid();pop('yay');toast('Vídeo pronto!');
+  };
+  r.start(1000);cam.t0=Date.now();vidState='rec';renderVid();
+  var v=$('#live');if(v&&cam.stream){v.srcObject=cam.stream;v.play().catch(function(){})}
+  cam.timer=setInterval(function(){
+    var s=Math.floor((Date.now()-cam.t0)/1000),el=$('#recTime');
+    if(el)el.textContent=Math.floor(s/60)+':'+z(s%60)+' de 1:00';
+    var bar=$('#recBar');if(bar)bar.style.width=Math.min(100,s/MAXV*100)+'%';
+    if(s>=MAXV)stopRecording();
+  },250);
+}
+function stopRecording(){clearInterval(cam.timer);if(cam.rec&&cam.rec.state!=='inactive')cam.rec.stop();cam.rec=null}
+function renderVid(){
+  var box=$('#vidBox');if(!box||!draft)return;
+  if(vidUrl){URL.revokeObjectURL(vidUrl);vidUrl=null}
+  var CAMI='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="14" height="12" rx="3"/><path d="M16 10l6-3v10l-6-3z"/></svg>';
+  if(vidState==='live'||vidState==='rec'){
+    var recing=vidState==='rec';
+    box.innerHTML='<div class="vidwrap live'+(recing?' recording':'')+'"><video id="live" muted playsinline autoplay></video>'+
+      (recing?'<span class="recdot">GRAVANDO</span><div class="recprog"><span id="recBar"></span></div>':'<span class="tip">Sorria! Você pode gravar até 1 minuto.</span>')+'</div>'+
+      '<div class="actions" style="margin-top:12px">'+(recing?'<button class="btn" data-act="vid-stop"><span class="sq" aria-hidden="true"></span>Parar <span id="recTime" class="rt">0:00 de 1:00</span></button>'
+        :'<button class="btn" data-act="vid-rec"><span class="dot" aria-hidden="true"></span>Gravar</button><button class="btn ghost" data-act="vid-cancel">Fechar câmera</button>')+'</div>';
+    return;
+  }
+  if(draft.video){
+    vidUrl=URL.createObjectURL(draft.video);
+    box.innerHTML='<div class="vidwrap"><video src="'+vidUrl+'" controls playsinline preload="metadata"></video></div>'+
+      '<div class="actions" style="margin-top:12px"><button class="btn ghost small" data-act="vid-open">Gravar outro</button><button class="btn ghost small" data-act="vid-remove">Tirar o vídeo</button></div>';
+    return;
+  }
+  box.innerHTML='<button class="bigcam" data-act="vid-open">'+'<span class="ic">'+CAMI+'</span><span><strong>Gravar um vídeo</strong><br><small>Conte seu dia olhando para a câmera</small></span></button>';
+}
+var dayVid={id:null,file:null,url:null};
+function loadDayVideo(id){
+  if(dayVid.url){URL.revokeObjectURL(dayVid.url);dayVid.url=null}
+  dayVid.id=id;dayVid.file=null;
+  var e=entry(id);if(!e||!e.hasVideo)return;
+  vidGet(id).then(function(b){
+    var box=$('#dayVid');if(!box||dayVid.id!==id)return;
+    if(!b){box.innerHTML='<div class="empty" style="padding:14px">O vídeo deste dia não está neste aparelho.</div>';var sb=$('#shareVid');if(sb)sb.remove();return}
+    dayVid.file=new File([b],'meu-dia-'+e.date+'.'+vidExt(b),{type:(b.type||'video/webm').split(';')[0]});
+    dayVid.url=URL.createObjectURL(b);
+    box.innerHTML='<video src="'+dayVid.url+'" controls playsinline preload="metadata"></video>';
+  });
+}
+function downloadFile(f){
+  var a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500);
+}
+function shareVideo(id){
+  var e=entry(id),f=dayVid.file;
+  if(!e||!f||dayVid.id!==id){toast('O vídeo ainda está carregando. Tente de novo!');return}
+  if(navigator.canShare&&navigator.canShare({files:[f]})){
+    navigator.share({files:[f],title:'Meu dia',text:shareText(e)}).catch(function(err){if(err&&err.name!=='AbortError'){downloadFile(f);toast('Baixei o vídeo. Agora é só enviar pelo WhatsApp.')}});
+  }else{downloadFile(f);toast('Baixei o vídeo. Agora é só enviar pelo WhatsApp.')}
+}
+
+/* ---------- Sons e festa ---------- */
+var AC=null;
+function pop(kind){
+  if(S.settings.sound===false)return;
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state==='suspended')AC.resume();
+    var notes=kind==='yay'?[523,659,784,1047]:kind==='tap'?[660]:[392];
+    notes.forEach(function(f,i){
+      var o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+i*.09;
+      o.type='triangle';o.frequency.value=f;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(kind==='tap'?.06:.12,t+.015);g.gain.exponentialRampToValueAtTime(.001,t+.22);
+      o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+.25);
+    });
+  }catch(e){}
+}
+var reduceMotion=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function confetti(){
+  if(reduceMotion)return;
+  var box=document.createElement('div');box.className='confetti';box.setAttribute('aria-hidden','true');
+  var cols=['#ffd43b','#ff6b6b','#4dabf7','#7fcf6b','#b197fc','#ff922b'];
+  for(var i=0;i<46;i++){
+    var p=document.createElement('i');
+    p.style.left=Math.random()*100+'%';p.style.background=cols[i%cols.length];
+    p.style.animationDelay=(Math.random()*.35)+'s';p.style.animationDuration=(1.4+Math.random()*1.2)+'s';
+    p.style.setProperty('--dx',(Math.random()*120-60)+'px');p.style.setProperty('--r',(Math.random()*720-360)+'deg');
+    if(i%3===0)p.style.borderRadius='50%';
+    box.appendChild(p);
+  }
+  $('#app').appendChild(box);setTimeout(function(){box.remove()},3200);
+}
+
+function btnBusy(b,txt){if(b){b.disabled=true;b.textContent=txt}}
+function celebrate(e,isNew){
+  if(!isNew){toast('Pronto, mudei o seu dia!');go('day',e.id);return}
+  go('yay',e.id);confetti();pop('yay');
+}
+VIEWS.yay=function(id){
+  var e=entry(id);if(!e)return VIEWS.days();
+  var stars=S.entries.filter(function(x){return !x.deletedAt&&!x.example}).length,st=streak();
+  var cheer=['Muito bem!','Que legal!','Arrasou!','Incrível!','Show de bola!'][stars%5];
+  return '<div class="yay"><div class="yaychar">'+charSvg(e.character||'coelha',150)+'</div>'+
+    '<h2>'+cheer+'</h2><p class="yaysub">Seu dia foi guardado no diário.</p>'+
+    '<div class="yaystar">'+STAR.replace(/26/g,'44')+'<span>+1 estrela<br><small>Você tem '+stars+(stars===1?' estrela':' estrelas')+'</small></span></div>'+
+    (st>1?'<p class="yaystreak">'+st+' dias seguidos escrevendo!</p>':'')+
+    '<div class="actions" style="justify-content:center"><button class="btn big" data-act="go" data-v="day" data-id="'+e.id+'">Ver meu dia</button><button class="btn ghost" data-act="go" data-v="park">Voltar ao parque</button></div></div>';
+};
+
+/* ---------- Cópia de segurança ---------- */
+function backup(){
+  try{
+    var blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download='meu-diario-'+dstr()+'.json';document.body.appendChild(a);a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);
+    S.settings.lastBackup=dstr();save();toast('Cópia baixada! Guarde o arquivo em um lugar seguro.');render();
+  }catch(e){toast('Não consegui baixar a cópia neste aparelho.')}
+}
+function restoreBackup(file){
+  var r=new FileReader();
+  r.onload=function(){
+    var o;try{o=JSON.parse(r.result)}catch(e){o=null}
+    if(!o||!Array.isArray(o.entries)||!Array.isArray(o.friends)||!Array.isArray(o.reminders)||!o.settings){toast('Esse arquivo não é uma cópia do diário.');return}
+    var n=o.entries.filter(function(e){return !e.deletedAt}).length;
+    if(!confirm('Trocar o diário deste aparelho pela cópia com '+n+(n===1?' dia':' dias')+'? O que está aqui agora será substituído.'))return;
+    S=o;save();toast('Cópia restaurada!');render();
+  };
+  r.onerror=function(){toast('Não consegui ler esse arquivo.')};
+  r.readAsText(file);
+}
 
 /* ---------- Ações ---------- */
 function restore(id){
@@ -524,9 +929,44 @@ document.addEventListener('click',function(ev){
   if(!el)return;
   var a=el.dataset.act,id=el.dataset.id;
   if(a==='go'){go(el.dataset.v,id);return}
-  if(a==='mood'){draft.mood=el.dataset.mood;$$('.mood').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mood===draft.mood))});return}
-  if(a==='char'){draft.character=draft.character===el.dataset.char?null:el.dataset.char;$$('.char').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.char===draft.character))});return}
-  if(a==='fpick'){var i=draft.friends.indexOf(id);if(i>-1)draft.friends.splice(i,1);else draft.friends.push(id);el.setAttribute('aria-pressed',String(i===-1));return}
+  if(a==='mood'){draft.mood=el.dataset.mood;$$('.mood').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mood===draft.mood))});var bb=$('#bubble');if(bb){bb.textContent=bubbleText();bb.classList.remove('pop');void bb.offsetWidth;bb.classList.add('pop')}pop('tap');keepDraft();return}
+  if(a==='char'){draft.character=draft.character===el.dataset.char?null:el.dataset.char;$$('.char').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.char===draft.character))});var bp=$('#buddyPic');if(bp)bp.innerHTML=charSvg(draft.character||'coelha',72);pop('tap');keepDraft();return}
+  if(a==='idea'){
+    var tx=$('#txt'),t0=el.dataset.t+' ';
+    tx.value=tx.value.trim()?tx.value.replace(/\s*$/,'')+'\n'+t0:t0;
+    tx.focus();try{tx.setSelectionRange(tx.value.length,tx.value.length)}catch(e){}
+    draft.text=tx.value;keepDraft();return;
+  }
+  if(a==='ideas-more'){$('#ideas').innerHTML=ideaChips();return}
+  if(a==='vid-open'){openCam();return}
+  if(a==='vid-rec'){startRecording();return}
+  if(a==='vid-stop'){stopRecording();return}
+  if(a==='vid-cancel'){stopCam();renderVid();return}
+  if(a==='vid-remove'){draft.video=null;draft.videoTouched=true;if(!draft.id)vidDel('__draft');keepDraft();renderVid();return}
+  if(a==='share-vid'){shareVideo(id);return}
+  if(a==='sound'){S.settings.sound=S.settings.sound===false;save();render();if(S.settings.sound!==false)pop('yay');return}
+  if(a==='fpick'){var i=draft.friends.indexOf(id);if(i>-1)draft.friends.splice(i,1);else draft.friends.push(id);el.setAttribute('aria-pressed',String(i===-1));keepDraft();return}
+  if(a==='clear-draft'){S.draft=null;save();initDraft();render();return}
+  if(a==='cal-prev'||a==='cal-next'){calMonth=shiftMonth(calMonth,a==='cal-prev'?-1:1);render();return}
+  if(a==='cal-day'){
+    var dd0=el.dataset.date;
+    if(el.dataset.has==='1'){filt.date=filt.date===dd0?'':dd0;render();var lh=$('#listHead');if(lh&&filt.date)lh.scrollIntoView({behavior:'smooth',block:'start'})}
+    else go('write','d:'+dd0);
+    return;
+  }
+  if(a==='fdate'){filt.date='';render();return}
+  if(a==='backup'){backup();return}
+  if(a==='restore-file'){var fi=$('#bkfile');if(fi)fi.click();return}
+  if(a==='clear-examples'){
+    if(!confirm('Tirar os dias e lembretes de exemplo?'))return;
+    S.entries=S.entries.filter(function(e){return !e.example});S.reminders=S.reminders.filter(function(r){return !r.example});
+    save();toast('Exemplos tirados.');render();return;
+  }
+  if(a==='empty-trash'){
+    if(!confirm('Apagar para sempre os dias da lixeira? Não dá para desfazer.'))return;
+    S.entries.forEach(function(e){if(e.deletedAt&&e.hasVideo)vidDel(e.id)});
+    S.entries=S.entries.filter(function(e){return !e.deletedAt});save();toast('Lixeira esvaziada.');render();return;
+  }
   if(a==='enter'){
     var nm=$('#nm').value.trim();
     if(!nm){toast('Escreva o seu nome para entrar.');$('#nm').focus();return}
@@ -536,12 +976,29 @@ document.addEventListener('click',function(ev){
   if(a==='save-entry'){
     var ta=$('#txt');draft.text=ta.value.trim();draft.date=$('#dt').value||dstr();
     if(!draft.mood){toast('Escolha uma carinha: como você está?');return}
-    if(!draft.text){toast('Escreva ou fale um pouquinho sobre o seu dia.');return}
-    stopRec();
-    var e=draft.id&&entry(draft.id);
+    if(vidState==='rec'){toast('Termine de gravar o vídeo primeiro.');return}
+    if(!draft.text&&!draft.video){toast('Escreva, fale ou grave um vídeo sobre o seu dia.');return}
+    stopRec();stopCam();
+    var isNew=!draft.id,e=draft.id&&entry(draft.id);
     if(e){e.date=draft.date;e.text=draft.text;e.mood=draft.mood;e.character=draft.character;e.friends=draft.friends.slice();e.example=false}
-    else{e={id:uid(),date:draft.date,text:draft.text,mood:draft.mood,character:draft.character,friends:draft.friends.slice(),createdAt:Date.now(),deletedAt:null};S.entries.push(e)}
-    save();toast('Dia guardado no diário!');go('day',e.id);return
+    else{e={id:uid(),date:draft.date,text:draft.text,mood:draft.mood,character:draft.character,friends:draft.friends.slice(),createdAt:Date.now(),deletedAt:null};S.entries.push(e);S.draft=null;clearTimeout(draftT)}
+    var vop=Promise.resolve(),vidChanged=draft.videoTouched||(isNew&&draft.video);
+    if(vidChanged){
+      vop=draft.video?vidPut(e.id,draft.video):vidDel(e.id);
+      if(draft.video&&navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(function(){});
+    }
+    var hadVideo=!!draft.video;
+    btnBusy(el,'Guardando...');
+    vop.then(function(){
+      if(vidChanged)e.hasVideo=hadVideo;
+      if(isNew)vidDel('__draft');
+      save();celebrate(e,isNew);
+    }).catch(function(){
+      if(vidChanged)e.hasVideo=false;
+      if(!e.text)e.text='(vídeo)';
+      save();toast('O vídeo não coube no aparelho, mas o resto foi guardado.');go('day',e.id);
+    });
+    return;
   }
   if(a==='fmood'){filt.mood=el.dataset.mood;render();return}
   if(a==='ffriend'){filt.friend=id;render();return}
@@ -564,6 +1021,12 @@ document.addEventListener('click',function(ev){
   if(a==='gate'){var v=parseInt($('#ans').value,10);if(v===gate.a+gate.b){momOK=true;render()}else{gate=null;toast('Ops, essa não é a resposta.');render()}return}
   if(a==='save-mom'){S.settings.name=$('#cn').value.trim();S.settings.momPhone=$('#mp').value.trim();save();toast('Guardado!');go(S.settings.name?'park':'welcome');return}
 });
+document.addEventListener('input',function(ev){
+  if(view==='write'&&(ev.target.id==='txt'||ev.target.id==='dt'))keepDraft();
+});
+document.addEventListener('change',function(ev){
+  if(ev.target.id==='bkfile'&&ev.target.files&&ev.target.files[0])restoreBackup(ev.target.files[0]);
+});
 $$('.hot').forEach(function(h){
   try{
     var bb=h.getBBox(),hit=document.createElementNS('http://www.w3.org/2000/svg','rect');
@@ -580,6 +1043,10 @@ document.addEventListener('keydown',function(ev){
 });
 updatePark();
 if(!S.settings.name)go('welcome');
+/* funciona sem internet depois da primeira visita */
+if('serviceWorker' in navigator&&location.protocol==='https:'){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+}
 })();
 </script>
 </body></html>
