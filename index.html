@@ -8,10 +8,16 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/baloo-2-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+/* fontes guardadas no próprio site (nada é carregado do Google) */
+@font-face{font-family:'Baloo 2';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/baloo-2-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Baloo 2';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/baloo-2-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Baloo 2';font-style:normal;font-weight:800;font-display:swap;src:url(fonts/baloo-2-latin-800-normal.woff2) format('woff2')}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/nunito-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/nunito-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:800;font-display:swap;src:url(fonts/nunito-latin-800-normal.woff2) format('woff2')}
+
 :root{
   --ink:#2b3a5a;
   --ink-soft:#56648a;
@@ -201,6 +207,21 @@ label.f{display:block;font-weight:800;margin:14px 0 6px}
 .streak{margin:10px 2px 0;font-weight:800;color:var(--ink-soft)}
 .draftnote{background:#fff6c9;border:2px dashed #d9a441;border-radius:14px;padding:8px 12px;font-weight:700;margin:0 0 10px}
 
+.consent{min-height:100%}
+.consent .wrap{padding-top:calc(env(safe-area-inset-top,0px) + 18px)}
+.ctop{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.ctop h1{margin:0;font-family:var(--display);font-weight:800;font-size:2rem;line-height:1.05}
+.kicker{margin:0;font-weight:800;color:#0b7a55;text-transform:uppercase;letter-spacing:.04em;font-size:.82rem}
+.cl{margin:0;padding-left:20px}.cl li{margin:6px 0}
+.checks{display:grid;gap:10px;margin-top:18px}
+.ck{display:flex;gap:12px;align-items:flex-start;background:#fff;border:3px solid var(--line);border-radius:16px;padding:12px 14px;cursor:pointer}
+.ck input{width:26px;height:26px;flex:none;margin:1px 0 0;accent-color:#1f8a4c}
+.ck:has(input:checked){border-color:#1f8a4c;background:#ebfbee}
+.btn.danger{background:#fff;color:#c92a2a;border:2px solid #ffc9c9;box-shadow:0 3px 0 #ffc9c9}
+.legal .card h3{font-family:var(--display);font-size:1.15rem;margin:18px 0 4px}
+.legal .card h3:first-child{margin-top:0}
+.legal .card ul{padding-left:20px}
+.legal .card .todo{background:#fff3bf;border-radius:4px;padding:0 4px}
 /* ---------- Visual para crianças: cores por tela ---------- */
 #sheet{--th:#4dabf7;--th-bg:#e3f3ff;--th-dot:rgba(77,171,247,.14)}
 #sheet[data-theme=sun]{--th:#ff9f1c;--th-bg:#fff3d9;--th-dot:rgba(255,159,28,.16)}
@@ -626,7 +647,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
 var $=function(s,r){return (r||document).querySelector(s)};
 var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
 var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
-var DAY=86400000, KEY='diario-parque-v1', TRASH_DAYS=30;
+var DAY=86400000, KEY='diario-parque-v1', TRASH_DAYS=30, TERMS_V=1;
 var cap=function(s){return s.charAt(0).toUpperCase()+s.slice(1)};
 function z(n){return String(n).padStart(2,'0')}
 function dstr(d){d=d||new Date();return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())}
@@ -700,7 +721,7 @@ function load(){
   try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.entries)return o}}catch(e){}
   return seed();
 }
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function save(){if(!hasConsent())return;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 S=load();
 var gone=S.entries.filter(function(e){return e.deletedAt&&Date.now()-e.deletedAt>=TRASH_DAYS*DAY});
 S.entries=S.entries.filter(function(e){return gone.indexOf(e)<0});
@@ -763,15 +784,15 @@ var view='park',vArg=null,draft=null,selTrash=null,filt={mood:'',friend:'',date:
 var calMonth=dstr().slice(0,7);
 function shiftMonth(ym,n){var p=ym.split('-').map(Number),d=new Date(p[0],p[1]-1+n,1);return d.getFullYear()+'-'+z(d.getMonth()+1)}
 function go(v,arg){
-  stopRec();stopCam();view=v;vArg=arg||null;
+  var prev=view;stopRec();stopCam();view=v;vArg=arg||null;
   if(v!=='yay')$$('.confetti').forEach(function(c){c.remove()});
   if(v==='write')initDraft(arg);
   if(v==='trash')selTrash=null;
-  if(v==='mom'){momOK=false;gate=null}
+  if(v==='mom'&&prev!=='legal'){momOK=false;gate=null}
   render();
 }
 /* cada tela tem sua cor e um amiguinho no cantinho */
-var THEME={write:['sun','coelha'],day:['grape','ursinho'],days:['grape','ursinho'],friends:['sky','sapo'],reminders:['lemon','pintinho'],trash:['slate','gato'],mom:['mint',''],yay:['party',''],welcome:['party','']};
+var THEME={write:['sun','coelha'],day:['grape','ursinho'],days:['grape','ursinho'],friends:['sky','sapo'],reminders:['lemon','pintinho'],trash:['slate','gato'],mom:['mint',''],consent:['mint',''],legal:['mint',''],yay:['party',''],welcome:['party','']};
 function head(title,back){
   var th=THEME[view]||[];
   return '<header class="bar"><button class="back" data-act="go" data-v="'+(back||'park')+'"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b3a5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'+(back&&back!=='park'?'Voltar':cap(sceneInfo().name))+'</button><h2>'+title+'</h2>'+(th[1]?'<span class="mascot" aria-hidden="true">'+charSvg(th[1],54)+'</span>':'')+'</header>';
@@ -783,6 +804,7 @@ function render(){
   sh.hidden=false;sh.innerHTML=VIEWS[view](vArg);sh.scrollTop=0;
   if(view==='write')renderVid();
   if(view==='day')loadDayVideo(vArg);
+  if(view==='legal')loadLegal(vArg);
 }
 
 /* ---------- Quarto: mural, decoração e brincadeiras ---------- */
@@ -1039,6 +1061,45 @@ VIEWS.trash=function(){
   return head('Lixeira')+'<div class="wrap"><p class="hint" style="margin:0 0 14px">Os dias apagados ficam guardados por '+TRASH_DAYS+' dias. Depois somem para sempre.</p><div class="list">'+rows+'</div>'+micBlock+'</div>';
 };
 
+/* ---------- Termos e privacidade ---------- */
+function hasConsent(){return !!(S.consent&&S.consent.v>=TERMS_V)}
+var legalCache={},legalFrom='consent';
+function loadLegal(sec){
+  var box=$('#legalBox');if(!box)return;
+  function put(html){if($('#legalBox')===box)box.innerHTML=html}
+  if(legalCache[sec]){put(legalCache[sec]);return}
+  fetch('termos.html').then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
+    var d=new DOMParser().parseFromString(t,'text/html'),s=d.getElementById(sec);if(!s)throw 0;
+    var h2=s.querySelector('h2');if(h2)h2.remove();
+    legalCache[sec]=s.innerHTML;put(s.innerHTML);
+  }).catch(function(){put('<p>Não consegui abrir o texto agora. Ele também está em <a href="termos.html#'+sec+'" target="_blank" rel="noopener">termos.html</a>.</p>')});
+}
+VIEWS.consent=function(){
+  var again=!!S.consent;
+  return '<div class="consent"><div class="wrap">'+
+   '<div class="ctop"><span aria-hidden="true">'+charSvg('coelha',64)+'</span><div><p class="kicker">Para o adulto responsável</p><h1>Antes de começar</h1></div></div>'+
+   (again?'<p class="draftnote">Os termos foram atualizados. Leia e aceite de novo para continuar.</p>':'')+
+   '<div class="card"><ul class="cl">'+
+     '<li><b>Tudo fica neste aparelho.</b> Não recebemos, não vemos e não vendemos o que a criança escreve ou grava.</li>'+
+     '<li><b>Sem anúncios, cadastro ou rastreamento.</b></li>'+
+     '<li><b>Câmera e microfone</b> só funcionam quando a criança toca para gravar, e o aparelho pede permissão.</li>'+
+     '<li><b>Ditado por voz</b> usa o serviço do navegador (Google ou Apple), que pode enviar o áudio a essas empresas. É opcional.</li>'+
+     '<li><b>Nada sai sozinho:</b> o WhatsApp e o Google Drive só são usados quando alguém toca para enviar ou salvar.</li>'+
+     '<li><b>Faça cópias de segurança</b> na Área da mamãe (engrenagem) e guarde-as no seu Google Drive. Se o aparelho for perdido ou limpo, o diário se perde.</li>'+
+   '</ul></div>'+
+   '<div class="actions" style="margin-top:14px"><button class="btn ghost small" data-act="legal" data-v="termos">Ler os Termos de Uso</button><button class="btn ghost small" data-act="legal" data-v="privacidade">Ler a Política de Privacidade</button></div>'+
+   '<div class="checks">'+
+     '<label class="ck"><input type="checkbox" id="ck1"><span>Sou <b>pai, mãe ou responsável legal</b> pela criança que vai usar este diário e autorizo que ela use o aplicativo.</span></label>'+
+     '<label class="ck"><input type="checkbox" id="ck2"><span>Li e aceito os <b>Termos de Uso</b> e a <b>Política de Privacidade</b>, e autorizo que os dados da criança fiquem guardados neste aparelho como descrito (LGPD, art. 14).</span></label>'+
+   '</div>'+
+   '<div class="actions"><button class="btn green big" id="acceptBtn" data-act="accept" disabled>Aceitar e continuar</button></div>'+
+   '<p class="hint">Você pode reler os termos e apagar tudo a qualquer momento na Área da mamãe.</p>'+
+  '</div></div>';
+};
+VIEWS.legal=function(sec){
+  var t=sec==='privacidade'?'Privacidade':'Termos de Uso';
+  return head(t,legalFrom)+'<div class="wrap legal"><p class="hint" style="margin-top:0">Versão '+TERMS_V+' · <a href="termos.html#'+sec+'" target="_blank" rel="noopener">abrir em outra página</a></p><div id="legalBox" class="card"><p>Carregando...</p></div></div>';
+};
 VIEWS.welcome=function(){
   return '<div class="welcome"><h1>Meu Diário</h1><div class="crew">'+charSvg('coelha',84)+charSvg('ursinho',104)+charSvg('pintinho',84)+'</div>'+
    '<div class="box"><label for="nm">Qual é o seu nome?</label><input type="text" id="nm" maxlength="24" autocomplete="off" autocapitalize="words" placeholder="Escreva aqui" value="'+esc(S.settings.name)+'"><button class="btn" data-act="enter">Entrar no meu quarto</button></div></div>';
@@ -1058,10 +1119,13 @@ VIEWS.mom=function(){
    '<p class="hint">Quando a criança tocar em “Compartilhar com a mamãe”, o WhatsApp abre com o texto do dia pronto para enviar. Nada é enviado sozinho.</p>'+
    '<div class="actions"><button class="btn" data-act="save-mom">Guardar</button></div>'+
    '<h3>Sons</h3><button class="chip" data-act="sound" aria-pressed="'+(S.settings.sound!==false)+'">'+(S.settings.sound!==false?'Sons ligados':'Sons desligados')+'</button>'+
-   '<h3>Onde os dias ficam guardados</h3><div class="card"><strong>Neste aparelho.</strong><p class="hint" style="margin:6px 0 10px">O diário fica salvo só neste navegador. Se limpar os dados do navegador ou trocar de aparelho, os dias se perdem — por isso, baixe uma cópia de vez em quando. Os vídeos não entram na cópia (são grandes): para guardar um vídeo, use “Enviar o vídeo” na página do dia.</p>'+
+   '<h3>Onde os dias ficam guardados</h3><div class="card"><strong>Neste aparelho.</strong><p class="hint" style="margin:6px 0 10px">O diário fica salvo só neste navegador. Se limpar os dados do navegador ou trocar de aparelho, os dias se perdem — por isso, salve uma cópia de vez em quando. No celular, toque em “Salvar cópia” e escolha <b>Drive</b> para guardar na sua conta do Google. Os vídeos não entram na cópia (são grandes): para guardar um vídeo, use “Enviar o vídeo” na página do dia.</p>'+
    '<p class="hint" style="margin:0 0 4px">'+nLive+(nLive===1?' dia':' dias')+' no diário'+(nTrash?' · '+nTrash+' na lixeira':'')+(lastBk?' · última cópia em '+esc(shortDate(lastBk)):' · nenhuma cópia ainda')+'</p>'+
-   '<div class="actions" style="margin-top:10px"><button class="btn green small" data-act="backup">Baixar cópia</button><button class="btn ghost small" data-act="restore-file">Restaurar uma cópia</button></div>'+
+   '<div class="actions" style="margin-top:10px"><button class="btn green small" data-act="backup">Salvar cópia</button><button class="btn ghost small" data-act="restore-file">Restaurar uma cópia</button></div>'+
    '<input type="file" id="bkfile" accept=".json,application/json" hidden></div>'+
+   '<h3>Privacidade</h3><div class="card"><p class="hint" style="margin:0 0 10px">Termos aceitos'+(S.consent&&S.consent.at?' em '+esc(shortDate(S.consent.at.slice(0,10))):'')+'. Nada do diário é enviado para nós.</p>'+
+   '<div class="actions" style="margin-top:0"><button class="btn ghost small" data-act="legal" data-v="termos">Termos de Uso</button><button class="btn ghost small" data-act="legal" data-v="privacidade">Política de Privacidade</button></div>'+
+   '<p class="hint" style="margin:14px 0 8px">Apagar tudo também retira a sua autorização. O diário volta ao começo.</p><button class="btn small danger" data-act="wipe">Apagar tudo deste aparelho</button></div>'+
    ((hasEx||nTrash)?'<h3>Arrumar</h3><div class="actions" style="margin-top:0">'+
      (hasEx?'<button class="btn ghost small" data-act="clear-examples">Tirar os exemplos</button>':'')+
      (nTrash?'<button class="btn ghost small" data-act="empty-trash">Esvaziar a lixeira</button>':'')+'</div>':'')+
@@ -1237,13 +1301,27 @@ VIEWS.yay=function(id){
 
 /* ---------- Cópia de segurança ---------- */
 function backup(){
+  var done=function(msg){S.settings.lastBackup=dstr();save();toast(msg);if(view==='mom')render()};
+  var file;
+  try{file=new File([JSON.stringify(S,null,1)],'meu-diario-'+dstr()+'.json',{type:'application/json'})}catch(e){toast('Não consegui criar a cópia neste aparelho.');return}
+  /* no celular: abre o compartilhar, onde dá para escolher "Salvar no Drive" */
+  if(navigator.canShare&&navigator.share&&navigator.canShare({files:[file]})){
+    navigator.share({files:[file],title:'Cópia do Meu Diário'}).then(function(){done('Cópia salva! Ela fica onde você escolheu, como no seu Drive.')}).catch(function(err){
+      if(err&&err.name==='AbortError')return;
+      downloadFile(file);done('Cópia baixada! Guarde o arquivo no seu Google Drive.');
+    });
+    return;
+  }
+  downloadFile(file);done('Cópia baixada! Guarde o arquivo no seu Google Drive.');
+}
+function wipeAll(){
+  try{localStorage.removeItem(KEY)}catch(e){}
+  var fin=function(){location.reload()};
   try{
-    var blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});
-    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
-    a.download='meu-diario-'+dstr()+'.json';document.body.appendChild(a);a.click();
-    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);
-    S.settings.lastBackup=dstr();save();toast('Cópia baixada! Guarde o arquivo em um lugar seguro.');render();
-  }catch(e){toast('Não consegui baixar a cópia neste aparelho.')}
+    if(VDB){VDB.then(function(db){db.close()}).catch(function(){})}
+    var r=indexedDB.deleteDatabase('diario-videos');r.onsuccess=r.onerror=r.onblocked=function(){setTimeout(fin,50)};
+    setTimeout(fin,1500);
+  }catch(e){fin()}
 }
 function restoreBackup(file){
   var r=new FileReader();
@@ -1252,7 +1330,7 @@ function restoreBackup(file){
     if(!o||!Array.isArray(o.entries)||!Array.isArray(o.friends)||!Array.isArray(o.reminders)||!o.settings){toast('Esse arquivo não é uma cópia do diário.');return}
     var n=o.entries.filter(function(e){return !e.deletedAt}).length;
     if(!confirm('Trocar o diário deste aparelho pela cópia com '+n+(n===1?' dia':' dias')+'? O que está aqui agora será substituído.'))return;
-    S=o;save();applyRoom();toast('Cópia restaurada!');render();
+    var keepC=S.consent;S=o;S.consent=keepC;save();applyRoom();toast('Cópia restaurada!');render();
   };
   r.onerror=function(){toast('Não consegui ler esse arquivo.')};
   r.readAsText(file);
@@ -1300,6 +1378,17 @@ document.addEventListener('click',function(ev){
   }
   if(a==='fdate'){filt.date='';render();return}
   if(a==='backup'){backup();return}
+  if(a==='legal'){legalFrom=view==='mom'?'mom':'consent';go('legal',el.dataset.v);return}
+  if(a==='accept'){
+    if(!($('#ck1').checked&&$('#ck2').checked)){toast('Marque as duas caixas para continuar.');return}
+    S.consent={v:TERMS_V,at:new Date().toISOString()};save();
+    go(S.settings.name?'park':'welcome');return;
+  }
+  if(a==='wipe'){
+    if(!confirm('Apagar TUDO deste aparelho? Os dias, vídeos, amigos, lembretes e a decoração serão apagados para sempre.'))return;
+    if(!confirm('Tem certeza? Não dá para desfazer. Se quiser guardar, faça antes uma cópia.'))return;
+    wipeAll();return;
+  }
   if(a==='restore-file'){var fi=$('#bkfile');if(fi)fi.click();return}
   if(a==='clear-examples'){
     if(!confirm('Tirar os dias e lembretes de exemplo?'))return;
@@ -1369,6 +1458,7 @@ document.addEventListener('input',function(ev){
   if(view==='write'&&(ev.target.id==='txt'||ev.target.id==='dt'))keepDraft();
 });
 document.addEventListener('change',function(ev){
+  if(ev.target.id==='ck1'||ev.target.id==='ck2'){var ab=$('#acceptBtn');if(ab)ab.disabled=!($('#ck1').checked&&$('#ck2').checked);return}
   if(ev.target.id==='bkfile'&&ev.target.files&&ev.target.files[0])restoreBackup(ev.target.files[0]);
 });
 $$('.hot').forEach(function(h){
@@ -1388,6 +1478,7 @@ $$('.hot').forEach(function(h){
 });
 document.addEventListener('keydown',function(ev){
   if(ev.key==='Enter'&&view==='welcome'&&ev.target.id==='nm'){ev.preventDefault();var b=$('[data-act=enter]');if(b)b.click();return}
+  if(!hasConsent())return;
   if(ev.key==='Escape'&&decorOpen){closeDecor();return}
   if(ev.key==='Escape'&&view!=='park'&&view!=='welcome')go('park');
 });
@@ -1395,7 +1486,8 @@ $$('.ball').forEach(function(bl){var play=function(){bl.classList.remove('bounce
   bl.addEventListener('click',play);bl.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();play()}});});
 applyRoom();
 updatePark();
-if(!S.settings.name)go('welcome');
+if(!hasConsent())go('consent');
+else if(!S.settings.name)go('welcome');
 /* funciona sem internet depois da primeira visita */
 if('serviceWorker' in navigator&&location.protocol==='https:'){
   window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
