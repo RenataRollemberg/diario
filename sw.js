@@ -1,7 +1,7 @@
 // Meu Diário — guarda o app para abrir mesmo sem internet.
 // Páginas do próprio site: tenta a internet primeiro (para pegar novidades) e usa a cópia guardada se cair.
 // Fontes do Google: usa a cópia guardada primeiro.
-const CACHE = 'diario-v2';
+const CACHE = 'diario-v3';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png', './icon-180.png'];
 
 self.addEventListener('install', (e) => {
