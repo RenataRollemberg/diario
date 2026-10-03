@@ -70,14 +70,11 @@ button{cursor:pointer}
 .curtain{animation:flutter 4s ease-in-out infinite alternate;transform-box:view-box}
 .curtain.b{animation-duration:4.6s}
 @keyframes flutter{from{transform:rotate(1.2deg)}to{transform:rotate(-1.2deg)}}
-.toy,.ball{cursor:pointer;outline:none}
-.toy svg,.ball{transform-box:fill-box;transform-origin:center bottom}
-.toy.jump svg{animation:toyjump .65s ease}
-@keyframes toyjump{30%{transform:translateY(-30px) rotate(-10deg)}55%{transform:translateY(0) scale(1.1,.88)}75%{transform:translateY(-8px)}}
+.ball{cursor:pointer;outline:none;transform-box:fill-box;transform-origin:center bottom}
 .ball.bounce{animation:ballb .9s cubic-bezier(.3,.6,.4,1)}
 @keyframes ballb{20%{transform:translate(18px,-60px) rotate(120deg)}45%{transform:translate(36px,0) rotate(240deg) scale(1.1,.85)}65%{transform:translate(48px,-22px) rotate(320deg)}85%{transform:translate(24px,0) rotate(360deg)}}
-.toy:focus-visible svg,.ball:focus-visible{outline:3px solid #5c7cfa}
-@media (prefers-reduced-motion:reduce){.curtain,.toy.jump svg,.ball.bounce{animation:none}}
+.ball:focus-visible{outline:3px solid #5c7cfa}
+@media (prefers-reduced-motion:reduce){.curtain,.ball.bounce{animation:none}}
 
 .topbtns{display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:auto}
 .decobtn{border:0;border-radius:999px;background:#fff;box-shadow:0 3px 0 rgba(43,58,90,.18);display:flex;flex-direction:column;align-items:center;padding:6px 8px 4px;font-weight:800;font-size:.78rem;min-width:62px;min-height:56px;gap:1px}
@@ -100,7 +97,6 @@ button{cursor:pointer}
 .pat-listras .pv{background-image:repeating-linear-gradient(90deg,var(--d) 0 4px,transparent 4px 8px)}
 .pat-coracoes .pv{background-image:radial-gradient(circle at 30% 40%,var(--d) 2.5px,transparent 3px),radial-gradient(circle at 70% 40%,var(--d) 2.5px,transparent 3px);background-size:11px 11px}
 .char.mini{padding:4px 2px;font-size:.8rem}
-.chars.toys{grid-template-columns:repeat(3,1fr)}
 
 .top{position:absolute;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top,0px) + 6px) 16px 0;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
 .top h1{margin:0;font-family:var(--display);font-weight:800;font-size:2.1rem;line-height:1.1;color:var(--ink);text-shadow:0 2px 0 rgba(255,255,255,.7)}
@@ -399,11 +395,6 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
         <g class="pill"><rect x="176" y="584" width="88" height="26" rx="13"/><text x="220" y="603">Amigos</text></g>
       </g>
 
-      <!-- bichinhos na cama (toque para brincar) -->
-      <g class="toy" data-slot="0" tabindex="0" role="button"><svg x="132" y="448" width="46" height="46" viewBox="0 0 100 100"></svg></g>
-      <g class="toy" data-slot="1" tabindex="0" role="button"><svg x="194" y="444" width="52" height="52" viewBox="0 0 100 100"></svg></g>
-      <g class="toy" data-slot="2" tabindex="0" role="button"><svg x="254" y="450" width="46" height="46" viewBox="0 0 100 100"></svg></g>
-
       <!-- bola -->
       <g class="ball" id="ball" tabindex="0" role="button" aria-label="Bola: toque para quicar">
         <circle cx="52" cy="572" r="22" fill="#ff6b6b" stroke="#2b3a5a" stroke-width="3"/>
@@ -633,7 +624,6 @@ var ROOM_OPTS={
 function room(){
   var r=S.settings.room||(S.settings.room={});
   if(!r.wall)r.wall='pessego';if(!r.pat)r.pat='bolinhas';if(!r.bed)r.bed='azul';if(!r.rug)r.rug='rosa';if(!r.floor)r.floor='madeira';
-  if(!Array.isArray(r.toys))r.toys=['pintinho','coelha','ursinho'];
   return r;
 }
 function opt(k,id){var l=ROOM_OPTS[k];for(var i=0;i<l.length;i++)if(l[i].id===id)return l[i];return l[0]}
@@ -645,11 +635,6 @@ function applyRoom(){
   var pu=opt('pat',r.pat).url,wp=$('#wallPat');
   if(pu){wp.setAttribute('fill','url('+pu+')');wp.style.display=''}else wp.style.display='none';
   pk.classList.toggle('night',!!r.night);
-  $$('.toy').forEach(function(t){
-    var id=r.toys[+t.dataset.slot],s=t.querySelector('svg');
-    if(id&&CHAR_INNER[id]){s.innerHTML=CHAR_INNER[id];t.style.display='';t.setAttribute('aria-label','Brincar com '+charLabel(id))}
-    else{s.innerHTML='';t.style.display='none'}
-  });
 }
 var decorOpen=false;
 function swatches(k,round){
@@ -664,7 +649,6 @@ function renderDecor(){
     var w=opt('wall',r.wall);
     return '<button class="chip pat pat-'+o.id+'" data-act="room" data-k="pat" data-v="'+o.id+'" aria-pressed="'+(r.pat===o.id)+'" style="--c:'+w.c+';--d:'+w.d+'"><span class="pv" aria-hidden="true"></span>'+o.label+'</button>';
   }).join('');
-  var toys=CHARS.map(function(c){var on=r.toys.indexOf(c.id)>-1;return '<button class="char mini" data-act="room-toy" data-char="'+c.id+'" aria-pressed="'+on+'">'+charSvg(c.id,46)+'<span>'+c.label+'</span></button>'}).join('');
   box.innerHTML='<div class="dhead"><h2>Decorar meu quarto</h2><button class="btn small green" data-act="decor-close">Pronto!</button></div><div class="dbody">'+
     '<h3>Dia ou noite?</h3><div class="chips"><button class="chip" data-act="room-night" data-v="0" aria-pressed="'+!r.night+'">Dia</button><button class="chip" data-act="room-night" data-v="1" aria-pressed="'+!!r.night+'">Noite</button></div>'+
     '<h3>Cor da parede</h3>'+swatches('wall')+
@@ -672,12 +656,10 @@ function renderDecor(){
     '<h3>Cama e cortina</h3>'+swatches('bed',true)+
     '<h3>Tapete</h3>'+swatches('rug',true)+
     '<h3>Chão</h3>'+swatches('floor')+
-    '<h3>Bichinhos na cama <small>(até 3)</small></h3><div class="chars toys">'+toys+'</div>'+
     '</div>';
 }
 function openDecor(){decorOpen=true;renderDecor();$('#decor').hidden=false;$('#app').classList.add('decorating');pop('tap')}
 function closeDecor(){decorOpen=false;$('#decor').hidden=true;$('#app').classList.remove('decorating');pop('yay');toast('Seu quarto ficou lindo!')}
-function jump(el){el.classList.remove('jump');void el.getBoundingClientRect();el.classList.add('jump');setTimeout(function(){el.classList.remove('jump')},700)}
 function toggleNight(){var r=room();r.night=!r.night;save();applyRoom();pop(r.night?'night':'tap');if(decorOpen)renderDecor()}
 
 /* ---------- Telas ---------- */
@@ -1095,11 +1077,6 @@ document.addEventListener('click',function(ev){
   if(a==='decor-close'){closeDecor();return}
   if(a==='room'){room()[el.dataset.k]=el.dataset.v;save();applyRoom();renderDecor();pop('tap');return}
   if(a==='room-night'){if(!!room().night!==(el.dataset.v==='1'))toggleNight();return}
-  if(a==='room-toy'){
-    var tl=room().toys,ci=tl.indexOf(el.dataset.char);
-    if(ci>-1)tl.splice(ci,1);else{if(tl.length>=3){toast('Cabem só 3 bichinhos na cama. Tire um primeiro!');return}tl.push(el.dataset.char)}
-    save();applyRoom();renderDecor();pop('tap');return;
-  }
   if(a==='sound'){S.settings.sound=S.settings.sound===false;save();render();if(S.settings.sound!==false)pop('yay');return}
   if(a==='fpick'){var i=draft.friends.indexOf(id);if(i>-1)draft.friends.splice(i,1);else draft.friends.push(id);el.setAttribute('aria-pressed',String(i===-1));keepDraft();return}
   if(a==='clear-draft'){S.draft=null;save();initDraft();render();return}
@@ -1201,11 +1178,6 @@ document.addEventListener('keydown',function(ev){
   if(ev.key==='Enter'&&view==='welcome'&&ev.target.id==='nm'){ev.preventDefault();var b=$('[data-act=enter]');if(b)b.click();return}
   if(ev.key==='Escape'&&decorOpen){closeDecor();return}
   if(ev.key==='Escape'&&view!=='park'&&view!=='welcome')go('park');
-});
-$$('.toy').forEach(function(t){
-  var play=function(){jump(t);pop('boing')};
-  t.addEventListener('click',play);
-  t.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();play()}});
 });
 (function(){var bl=$('#ball'),play=function(){bl.classList.remove('bounce');void bl.getBoundingClientRect();bl.classList.add('bounce');pop('boing')};
   bl.addEventListener('click',play);bl.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();play()}});})();
