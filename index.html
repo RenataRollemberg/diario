@@ -84,6 +84,16 @@ button{cursor:pointer}
 #decor[hidden]{display:none}
 #decor .dhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px 10px;border-bottom:2px solid var(--line)}
 #decor .dhead h2{margin:0;font-family:var(--display);font-weight:800;font-size:1.4rem}
+#decor .scenes{display:flex;gap:10px;flex-wrap:wrap}
+.scenebtn{border:3px solid var(--line);background:#fff;border-radius:18px;padding:6px 10px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:800;box-shadow:0 4px 0 var(--line);min-width:84px}
+.scenebtn[aria-pressed=true]{border-color:var(--ink);background:#fff6c9;box-shadow:0 4px 0 var(--ink)}
+.beam{opacity:.16;pointer-events:none}
+.horse{animation:horse 1.4s ease-in-out infinite alternate}
+.horse.b{animation-delay:-.7s}.horse.c{animation-delay:-.35s}
+@keyframes horse{from{transform:translateY(-10px)}to{transform:translateY(10px)}}
+#park.night .bulb{filter:brightness(1.3)}
+#park.night .scene[data-scene=carrossel] .c-wall{fill:#1f2a5c}
+@media (prefers-reduced-motion:reduce){.horse{animation:none}}
 #decor .dbody{overflow-y:auto;padding:4px 16px calc(env(safe-area-inset-bottom,0px) + 20px);overscroll-behavior:contain}
 #decor h3{font-family:var(--display);font-weight:700;font-size:1.15rem;margin:14px 0 8px}
 #decor h3 small{font-family:var(--body);font-size:.85rem;color:var(--ink-soft)}
@@ -298,6 +308,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
         <pattern id="pHearts" width="40" height="40" patternUnits="userSpaceOnUse"><path class="c-wdot" d="M10 16 C4 11 5 5 10 7 C15 5 16 11 10 16Z"/><path class="c-wdot" d="M30 36 C24 31 25 25 30 27 C35 25 36 31 30 36Z"/></pattern>
         <clipPath id="glass"><rect x="230" y="68" width="130" height="120" rx="6"/></clipPath>
       </defs>
+      <g class="scene" data-scene="quarto">
 
       <!-- parede e chão -->
       <rect x="-2000" y="-2000" width="4400" height="2430" class="c-wall"/>
@@ -338,9 +349,9 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <rect x="24" y="70" width="140" height="108" rx="10" fill="#d9a066" stroke="#a8743c" stroke-width="6"/>
           <rect x="38" y="84" width="112" height="82" rx="4" fill="#fff8c4" transform="rotate(-2 94 125)"/>
           <circle cx="94" cy="87" r="6" fill="#e03131"/><circle cx="92" cy="85" r="2" fill="#fff" opacity=".7"/>
-          <g id="signText" font-family="Baloo 2, Trebuchet MS, sans-serif" fill="#2b3a5a" text-anchor="middle"></g>
+          <g class="signText" font-family="Baloo 2, Trebuchet MS, sans-serif" fill="#2b3a5a" text-anchor="middle"></g>
         </g>
-        <g id="signBadge"></g>
+        <g class="signBadge"></g>
       </g>
 
       <!-- estante: meus dias -->
@@ -396,7 +407,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
       </g>
 
       <!-- bola -->
-      <g class="ball" id="ball" tabindex="0" role="button" aria-label="Bola: toque para quicar">
+      <g class="ball" tabindex="0" role="button" aria-label="Bola: toque para quicar">
         <circle cx="52" cy="572" r="22" fill="#ff6b6b" stroke="#2b3a5a" stroke-width="3"/>
         <path d="M31 566 Q52 580 73 566" stroke="#fff" stroke-width="5" fill="none"/><path d="M48 550 Q60 572 50 594" stroke="#ffd43b" stroke-width="5" fill="none"/>
       </g>
@@ -416,16 +427,195 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
       <rect class="dim" x="-2000" y="-2000" width="4400" height="4400" fill="#0b1440"/>
       <circle class="glow" cx="82" cy="300" r="78" fill="url(#glowG)"/>
       <circle class="glow" cx="295" cy="128" r="70" fill="url(#glowG)" opacity=".4"/>
+      </g>
+      <g class="scene" data-scene="circo" style="display:none">
+      <!-- CIRCO -->
+      <rect x="-2000" y="-2000" width="4400" height="2430" class="c-wall"/>
+      <polygon class="c-bed" points="200,-80 -304,430 -248,430"/><polygon class="c-bed" points="200,-80 -192,430 -136,430"/><polygon class="c-bed" points="200,-80 -80,430 -24,430"/><polygon class="c-bed" points="200,-80 32,430 88,430"/><polygon class="c-bed" points="200,-80 144,430 200,430"/><polygon class="c-bed" points="200,-80 256,430 312,430"/><polygon class="c-bed" points="200,-80 368,430 424,430"/><polygon class="c-bed" points="200,-80 480,430 536,430"/><polygon class="c-bed" points="200,-80 592,430 648,430"/>
+      <rect x="-2000" y="-2000" width="4400" height="2015" class="c-bed"/>
+      <g><path d="M4 26 l13 0 l-6.5 16z" fill="#ff6b6b"/><path d="M28 29 l13 0 l-6.5 16z" fill="#ffd43b"/><path d="M52 32 l13 0 l-6.5 16z" fill="#4dabf7"/><path d="M76 34 l13 0 l-6.5 16z" fill="#51cf66"/><path d="M100 36 l13 0 l-6.5 16z" fill="#b197fc"/><path d="M124 37 l13 0 l-6.5 16z" fill="#ff922b"/><path d="M148 39 l13 0 l-6.5 16z" fill="#ff6b6b"/><path d="M172 39 l13 0 l-6.5 16z" fill="#ffd43b"/><path d="M196 39 l13 0 l-6.5 16z" fill="#4dabf7"/><path d="M220 39 l13 0 l-6.5 16z" fill="#51cf66"/><path d="M244 39 l13 0 l-6.5 16z" fill="#b197fc"/><path d="M268 38 l13 0 l-6.5 16z" fill="#ff922b"/><path d="M292 37 l13 0 l-6.5 16z" fill="#ff6b6b"/><path d="M316 35 l13 0 l-6.5 16z" fill="#ffd43b"/><path d="M340 33 l13 0 l-6.5 16z" fill="#4dabf7"/><path d="M364 30 l13 0 l-6.5 16z" fill="#51cf66"/><path d="M388 27 l13 0 l-6.5 16z" fill="#b197fc"/></g>
+      <path d="M-10 26 Q200 54 410 26" stroke="#8f5a2a" stroke-width="2" fill="none"/>
+      <rect x="-2000" y="430" width="4400" height="2400" class="c-floor"/>
+      <rect x="-2000" y="424" width="4400" height="12" fill="#ffd43b"/>
+      <ellipse cx="205" cy="548" rx="178" ry="56" fill="#c92a2a"/>
+      <ellipse cx="205" cy="548" rx="178" ry="56" fill="none" stroke="#fff" stroke-width="10" stroke-dasharray="22 22"/>
+      <ellipse cx="205" cy="546" rx="160" ry="46" class="c-rug"/>
+      <ellipse cx="205" cy="546" rx="120" ry="32" fill="#fff" opacity=".25"/>
+
+      <!-- trapézio -->
+      <g class="sway" style="transform-origin:200px 40px">
+        <line x1="178" y1="40" x2="178" y2="196" stroke="#495057" stroke-width="2.5"/><line x1="222" y1="40" x2="222" y2="196" stroke="#495057" stroke-width="2.5"/>
+        <rect x="170" y="194" width="60" height="9" rx="4" fill="#ffd43b" stroke="#e67700" stroke-width="2"/>
+      </g>
+
+      <rect class="dim" x="-2000" y="-2000" width="4400" height="4400" fill="#0b1440"/>
+      <polygon class="glow" points="330,96 140,560 270,560" fill="#fff3bf" opacity=".5"/>
+      <ellipse class="glow" cx="205" cy="548" rx="80" ry="22" fill="#fff3bf" opacity=".6"/>
+      <g class="glow"><circle fill="#ffe066" class="bulb" cx="30" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="46" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="62" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="78" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="94" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="110" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="126" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="142" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="158" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="30" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="46" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="62" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="78" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="94" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="110" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="126" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="142" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="158" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="24" cy="86" r="4"/><circle fill="#ffe066" class="bulb" cx="24" cy="102" r="4"/><circle fill="#ffe066" class="bulb" cx="24" cy="118" r="4"/><circle fill="#ffe066" class="bulb" cx="24" cy="134" r="4"/><circle fill="#ffe066" class="bulb" cx="24" cy="150" r="4"/><circle fill="#ffe066" class="bulb" cx="24" cy="166" r="4"/><circle fill="#ffe066" class="bulb" cx="164" cy="86" r="4"/><circle fill="#ffe066" class="bulb" cx="164" cy="102" r="4"/><circle fill="#ffe066" class="bulb" cx="164" cy="118" r="4"/><circle fill="#ffe066" class="bulb" cx="164" cy="134" r="4"/><circle fill="#ffe066" class="bulb" cx="164" cy="150" r="4"/><circle fill="#ffe066" class="bulb" cx="164" cy="166" r="4"/></g>
+      <!-- holofote: show de luzes -->
+      <polygon class="beam" points="330,96 140,560 270,560" fill="#fff3bf"/>
+      <g class="hot" tabindex="0" role="button" aria-label="Holofote: ligar o show de luzes" data-play="night">
+        <line x1="300" y1="40" x2="380" y2="40" stroke="#495057" stroke-width="5" stroke-linecap="round"/>
+        <line x1="336" y1="40" x2="336" y2="60" stroke="#495057" stroke-width="4"/>
+        <g transform="rotate(20 336 76)"><rect x="318" y="60" width="36" height="34" rx="8" fill="#343a40"/><ellipse cx="336" cy="96" rx="20" ry="7" fill="#fff3bf" stroke="#343a40" stroke-width="3"/></g>
+      </g>
+
+      <g class="hot" tabindex="0" role="button" aria-label="Lembretes de datas importantes" data-go="reminders">
+        <g class="lift">
+          <rect x="22" y="66" width="144" height="116" rx="12" fill="#c92a2a" stroke="#ffd43b" stroke-width="4"/>
+          <rect x="38" y="84" width="112" height="82" rx="4" fill="#fff8c4" transform="rotate(-2 94 125)"/>
+          <g class="signText" font-family="Baloo 2, Trebuchet MS, sans-serif" fill="#2b3a5a" text-anchor="middle"></g>
+        </g>
+        <g class="signBadge"></g>
+      </g>
+          <circle fill="#ffe066" class="bulb" cx="30" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="46" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="62" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="78" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="94" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="110" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="126" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="142" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="158" cy="70" r="4"/><circle fill="#ffe066" class="bulb" cx="30" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="46" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="62" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="78" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="94" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="110" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="126" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="142" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="158" cy="178" r="4"/><circle fill="#ffe066" class="bulb" cx="24" cy="86" r="4"/><circle fill="#ffe066" class="bulb" cx="24" cy="102" r="4"/><circle fill="#ffe066" class="bulb" cx="24" cy="118" r="4"/><circle fill="#ffe066" class="bulb" cx="24" cy="134" r="4"/><circle fill="#ffe066" class="bulb" cx="24" cy="150" r="4"/><circle fill="#ffe066" class="bulb" cx="24" cy="166" r="4"/><circle fill="#ffe066" class="bulb" cx="164" cy="86" r="4"/><circle fill="#ffe066" class="bulb" cx="164" cy="102" r="4"/><circle fill="#ffe066" class="bulb" cx="164" cy="118" r="4"/><circle fill="#ffe066" class="bulb" cx="164" cy="134" r="4"/><circle fill="#ffe066" class="bulb" cx="164" cy="150" r="4"/><circle fill="#ffe066" class="bulb" cx="164" cy="166" r="4"/>
+
+      <!-- baú: meus dias -->
+      <g class="hot" tabindex="0" role="button" aria-label="Ver meus dias no diário" data-go="days">
+        <g class="lift">
+          <rect x="292" y="356" width="92" height="70" rx="6" fill="#9c36b5" stroke="#5f3dc4" stroke-width="3"/>
+          <path d="M292 360 Q338 310 384 360 Z" fill="#ae3ec9" stroke="#5f3dc4" stroke-width="3"/>
+          <rect x="292" y="380" width="92" height="9" fill="#ffd43b"/><rect x="292" y="406" width="92" height="9" fill="#ffd43b"/>
+          <rect x="328" y="368" width="20" height="26" rx="4" fill="#ffd43b" stroke="#e67700" stroke-width="2"/><circle cx="338" cy="380" r="3" fill="#5f3dc4"/>
+          <path d="M338 322 l3.5 7 7.6 1-5.6 5.2 1.4 7.5-6.9-3.7-6.9 3.7 1.4-7.5-5.6-5.2 7.6-1z" fill="#ffd43b" stroke="#e67700" stroke-width="1.5"/>
+        </g>
+        <g class="pill"><rect x="290" y="434" width="96" height="26" rx="13"/><text x="338" y="453">Meus dias</text></g>
+      </g>
+
+      <!-- palco: escrever -->
+      <g class="hot" tabindex="0" role="button" aria-label="Escrever ou falar sobre o meu dia" data-go="write">
+        <g class="lift">
+          <rect x="18" y="398" width="152" height="30" rx="6" fill="#f08c00"/><rect x="18" y="398" width="152" height="8" rx="4" fill="#ffd43b"/>
+          <path d="M60 398 L70 336 H120 L130 398 Z" fill="#1971c2" stroke="#0b4f8a" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M95 352 l3.5 7 7.6 1-5.6 5.2 1.4 7.5-6.9-3.7-6.9 3.7 1.4-7.5-5.6-5.2 7.6-1z" fill="#ffd43b"/>
+          <rect x="62" y="328" width="66" height="9" rx="3" fill="#0b4f8a"/>
+          <path d="M70 328 Q82 318 95 326 Q108 318 120 328 Z" fill="#fff" stroke="#a5b4fc" stroke-width="2"/>
+          <line x1="150" y1="398" x2="150" y2="330" stroke="#495057" stroke-width="4"/><rect x="144" y="314" width="12" height="20" rx="6" fill="#343a40"/>
+        </g>
+        <g class="pill"><rect x="47" y="434" width="96" height="26" rx="13"/><text x="95" y="453">Escrever</text></g>
+      </g>
+
+      <!-- arquibancada: amigos -->
+      <g class="hot" tabindex="0" role="button" aria-label="Meus amigos" data-go="friends">
+        <g class="lift">
+          <rect x="176" y="404" width="108" height="24" fill="#8f5a2a"/><rect x="212" y="380" width="72" height="24" fill="#a0673a"/><rect x="248" y="356" width="36" height="24" fill="#b5763a"/>
+          <rect x="174" y="398" width="40" height="8" rx="3" fill="#ff6b6b"/><rect x="210" y="374" width="40" height="8" rx="3" fill="#4dabf7"/><rect x="246" y="350" width="40" height="8" rx="3" fill="#51cf66"/>
+          <line x1="284" y1="320" x2="284" y2="428" stroke="#495057" stroke-width="4"/><path d="M180 396 L216 372 L252 348 L284 324" stroke="#495057" stroke-width="3" fill="none"/>
+          <path d="M284 320 v-22 l18 6 -18 6" fill="#ffd43b" stroke="#2b3a5a" stroke-width="1.5"/>
+        </g>
+        <g class="pill"><rect x="186" y="434" width="88" height="26" rx="13"/><text x="230" y="453">Amigos</text></g>
+      </g>
+
+      <!-- pedestal com bola no picadeiro -->
+      <rect x="180" y="520" width="50" height="30" rx="4" fill="#4c6ef5"/><ellipse cx="205" cy="520" rx="25" ry="7" fill="#748ffc"/><ellipse cx="205" cy="550" rx="25" ry="7" fill="#364fc7"/>
+      
+      <g class="ball" tabindex="0" role="button" aria-label="Bola: toque para quicar" transform="translate(153 -74)">
+        <circle cx="52" cy="572" r="22" fill="#ff6b6b" stroke="#2b3a5a" stroke-width="3"/>
+        <path d="M31 566 Q52 580 73 566" stroke="#fff" stroke-width="5" fill="none"/><path d="M48 550 Q60 572 50 594" stroke="#ffd43b" stroke-width="5" fill="none"/>
+      </g>
+      <g class="hot" transform="translate(396 636) scale(.72) translate(-396 -636)" tabindex="0" role="button" aria-label="Lixeira, dias apagados" data-go="trash">
+        <g class="lift">
+          <rect x="328" y="538" width="56" height="9" rx="4" fill="#3b5bdb"/><rect x="348" y="530" width="16" height="8" rx="3" fill="#3b5bdb"/>
+          <path d="M333 549 H379 L373 600 H339 Z" fill="#5c7cfa"/>
+          <line x1="347" y1="558" x2="349" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/><line x1="356" y1="558" x2="356" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/><line x1="365" y1="558" x2="363" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        <g class="pill"><rect x="312" y="606" width="86" height="26" rx="13"/><text x="355" y="625">Lixeira</text></g>
+      </g>
+      </g>
+      <g class="scene" data-scene="carrossel" style="display:none">
+      <!-- CARROSSEL -->
+      <rect x="-2000" y="-2000" width="4400" height="2430" class="c-wall"/>
+      <g class="sunG"><circle cx="330" cy="104" r="34" fill="#ffd43b" opacity=".35"/><circle cx="330" cy="104" r="22" fill="#ffd43b"/></g>
+      <g class="moonG"><circle cx="330" cy="104" r="20" fill="#fff3bf"/><circle cx="340" cy="96" r="18" class="c-wall"/></g>
+      <g class="starsG" fill="#fff"><circle cx="40" cy="200" r="2"/><circle cx="110" cy="120" r="1.6"/><circle cx="250" cy="90" r="2"/><circle cx="370" cy="220" r="1.6"/><circle cx="190" cy="110" r="1.4"/><circle cx="290" cy="180" r="1.4"/></g>
+      <g class="cloud"><ellipse cx="80" cy="230" rx="30" ry="12" fill="#fff"/><ellipse cx="100" cy="221" rx="20" ry="12" fill="#fff"/></g>
+      <g class="cloud b"><ellipse cx="300" cy="250" rx="26" ry="10" fill="#fff" opacity=".9"/></g>
+      <g class="hot" tabindex="0" role="button" aria-label="Sol e lua: trocar entre dia e noite" data-play="night"><circle cx="330" cy="104" r="34" fill="transparent"/></g>
+      <ellipse cx="80" cy="436" rx="230" ry="40" fill="#9bdc84"/><ellipse cx="330" cy="432" rx="200" ry="34" fill="#8ad374"/>
+      <rect x="-2000" y="430" width="4400" height="2400" fill="#7fcf6b"/>
+      <g fill="#fff"><circle cx="60" cy="520" r="4"/><circle cx="330" cy="540" r="4"/><circle cx="110" cy="620" r="4"/><circle cx="290" cy="610" r="4"/></g>
+      <g fill="#ffd43b"><circle cx="60" cy="520" r="1.8"/><circle cx="330" cy="540" r="1.8"/><circle cx="110" cy="620" r="1.8"/><circle cx="290" cy="610" r="1.8"/></g>
+      <path d="M0 30 Q200 58 400 30" stroke="#495057" stroke-width="2" fill="none"/>
+      <g><circle class="bulb" cx="12" cy="32" r="5" fill="#ffd43b"/><circle class="bulb" cx="40" cy="38" r="5" fill="#ff6b6b"/><circle class="bulb" cx="68" cy="43" r="5" fill="#4dabf7"/><circle class="bulb" cx="96" cy="47" r="5" fill="#51cf66"/><circle class="bulb" cx="124" cy="50" r="5" fill="#b197fc"/><circle class="bulb" cx="152" cy="52" r="5" fill="#ffd43b"/><circle class="bulb" cx="180" cy="53" r="5" fill="#ff6b6b"/><circle class="bulb" cx="208" cy="53" r="5" fill="#4dabf7"/><circle class="bulb" cx="236" cy="53" r="5" fill="#51cf66"/><circle class="bulb" cx="264" cy="51" r="5" fill="#b197fc"/><circle class="bulb" cx="292" cy="48" r="5" fill="#ffd43b"/><circle class="bulb" cx="320" cy="45" r="5" fill="#ff6b6b"/><circle class="bulb" cx="348" cy="40" r="5" fill="#4dabf7"/><circle class="bulb" cx="376" cy="35" r="5" fill="#51cf66"/></g>
+
+      <g class="hot" tabindex="0" role="button" aria-label="Lembretes de datas importantes" data-go="reminders">
+        <g class="lift">
+          <line x1="50" y1="38" x2="50" y2="72" stroke="#8f5a2a" stroke-width="3"/><line x1="138" y1="46" x2="138" y2="72" stroke="#8f5a2a" stroke-width="3"/>
+          <rect x="24" y="70" width="140" height="108" rx="10" fill="#c98e57" stroke="#8f5a2a" stroke-width="5"/>
+          <rect x="38" y="84" width="112" height="82" rx="4" fill="#fff8c4" transform="rotate(-2 94 125)"/>
+          <g class="signText" font-family="Baloo 2, Trebuchet MS, sans-serif" fill="#2b3a5a" text-anchor="middle"></g>
+        </g>
+        <g class="signBadge"></g>
+      </g>
+
+      <!-- carrossel: amigos -->
+      <g class="hot" tabindex="0" role="button" aria-label="Meus amigos" data-go="friends">
+        <g class="lift">
+          <rect x="196" y="236" width="8" height="230" fill="#e67700"/>
+          <ellipse cx="200" cy="470" rx="104" ry="20" class="c-rug" stroke="#2b3a5a" stroke-width="2"/>
+          <rect x="96" y="470" width="208" height="16" class="c-rug"/><ellipse cx="200" cy="486" rx="104" ry="20" class="c-rug" stroke="#2b3a5a" stroke-width="2"/>
+          <rect x="96" y="470" width="208" height="16" fill="#000" opacity=".12"/>
+          <g class="horse"><line x1="140" y1="262" x2="140" y2="462" stroke="#ffd43b" stroke-width="4"/><g transform="translate(140 352)"><path d="M-14 8 L-20 26 M-8 10 L-4 28 M10 10 L16 26 M16 8 L24 22" stroke="#2b3a5a" stroke-width="4" stroke-linecap="round"/><path d="M-22 -2 Q-34 4 -30 18" stroke="#ff922b" stroke-width="6" fill="none" stroke-linecap="round"/><ellipse cx="0" cy="0" rx="23" ry="12" fill="#fff" stroke="#2b3a5a" stroke-width="2.5"/><path d="M12 -4 L18 -26 L28 -24 L24 -2 Z" fill="#fff" stroke="#2b3a5a" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="30" cy="-24" rx="11" ry="7" fill="#fff" stroke="#2b3a5a" stroke-width="2.5" transform="rotate(25 30 -24)"/><path d="M18 -30 l2 -8 4 7z" fill="#fff" stroke="#2b3a5a" stroke-width="1.5"/><path d="M15 -6 Q8 -18 16 -30" stroke="#ff922b" stroke-width="6" fill="none" stroke-linecap="round"/><rect x="-10" y="-14" width="18" height="7" rx="3" fill="#e64980"/></g></g><g class="horse b"><line x1="262" y1="262" x2="262" y2="462" stroke="#ffd43b" stroke-width="4"/><g transform="translate(262 380)"><path d="M-14 8 L-20 26 M-8 10 L-4 28 M10 10 L16 26 M16 8 L24 22" stroke="#2b3a5a" stroke-width="4" stroke-linecap="round"/><path d="M-22 -2 Q-34 4 -30 18" stroke="#4dabf7" stroke-width="6" fill="none" stroke-linecap="round"/><ellipse cx="0" cy="0" rx="23" ry="12" fill="#fff3bf" stroke="#2b3a5a" stroke-width="2.5"/><path d="M12 -4 L18 -26 L28 -24 L24 -2 Z" fill="#fff3bf" stroke="#2b3a5a" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="30" cy="-24" rx="11" ry="7" fill="#fff3bf" stroke="#2b3a5a" stroke-width="2.5" transform="rotate(25 30 -24)"/><path d="M18 -30 l2 -8 4 7z" fill="#fff3bf" stroke="#2b3a5a" stroke-width="1.5"/><path d="M15 -6 Q8 -18 16 -30" stroke="#4dabf7" stroke-width="6" fill="none" stroke-linecap="round"/><rect x="-10" y="-14" width="18" height="7" rx="3" fill="#e64980"/></g></g><g class="horse c"><line x1="200" y1="262" x2="200" y2="462" stroke="#ffd43b" stroke-width="4"/><g transform="translate(200 326)"><path d="M-14 8 L-20 26 M-8 10 L-4 28 M10 10 L16 26 M16 8 L24 22" stroke="#2b3a5a" stroke-width="4" stroke-linecap="round"/><path d="M-22 -2 Q-34 4 -30 18" stroke="#9775fa" stroke-width="6" fill="none" stroke-linecap="round"/><ellipse cx="0" cy="0" rx="23" ry="12" fill="#ffd8e8" stroke="#2b3a5a" stroke-width="2.5"/><path d="M12 -4 L18 -26 L28 -24 L24 -2 Z" fill="#ffd8e8" stroke="#2b3a5a" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="30" cy="-24" rx="11" ry="7" fill="#ffd8e8" stroke="#2b3a5a" stroke-width="2.5" transform="rotate(25 30 -24)"/><path d="M18 -30 l2 -8 4 7z" fill="#ffd8e8" stroke="#2b3a5a" stroke-width="1.5"/><path d="M15 -6 Q8 -18 16 -30" stroke="#9775fa" stroke-width="6" fill="none" stroke-linecap="round"/><rect x="-10" y="-14" width="18" height="7" rx="3" fill="#e64980"/></g></g>
+          <polygon class="c-bed" points="200,150 96,240 122,240"/><polygon fill="#fff" points="200,150 122,240 148,240"/><polygon class="c-bed" points="200,150 148,240 174,240"/><polygon fill="#fff" points="200,150 174,240 200,240"/><polygon class="c-bed" points="200,150 200,240 226,240"/><polygon fill="#fff" points="200,150 226,240 252,240"/><polygon class="c-bed" points="200,150 252,240 278,240"/><polygon fill="#fff" points="200,150 278,240 304,240"/>
+          <polyline points="96,240 200,150 304,240" fill="none" stroke="#2b3a5a" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M96 240 a13 13 0 0 0 26 0z" fill="#fff"/><path d="M122 240 a13 13 0 0 0 26 0z" class="c-bed"/><path d="M148 240 a13 13 0 0 0 26 0z" fill="#fff"/><path d="M174 240 a13 13 0 0 0 26 0z" class="c-bed"/><path d="M200 240 a13 13 0 0 0 26 0z" fill="#fff"/><path d="M226 240 a13 13 0 0 0 26 0z" class="c-bed"/><path d="M252 240 a13 13 0 0 0 26 0z" fill="#fff"/><path d="M278 240 a13 13 0 0 0 26 0z" class="c-bed"/>
+          <line x1="200" y1="150" x2="200" y2="122" stroke="#495057" stroke-width="3"/><path d="M200 122 l20 7 -20 7z" fill="#ff6b6b"/>
+        </g>
+        <g class="pill"><rect x="156" y="502" width="88" height="26" rx="13"/><text x="200" y="521">Amigos</text></g>
+      </g>
+
+      <!-- barraquinha: escrever -->
+      <g class="hot" tabindex="0" role="button" aria-label="Escrever ou falar sobre o meu dia" data-go="write">
+        <g class="lift">
+          <rect x="24" y="300" width="8" height="128" fill="#8f5a2a"/><rect x="124" y="300" width="8" height="128" fill="#8f5a2a"/>
+          <rect x="18" y="360" width="120" height="68" rx="6" fill="#ffd43b" stroke="#e67700" stroke-width="3"/>
+          <rect x="18" y="360" width="120" height="12" fill="#ff922b"/>
+          <path d="M14 300 H142 L136 322 H20 Z" fill="#fff" stroke="#2b3a5a" stroke-width="2"/>
+          <g fill="#ff6b6b"><path d="M14 300 h16 l-1 22 h-9z"/><path d="M46 300 h16 v22 h-16z"/><path d="M78 300 h16 v22 h-16z"/><path d="M110 300 h16 v22 h-16z"/></g>
+          <path d="M20 322 q8 10 16 0 q8 10 16 0 q8 10 16 0 q8 10 16 0 q8 10 16 0 q8 10 16 0 q8 10 16 0" fill="#fff" stroke="#2b3a5a" stroke-width="2"/>
+          <rect x="44" y="350" width="64" height="7" rx="2" fill="#4c6ef5"/>
+          <path d="M46 350 Q61 341 76 348 Q91 341 106 350 Z" fill="#fff" stroke="#a5b4fc" stroke-width="2"/>
+          <text x="78" y="404" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#c92a2a" text-anchor="middle">DIÁRIO</text>
+        </g>
+        <g class="pill"><rect x="30" y="434" width="96" height="26" rx="13"/><text x="78" y="453">Escrever</text></g>
+      </g>
+
+      <!-- banco: meus dias -->
+      <g class="hot" tabindex="0" role="button" aria-label="Ver meus dias no diário" data-go="days">
+        <g class="lift">
+          <rect x="312" y="380" width="78" height="8" rx="4" fill="#b5763a"/><rect x="310" y="402" width="82" height="10" rx="5" fill="#b5763a"/>
+          <rect x="318" y="412" width="7" height="16" rx="2" fill="#8f5a2a"/><rect x="377" y="412" width="7" height="16" rx="2" fill="#8f5a2a"/>
+          <rect x="330" y="384" width="44" height="20" rx="4" fill="#4c6ef5"/><rect x="333" y="387" width="18" height="14" rx="2" fill="#fff"/><rect x="353" y="387" width="18" height="14" rx="2" fill="#fff"/>
+        </g>
+        <g class="pill"><rect x="292" y="434" width="96" height="26" rx="13"/><text x="340" y="453">Meus dias</text></g>
+      </g>
+      
+      <g class="ball" tabindex="0" role="button" aria-label="Bola: toque para quicar">
+        <circle cx="52" cy="572" r="22" fill="#ff6b6b" stroke="#2b3a5a" stroke-width="3"/>
+        <path d="M31 566 Q52 580 73 566" stroke="#fff" stroke-width="5" fill="none"/><path d="M48 550 Q60 572 50 594" stroke="#ffd43b" stroke-width="5" fill="none"/>
+      </g>
+      <g class="hot" transform="translate(396 636) scale(.72) translate(-396 -636)" tabindex="0" role="button" aria-label="Lixeira, dias apagados" data-go="trash">
+        <g class="lift">
+          <rect x="328" y="538" width="56" height="9" rx="4" fill="#3b5bdb"/><rect x="348" y="530" width="16" height="8" rx="3" fill="#3b5bdb"/>
+          <path d="M333 549 H379 L373 600 H339 Z" fill="#5c7cfa"/>
+          <line x1="347" y1="558" x2="349" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/><line x1="356" y1="558" x2="356" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/><line x1="365" y1="558" x2="363" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        <g class="pill"><rect x="312" y="606" width="86" height="26" rx="13"/><text x="355" y="625">Lixeira</text></g>
+      </g>
+      <rect class="dim" x="-2000" y="-2000" width="4400" height="4400" fill="#0b1440"/>
+      <g class="glow"><circle class="bulb" cx="12" cy="32" r="11" opacity=".55" fill="#ffd43b"/><circle class="bulb" cx="40" cy="38" r="11" opacity=".55" fill="#ff6b6b"/><circle class="bulb" cx="68" cy="43" r="11" opacity=".55" fill="#4dabf7"/><circle class="bulb" cx="96" cy="47" r="11" opacity=".55" fill="#51cf66"/><circle class="bulb" cx="124" cy="50" r="11" opacity=".55" fill="#b197fc"/><circle class="bulb" cx="152" cy="52" r="11" opacity=".55" fill="#ffd43b"/><circle class="bulb" cx="180" cy="53" r="11" opacity=".55" fill="#ff6b6b"/><circle class="bulb" cx="208" cy="53" r="11" opacity=".55" fill="#4dabf7"/><circle class="bulb" cx="236" cy="53" r="11" opacity=".55" fill="#51cf66"/><circle class="bulb" cx="264" cy="51" r="11" opacity=".55" fill="#b197fc"/><circle class="bulb" cx="292" cy="48" r="11" opacity=".55" fill="#ffd43b"/><circle class="bulb" cx="320" cy="45" r="11" opacity=".55" fill="#ff6b6b"/><circle class="bulb" cx="348" cy="40" r="11" opacity=".55" fill="#4dabf7"/><circle class="bulb" cx="376" cy="35" r="11" opacity=".55" fill="#51cf66"/><circle class="bulb" cx="12" cy="32" r="5" fill="#ffd43b"/><circle class="bulb" cx="40" cy="38" r="5" fill="#ff6b6b"/><circle class="bulb" cx="68" cy="43" r="5" fill="#4dabf7"/><circle class="bulb" cx="96" cy="47" r="5" fill="#51cf66"/><circle class="bulb" cx="124" cy="50" r="5" fill="#b197fc"/><circle class="bulb" cx="152" cy="52" r="5" fill="#ffd43b"/><circle class="bulb" cx="180" cy="53" r="5" fill="#ff6b6b"/><circle class="bulb" cx="208" cy="53" r="5" fill="#4dabf7"/><circle class="bulb" cx="236" cy="53" r="5" fill="#51cf66"/><circle class="bulb" cx="264" cy="51" r="5" fill="#b197fc"/><circle class="bulb" cx="292" cy="48" r="5" fill="#ffd43b"/><circle class="bulb" cx="320" cy="45" r="5" fill="#ff6b6b"/><circle class="bulb" cx="348" cy="40" r="5" fill="#4dabf7"/><circle class="bulb" cx="376" cy="35" r="5" fill="#51cf66"/></g>
+      <circle class="glow" cx="200" cy="330" r="120" fill="url(#glowG)" opacity=".5"/>
+      </g>
     </svg>
     <div class="top">
       <div><h1>Meu Diário</h1><p id="hello">Toque nas coisas do quarto!</p><div id="stars" class="stars" role="status"></div></div>
       <div class="topbtns"><button class="gear" data-act="go" data-v="mom" aria-label="Área da mamãe">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2b3a5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
       </button>
-      <button class="decobtn" data-act="decor-open" aria-label="Decorar meu quarto"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0 0 18c1.4 0 2-1 2-2 0-.6-.3-1-.6-1.4-.3-.4-.6-.8-.6-1.4 0-1.1.9-2 2-2H17a4 4 0 0 0 4-4c0-4-4-7.2-9-7.2z" fill="#fff" stroke="#2b3a5a" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7.5" cy="11" r="1.6" fill="#ff6b6b"/><circle cx="10" cy="7" r="1.6" fill="#ffd43b"/><circle cx="14.5" cy="6.8" r="1.6" fill="#51cf66"/><circle cx="17.5" cy="10" r="1.6" fill="#4dabf7"/></svg><span>Decorar</span></button></div>
+      <button class="decobtn" data-act="decor-open" aria-label="Decorar e trocar o cenário"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0 0 18c1.4 0 2-1 2-2 0-.6-.3-1-.6-1.4-.3-.4-.6-.8-.6-1.4 0-1.1.9-2 2-2H17a4 4 0 0 0 4-4c0-4-4-7.2-9-7.2z" fill="#fff" stroke="#2b3a5a" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7.5" cy="11" r="1.6" fill="#ff6b6b"/><circle cx="10" cy="7" r="1.6" fill="#ffd43b"/><circle cx="14.5" cy="6.8" r="1.6" fill="#51cf66"/><circle cx="17.5" cy="10" r="1.6" fill="#4dabf7"/></svg><span>Decorar</span></button></div>
     </div>
   </main>
-  <section id="decor" hidden aria-label="Decorar meu quarto"></section>
+  <section id="decor" hidden aria-label="Decorar"></section>
   <section id="sheet" hidden></section>
   <div id="toast" role="status"></div>
 </div>
@@ -584,7 +774,7 @@ function go(v,arg){
 var THEME={write:['sun','coelha'],day:['grape','ursinho'],days:['grape','ursinho'],friends:['sky','sapo'],reminders:['lemon','pintinho'],trash:['slate','gato'],mom:['mint',''],yay:['party',''],welcome:['party','']};
 function head(title,back){
   var th=THEME[view]||[];
-  return '<header class="bar"><button class="back" data-act="go" data-v="'+(back||'park')+'"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b3a5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'+(back&&back!=='park'?'Voltar':'Quarto')+'</button><h2>'+title+'</h2>'+(th[1]?'<span class="mascot" aria-hidden="true">'+charSvg(th[1],54)+'</span>':'')+'</header>';
+  return '<header class="bar"><button class="back" data-act="go" data-v="'+(back||'park')+'"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b3a5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'+(back&&back!=='park'?'Voltar':cap(sceneInfo().name))+'</button><h2>'+title+'</h2>'+(th[1]?'<span class="mascot" aria-hidden="true">'+charSvg(th[1],54)+'</span>':'')+'</header>';
 }
 function render(){
   var sh=$('#sheet');
@@ -599,21 +789,29 @@ function render(){
 function upcoming(){return S.reminders.filter(function(r){return daysUntil(r.date)>=0}).sort(function(a,b){return a.date<b.date?-1:1})}
 function trunc(s,n){return s.length>n?s.slice(0,n-1)+'…':s}
 function updatePark(){
-  var up=upcoming(),g=$('#signText'),b=$('#signBadge');
+  var up=upcoming();
   var l2='',l3='';
   if(up.length){var r=up[0],n=daysUntil(r.date);l2=trunc(r.title,14);l3=n===0?'É hoje!':n===1?'É amanhã':'em '+n+' dias'}
   else{l2='Nada por perto';l3='Toque para criar'}
-  g.innerHTML='<g transform="rotate(-2 94 125)"><text x="94" y="112" font-size="17" font-weight="800">Lembretes</text><text x="94" y="134" font-size="12.5" font-weight="600">'+esc(l2)+'</text><text x="94" y="154" font-size="13" font-weight="700" fill="#b03a28">'+esc(l3)+'</text></g>';
-  b.innerHTML=up.length?'<circle cx="162" cy="72" r="13" fill="#d9432f" stroke="#fff" stroke-width="3"/><text x="162" y="77" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="14" fill="#fff">'+up.length+'</text>':'';
+  var gt='<g transform="rotate(-2 94 125)"><text x="94" y="112" font-size="17" font-weight="800">Lembretes</text><text x="94" y="134" font-size="12.5" font-weight="600">'+esc(l2)+'</text><text x="94" y="154" font-size="13" font-weight="700" fill="#b03a28">'+esc(l3)+'</text></g>';
+  var bt=up.length?'<circle cx="162" cy="72" r="13" fill="#d9432f" stroke="#fff" stroke-width="3"/><text x="162" y="77" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="14" fill="#fff">'+up.length+'</text>':'';
   var wroteToday=S.entries.some(function(e){return !e.deletedAt&&e.date===dstr()});
   var oi=S.settings.name?('Oi, '+S.settings.name+'! '):'';
-  $('#hello').textContent=oi+(wroteToday?'Você já contou sobre hoje!':S.draft?'Seu dia está esperando na escrivaninha.':'Que tal contar sobre hoje na escrivaninha?');
+  $$('.signText').forEach(function(x){x.innerHTML=gt});$$('.signBadge').forEach(function(x){x.innerHTML=bt});
+  var wp=sceneInfo().write;
+  $('#hello').textContent=oi+(wroteToday?'Você já contou sobre hoje!':S.draft?'Seu dia está esperando '+wp+'.':'Que tal contar sobre hoje '+wp+'?');
   var stars=S.entries.filter(function(e){return !e.deletedAt&&!e.example}).length,st=streak();
   $('#stars').innerHTML=STAR+'<span><b>'+stars+'</b> '+(stars===1?'estrela':'estrelas')+'</span>'+(st>1?'<span class="fire">'+st+' dias seguidos!</span>':'');
   $('#stars').setAttribute('aria-label',stars+(stars===1?' estrela':' estrelas')+(st>1?', '+st+' dias seguidos':''));
 }
 var STAR='<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5L2.5 9.3l6.6-.8z" fill="#ffd43b" stroke="#2b3a5a" stroke-width="1.6" stroke-linejoin="round"/></svg>';
 
+var SCENES={
+  quarto:{name:'quarto',write:'na escrivaninha',labels:{wall:'Cor da parede',pat:'Desenho da parede',bed:'Cama e cortina',rug:'Tapete',floor:'Chão'},night:['Dia','Noite']},
+  circo:{name:'circo',write:'no palco',labels:{wall:'Cor da lona',bed:'Listras da lona',rug:'Picadeiro',floor:'Chão'},night:['Luzes normais','Show de luzes']},
+  carrossel:{name:'carrossel',write:'na barraquinha',labels:{wall:'Cor do céu',bed:'Teto do carrossel',rug:'Base do carrossel'},night:['Dia','Noite']}
+};
+function sceneInfo(){return SCENES[room().scene]}
 var ROOM_OPTS={
   wall:[{id:'pessego',label:'Pêssego',c:'#ffe3cc',d:'#ffcfa8'},{id:'lilas',label:'Lilás',c:'#eadcff',d:'#d6c2ff'},{id:'menta',label:'Menta',c:'#d3f5e4',d:'#ade8cc'},{id:'azul',label:'Azul',c:'#d8ecff',d:'#b6d9ff'},{id:'amarelo',label:'Amarelo',c:'#fff2b8',d:'#ffe07a'},{id:'rosa',label:'Rosa',c:'#ffdbe8',d:'#ffbcd3'}],
   pat:[{id:'bolinhas',label:'Bolinhas',url:'#pDots'},{id:'estrelas',label:'Estrelas',url:'#pStars'},{id:'listras',label:'Listras',url:'#pStripes'},{id:'coracoes',label:'Corações',url:'#pHearts'},{id:'liso',label:'Liso',url:''}],
@@ -623,7 +821,7 @@ var ROOM_OPTS={
 };
 function room(){
   var r=S.settings.room||(S.settings.room={});
-  if(!r.wall)r.wall='pessego';if(!r.pat)r.pat='bolinhas';if(!r.bed)r.bed='azul';if(!r.rug)r.rug='rosa';if(!r.floor)r.floor='madeira';
+  if(!r.wall)r.wall='pessego';if(!r.pat)r.pat='bolinhas';if(!r.bed)r.bed='azul';if(!r.rug)r.rug='rosa';if(!r.floor)r.floor='madeira';if(!SCENES[r.scene])r.scene='quarto';
   return r;
 }
 function opt(k,id){var l=ROOM_OPTS[k];for(var i=0;i<l.length;i++)if(l[i].id===id)return l[i];return l[0]}
@@ -635,6 +833,8 @@ function applyRoom(){
   var pu=opt('pat',r.pat).url,wp=$('#wallPat');
   if(pu){wp.setAttribute('fill','url('+pu+')');wp.style.display=''}else wp.style.display='none';
   pk.classList.toggle('night',!!r.night);
+  $$('.scene').forEach(function(g){g.style.display=g.dataset.scene===r.scene?'':'none'});
+  $$('.scene[data-scene="'+r.scene+'"] .hot').forEach(function(x){if(x._hit)x._hit()});
 }
 var decorOpen=false;
 function swatches(k,round){
@@ -649,17 +849,27 @@ function renderDecor(){
     var w=opt('wall',r.wall);
     return '<button class="chip pat pat-'+o.id+'" data-act="room" data-k="pat" data-v="'+o.id+'" aria-pressed="'+(r.pat===o.id)+'" style="--c:'+w.c+';--d:'+w.d+'"><span class="pv" aria-hidden="true"></span>'+o.label+'</button>';
   }).join('');
-  box.innerHTML='<div class="dhead"><h2>Decorar meu quarto</h2><button class="btn small green" data-act="decor-close">Pronto!</button></div><div class="dbody">'+
-    '<h3>Dia ou noite?</h3><div class="chips"><button class="chip" data-act="room-night" data-v="0" aria-pressed="'+!r.night+'">Dia</button><button class="chip" data-act="room-night" data-v="1" aria-pressed="'+!!r.night+'">Noite</button></div>'+
-    '<h3>Cor da parede</h3>'+swatches('wall')+
-    '<h3>Desenho da parede</h3><div class="chips">'+pats+'</div>'+
-    '<h3>Cama e cortina</h3>'+swatches('bed',true)+
-    '<h3>Tapete</h3>'+swatches('rug',true)+
-    '<h3>Chão</h3>'+swatches('floor')+
+  var si=SCENES[r.scene],L=si.labels;
+  var scenes=Object.keys(SCENES).map(function(k){
+    return '<button class="scenebtn" data-act="room-scene" data-v="'+k+'" aria-pressed="'+(r.scene===k)+'">'+SCENE_ICON[k]+'<span>'+cap(SCENES[k].name)+'</span></button>';
+  }).join('');
+  box.innerHTML='<div class="dhead"><h2>Decorar</h2><button class="btn small green" data-act="decor-close">Pronto!</button></div><div class="dbody">'+
+    '<h3>Cenário</h3><div class="scenes">'+scenes+'</div>'+
+    '<h3>'+(r.scene==='circo'?'Luzes':'Dia ou noite?')+'</h3><div class="chips"><button class="chip" data-act="room-night" data-v="0" aria-pressed="'+!r.night+'">'+si.night[0]+'</button><button class="chip" data-act="room-night" data-v="1" aria-pressed="'+!!r.night+'">'+si.night[1]+'</button></div>'+
+    '<h3>'+L.wall+'</h3>'+swatches('wall')+
+    (L.pat?'<h3>'+L.pat+'</h3><div class="chips">'+pats+'</div>':'')+
+    '<h3>'+L.bed+'</h3>'+swatches('bed',true)+
+    '<h3>'+L.rug+'</h3>'+swatches('rug',true)+
+    (L.floor?'<h3>'+L.floor+'</h3>'+swatches('floor'):'')+
     '</div>';
 }
+var SCENE_ICON={
+  quarto:'<svg width="56" height="44" viewBox="0 0 56 44" aria-hidden="true"><rect width="56" height="44" rx="8" fill="#ffe3cc"/><rect x="6" y="18" width="5" height="20" rx="2" fill="#c98e57"/><rect x="8" y="26" width="42" height="9" rx="3" fill="#fff" stroke="#d0d7e2"/><rect x="24" y="23" width="26" height="12" rx="4" fill="#4dabf7"/><ellipse cx="17" cy="25" rx="6" ry="3.5" fill="#fff" stroke="#d0d7e2"/><rect x="34" y="5" width="16" height="13" rx="2" fill="#a5d8ff" stroke="#fff" stroke-width="2"/></svg>',
+  circo:'<svg width="56" height="44" viewBox="0 0 56 44" aria-hidden="true"><rect width="56" height="44" rx="8" fill="#ffe3e3"/><path d="M28 5 L6 22 H50 Z" fill="#fa5252"/><path d="M28 5 L17 22 H22 Z M28 5 L34 22 H39 Z" fill="#fff"/><rect x="9" y="22" width="38" height="16" fill="#fff"/><g fill="#fa5252"><rect x="9" y="22" width="6" height="16"/><rect x="21" y="22" width="6" height="16"/><rect x="33" y="22" width="6" height="16"/></g><path d="M24 38 v-9 a4 4 0 0 1 8 0 v9z" fill="#2b3a5a"/><path d="M28 5 v-3 l6 2-6 2" fill="#ffd43b" stroke="#2b3a5a" stroke-width=".8"/></svg>',
+  carrossel:'<svg width="56" height="44" viewBox="0 0 56 44" aria-hidden="true"><rect width="56" height="44" rx="8" fill="#d0ebff"/><path d="M28 6 L10 18 H46 Z" fill="#f783ac"/><path d="M28 6 L22 18 H28 Z M28 6 L34 18 H40 Z" fill="#fff"/><g stroke="#ffd43b" stroke-width="2"><line x1="16" y1="18" x2="16" y2="36"/><line x1="28" y1="18" x2="28" y2="36"/><line x1="40" y1="18" x2="40" y2="36"/></g><g fill="#fff" stroke="#2b3a5a" stroke-width="1"><rect x="11" y="24" width="10" height="6" rx="3"/><rect x="35" y="27" width="10" height="6" rx="3"/></g><ellipse cx="28" cy="37" rx="20" ry="4" fill="#ffc9de" stroke="#2b3a5a" stroke-width="1"/></svg>'
+};
 function openDecor(){decorOpen=true;renderDecor();$('#decor').hidden=false;$('#app').classList.add('decorating');pop('tap')}
-function closeDecor(){decorOpen=false;$('#decor').hidden=true;$('#app').classList.remove('decorating');pop('yay');toast('Seu quarto ficou lindo!')}
+function closeDecor(){decorOpen=false;$('#decor').hidden=true;$('#app').classList.remove('decorating');pop('yay');toast('Seu '+sceneInfo().name+' ficou lindo!')}
 function toggleNight(){var r=room();r.night=!r.night;save();applyRoom();pop(r.night?'night':'tap');if(decorOpen)renderDecor()}
 
 /* ---------- Telas ---------- */
@@ -704,7 +914,7 @@ function step(n,t){return '<h3 class="step"><span class="num">'+n+'</span>'+t+'<
 VIEWS.write=function(){
   var moods=MOODS.map(function(m){return '<button class="mood" data-act="mood" data-mood="'+m.id+'" aria-pressed="'+(draft.mood===m.id)+'">'+face(m.id,58)+'<span>'+m.label+'</span></button>'}).join('');
   var chars=CHARS.map(function(c){return '<button class="char" data-act="char" data-char="'+c.id+'" aria-pressed="'+(draft.character===c.id)+'">'+charSvg(c.id,64)+'<span>'+c.label+'</span></button>'}).join('');
-  var fr=S.friends.length?S.friends.map(function(f){return '<button class="chip" data-act="fpick" data-id="'+f.id+'" aria-pressed="'+(draft.friends.indexOf(f.id)>-1)+'">'+esc(f.name)+'</button>'}).join(''):'<p class="hint">Você ainda não cadastrou amigos. Toque na cama, no quarto, para cadastrar.</p>';
+  var fr=S.friends.length?S.friends.map(function(f){return '<button class="chip" data-act="fpick" data-id="'+f.id+'" aria-pressed="'+(draft.friends.indexOf(f.id)>-1)+'">'+esc(f.name)+'</button>'}).join(''):'<p class="hint">Você ainda não cadastrou amigos. Toque em Amigos, na tela inicial, para cadastrar.</p>';
   return head(draft.id?'Mudar meu dia':'Meu dia')+'<div class="wrap">'+
    (draftRestored?'<p class="draftnote">Guardei o que você tinha começado. Pode continuar! <button class="linkbtn" style="min-height:0;padding:0 4px" data-act="clear-draft">Começar de novo</button></p>':'')+
    '<div class="buddy"><span id="buddyPic">'+charSvg(draft.character||'coelha',72)+'</span><p class="bubble" id="bubble">'+esc(bubbleText())+'</p></div>'+
@@ -757,7 +967,7 @@ VIEWS.days=function(){
   var fchips=S.friends.length?'<h3>Com quem</h3><div class="chips"><button class="chip" data-act="ffriend" data-id="" aria-pressed="'+(!filt.friend)+'">Todos</button>'+S.friends.map(function(f){return '<button class="chip" data-act="ffriend" data-id="'+f.id+'" aria-pressed="'+(filt.friend===f.id)+'">'+esc(f.name)+'</button>'}).join('')+'</div>':'';
   var rows=list.length?list.map(function(e){
     return '<button class="row" data-act="go" data-v="day" data-id="'+e.id+'">'+face(e.mood,52)+'<span class="meta"><span class="d">'+esc(longDate(e.date))+(e.example?'<span class="tag">exemplo</span>':'')+(e.hasVideo?'<span class="tag vid">vídeo</span>':'')+'</span><br><span class="s">'+esc(e.text||'Dia contado em vídeo')+'</span></span>'+(e.character?charSvg(e.character,44):'')+'</button>';
-  }).join(''):'<div class="empty">Nenhum dia por aqui ainda.<br>Que tal escrever na escrivaninha?</div>';
+  }).join(''):'<div class="empty">Nenhum dia por aqui ainda.<br>Que tal escrever sobre hoje?</div>';
   var dchip=filt.date?'<div class="chips" style="margin-bottom:10px"><button class="chip" data-act="fdate" aria-pressed="true" aria-label="Só '+esc(longDate(filt.date))+'. Toque para ver todos os dias">'+esc(shortDate(filt.date))+' <span class="x" aria-hidden="true">×</span></button></div>':'';
   return head('Meus dias')+'<div class="wrap"><h3>Meu mês</h3>'+calendar()+'<p class="hint">Toque em uma carinha para ver o dia, ou em um número para escrever sobre ele.</p>'+
     '<h3>Como eu estava</h3><div class="chips">'+mchips+'</div>'+fchips+'<h3 id="listHead">'+list.length+(list.length===1?' dia':' dias')+'</h3>'+dchip+'<div class="list">'+rows+'</div></div>';
@@ -786,7 +996,7 @@ VIEWS.day=function(id){
    '<a class="btn green" href="'+shareUrl(e)+'" target="_blank" rel="noopener noreferrer"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 16-3-7z"/></svg>'+(e.hasVideo?'Enviar o texto':'Compartilhar com a mamãe')+'</a>'+
    '<button class="btn ghost" data-act="go" data-v="write" data-id="'+e.id+'">Mudar</button>'+
    '<button class="btn ghost" data-act="del-entry" data-id="'+e.id+'">Apagar este dia</button></div>'+
-   (hasPhone?'':'<p class="hint">A mamãe ainda não cadastrou o número dela. Toque na engrenagem, no quarto, para cadastrar. Por enquanto o WhatsApp vai pedir para escolher quem recebe.</p>')+
+   (hasPhone?'':'<p class="hint">A mamãe ainda não cadastrou o número dela. Toque na engrenagem, na tela inicial, para cadastrar. Por enquanto o WhatsApp vai pedir para escolher quem recebe.</p>')+
    '</div>';
 };
 
@@ -802,7 +1012,7 @@ VIEWS.reminders=function(){
    '<h3>Novo lembrete</h3><div class="card"><label class="f" for="rt" style="margin-top:0">O que vai acontecer?</label><input type="text" id="rt" maxlength="40" placeholder="Ex.: festa da Ana">'+
    '<label class="f" for="rd">Que dia?</label><input type="date" id="rd" value="'+addDays(1)+'">'+
    '<div class="actions" style="margin-top:16px"><button class="btn" data-act="add-rem">Guardar lembrete</button></div></div>'+
-   '<p class="hint" style="margin-top:14px">Os lembretes aparecem aqui e no mural do quarto.</p></div>';
+   '<p class="hint" style="margin-top:14px">Os lembretes aparecem aqui e na tela inicial.</p></div>';
 };
 
 VIEWS.friends=function(){
@@ -1022,7 +1232,7 @@ VIEWS.yay=function(id){
     '<h2>'+cheer+'</h2><p class="yaysub">Seu dia foi guardado no diário.</p>'+
     '<div class="yaystar">'+STAR.replace(/26/g,'44')+'<span>+1 estrela<br><small>Você tem '+stars+(stars===1?' estrela':' estrelas')+'</small></span></div>'+
     (st>1?'<p class="yaystreak">'+st+' dias seguidos escrevendo!</p>':'')+
-    '<div class="actions" style="justify-content:center"><button class="btn big" data-act="go" data-v="day" data-id="'+e.id+'">Ver meu dia</button><button class="btn ghost" data-act="go" data-v="park">Voltar ao quarto</button></div></div>';
+    '<div class="actions" style="justify-content:center"><button class="btn big" data-act="go" data-v="day" data-id="'+e.id+'">Ver meu dia</button><button class="btn ghost" data-act="go" data-v="park">Voltar ao '+sceneInfo().name+'</button></div></div>';
 };
 
 /* ---------- Cópia de segurança ---------- */
@@ -1076,6 +1286,7 @@ document.addEventListener('click',function(ev){
   if(a==='decor-open'){openDecor();return}
   if(a==='decor-close'){closeDecor();return}
   if(a==='room'){room()[el.dataset.k]=el.dataset.v;save();applyRoom();renderDecor();pop('tap');return}
+  if(a==='room-scene'){room().scene=el.dataset.v;save();applyRoom();updatePark();renderDecor();pop('yay');return}
   if(a==='room-night'){if(!!room().night!==(el.dataset.v==='1'))toggleNight();return}
   if(a==='sound'){S.settings.sound=S.settings.sound===false;save();render();if(S.settings.sound!==false)pop('yay');return}
   if(a==='fpick'){var i=draft.friends.indexOf(id);if(i>-1)draft.friends.splice(i,1);else draft.friends.push(id);el.setAttribute('aria-pressed',String(i===-1));keepDraft();return}
@@ -1161,11 +1372,12 @@ document.addEventListener('change',function(ev){
   if(ev.target.id==='bkfile'&&ev.target.files&&ev.target.files[0])restoreBackup(ev.target.files[0]);
 });
 $$('.hot').forEach(function(h){
+  h._hit=function(){if(h._done)return;
   try{
-    var bb=h.getBBox(),hit=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    var bb=h.getBBox();if(!bb.width)return;h._done=true;var hit=document.createElementNS('http://www.w3.org/2000/svg','rect');
     hit.setAttribute('x',bb.x-6);hit.setAttribute('y',bb.y-6);hit.setAttribute('width',bb.width+12);hit.setAttribute('height',bb.height+12);
     hit.setAttribute('fill','transparent');h.insertBefore(hit,h.firstChild);
-  }catch(e){}
+  }catch(e){}};
   var open=function(){
     if(h.dataset.play==='night'){toggleNight();return}
     if(decorOpen)return;
@@ -1179,8 +1391,8 @@ document.addEventListener('keydown',function(ev){
   if(ev.key==='Escape'&&decorOpen){closeDecor();return}
   if(ev.key==='Escape'&&view!=='park'&&view!=='welcome')go('park');
 });
-(function(){var bl=$('#ball'),play=function(){bl.classList.remove('bounce');void bl.getBoundingClientRect();bl.classList.add('bounce');pop('boing')};
-  bl.addEventListener('click',play);bl.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();play()}});})();
+$$('.ball').forEach(function(bl){var play=function(){bl.classList.remove('bounce');void bl.getBoundingClientRect();bl.classList.add('bounce');pop('boing')};
+  bl.addEventListener('click',play);bl.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();play()}});});
 applyRoom();
 updatePark();
 if(!S.settings.name)go('welcome');
