@@ -1,17 +1,74 @@
 {
-  "name": "Meu Diário do Parque",
+  "name": "Meu Diário Amigo",
   "short_name": "Meu Diário",
-  "description": "Um diário infantil no parque para contar como foi o dia.",
+  "description": "O diário das crianças: contar o dia, escolher como se sentiu, gravar vídeos e decorar o próprio cenário. Tudo fica guardado no aparelho.",
   "lang": "pt-BR",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#8fd3ff",
   "theme_color": "#8fd3ff",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
-    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "id": "/",
+  "categories": [
+    "education",
+    "kids",
+    "lifestyle"
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Escolher como foi o dia"
+    },
+    {
+      "src": "screenshots/2.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Contar o dia escrevendo, falando ou em vídeo"
+    },
+    {
+      "src": "screenshots/3.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Calendário com as carinhas do mês"
+    },
+    {
+      "src": "screenshots/4.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Decorar: quarto, circo ou carrossel"
+    },
+    {
+      "src": "screenshots/5.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Festa a cada dia guardado"
+    }
   ]
 }

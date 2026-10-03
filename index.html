@@ -1,10 +1,10 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Meu Diário</title>
+<title>Meu Diário Amigo</title>
 <meta name="description" content="Um diário infantil no seu quarto: conte como foi o seu dia, escolha uma carinha e guarde suas lembranças.">
 <meta name="theme-color" content="#8fd3ff">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Meu Diário">
+<meta name="apple-mobile-web-app-title" content="Meu Diário Amigo">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -46,6 +46,8 @@ button{cursor:pointer}
 /* ---------- Quarto ---------- */
 #park{position:absolute;inset:0}
 #parkSvg{width:100%;height:100%;display:block;overflow:visible}
+/* telas baixas: o cenário começa abaixo do título para nada ficar coberto */
+@media (max-height:760px){#parkSvg{height:calc(100% - var(--toph,118px));margin-top:var(--toph,118px)}}
 .hot{cursor:pointer;outline:none}
 .hot .lift{transition:transform .18s ease;transform-box:fill-box;transform-origin:center bottom}
 .hot:hover .lift,.hot:focus-visible .lift{transform:scale(1.06)}
@@ -85,7 +87,7 @@ button{cursor:pointer}
 .topbtns{display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:auto}
 .decobtn{border:0;border-radius:999px;background:#fff;box-shadow:0 3px 0 rgba(43,58,90,.18);display:flex;flex-direction:column;align-items:center;padding:6px 8px 4px;font-weight:800;font-size:.78rem;min-width:62px;min-height:56px;gap:1px}
 #app.decorating .top{display:none}
-#app.decorating #parkSvg{height:46%}
+#app.decorating #parkSvg{height:46%;margin-top:0}
 #decor{position:absolute;left:0;right:0;bottom:0;height:54%;background:#fff;border-radius:26px 26px 0 0;box-shadow:0 -6px 0 rgba(43,58,90,.1),0 -14px 30px rgba(43,58,90,.15);display:flex;flex-direction:column;z-index:4}
 #decor[hidden]{display:none}
 #decor .dhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px 10px;border-bottom:2px solid var(--line)}
@@ -824,6 +826,7 @@ function updatePark(){
   $('#hello').textContent=oi+(wroteToday?'Você já contou sobre hoje!':S.draft?'Seu dia está esperando '+wp+'.':'Que tal contar sobre hoje '+wp+'?');
   var stars=S.entries.filter(function(e){return !e.deletedAt&&!e.example}).length,st=streak();
   $('#stars').innerHTML=STAR+'<span><b>'+stars+'</b> '+(stars===1?'estrela':'estrelas')+'</span>'+(st>1?'<span class="fire">'+st+' dias seguidos!</span>':'');
+  if(typeof fitTop==='function')setTimeout(fitTop,0);
   $('#stars').setAttribute('aria-label',stars+(stars===1?' estrela':' estrelas')+(st>1?', '+st+' dias seguidos':''));
 }
 var STAR='<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5L2.5 9.3l6.6-.8z" fill="#ffd43b" stroke="#2b3a5a" stroke-width="1.6" stroke-linejoin="round"/></svg>';
@@ -891,7 +894,7 @@ var SCENE_ICON={
   carrossel:'<svg width="56" height="44" viewBox="0 0 56 44" aria-hidden="true"><rect width="56" height="44" rx="8" fill="#d0ebff"/><path d="M28 6 L10 18 H46 Z" fill="#f783ac"/><path d="M28 6 L22 18 H28 Z M28 6 L34 18 H40 Z" fill="#fff"/><g stroke="#ffd43b" stroke-width="2"><line x1="16" y1="18" x2="16" y2="36"/><line x1="28" y1="18" x2="28" y2="36"/><line x1="40" y1="18" x2="40" y2="36"/></g><g fill="#fff" stroke="#2b3a5a" stroke-width="1"><rect x="11" y="24" width="10" height="6" rx="3"/><rect x="35" y="27" width="10" height="6" rx="3"/></g><ellipse cx="28" cy="37" rx="20" ry="4" fill="#ffc9de" stroke="#2b3a5a" stroke-width="1"/></svg>'
 };
 function openDecor(){decorOpen=true;renderDecor();$('#decor').hidden=false;$('#app').classList.add('decorating');pop('tap')}
-function closeDecor(){decorOpen=false;$('#decor').hidden=true;$('#app').classList.remove('decorating');pop('yay');toast('Seu '+sceneInfo().name+' ficou lindo!')}
+function closeDecor(){decorOpen=false;$('#decor').hidden=true;$('#app').classList.remove('decorating');fitTop();pop('yay');toast('Seu '+sceneInfo().name+' ficou lindo!')}
 function toggleNight(){var r=room();r.night=!r.night;save();applyRoom();pop(r.night?'night':'tap');if(decorOpen)renderDecor()}
 
 /* ---------- Telas ---------- */
@@ -1101,7 +1104,7 @@ VIEWS.legal=function(sec){
   return head(t,legalFrom)+'<div class="wrap legal"><p class="hint" style="margin-top:0">Versão '+TERMS_V+' · <a href="termos.html#'+sec+'" target="_blank" rel="noopener">abrir em outra página</a></p><div id="legalBox" class="card"><p>Carregando...</p></div></div>';
 };
 VIEWS.welcome=function(){
-  return '<div class="welcome"><h1>Meu Diário</h1><div class="crew">'+charSvg('coelha',84)+charSvg('ursinho',104)+charSvg('pintinho',84)+'</div>'+
+  return '<div class="welcome"><h1>Meu Diário Amigo</h1><div class="crew">'+charSvg('coelha',84)+charSvg('ursinho',104)+charSvg('pintinho',84)+'</div>'+
    '<div class="box"><label for="nm">Qual é o seu nome?</label><input type="text" id="nm" maxlength="24" autocomplete="off" autocapitalize="words" placeholder="Escreva aqui" value="'+esc(S.settings.name)+'"><button class="btn" data-act="enter">Entrar no meu quarto</button></div></div>';
 };
 
@@ -1306,7 +1309,7 @@ function backup(){
   try{file=new File([JSON.stringify(S,null,1)],'meu-diario-'+dstr()+'.json',{type:'application/json'})}catch(e){toast('Não consegui criar a cópia neste aparelho.');return}
   /* no celular: abre o compartilhar, onde dá para escolher "Salvar no Drive" */
   if(navigator.canShare&&navigator.share&&navigator.canShare({files:[file]})){
-    navigator.share({files:[file],title:'Cópia do Meu Diário'}).then(function(){done('Cópia salva! Ela fica onde você escolheu, como no seu Drive.')}).catch(function(err){
+    navigator.share({files:[file],title:'Cópia do Meu Diário Amigo'}).then(function(){done('Cópia salva! Ela fica onde você escolheu, como no seu Drive.')}).catch(function(err){
       if(err&&err.name==='AbortError')return;
       downloadFile(file);done('Cópia baixada! Guarde o arquivo no seu Google Drive.');
     });
@@ -1484,8 +1487,10 @@ document.addEventListener('keydown',function(ev){
 });
 $$('.ball').forEach(function(bl){var play=function(){bl.classList.remove('bounce');void bl.getBoundingClientRect();bl.classList.add('bounce');pop('boing')};
   bl.addEventListener('click',play);bl.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();play()}});});
+function fitTop(){var t=$('.top');if(t&&t.offsetHeight)$('#park').style.setProperty('--toph',(t.offsetHeight+4)+'px')}
+window.addEventListener('resize',fitTop);
 applyRoom();
-updatePark();
+updatePark();fitTop();
 if(!hasConsent())go('consent');
 else if(!S.settings.name)go('welcome');
 /* funciona sem internet depois da primeira visita */
