@@ -225,6 +225,28 @@ label.f{display:block;font-weight:800;margin:14px 0 6px}
 .legal .card h3:first-child{margin-top:0}
 .legal .card ul{padding-left:20px}
 .legal .card .todo{background:#fff3bf;border-radius:4px;padding:0 4px}
+.intro{min-height:100%;padding:calc(env(safe-area-inset-top,0px) + 14px) 0 10px;background:linear-gradient(rgba(43,58,90,0) 0 45%,rgba(43,58,90,.35))}
+#sheet[data-theme=scene]{background:transparent}
+#sheet[data-theme=scenesoft]{background:rgba(243,249,255,.80);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+#app.cover .top{visibility:hidden}
+#app.cover .pill,#app.cover .signBadge,#app.cover .signText{visibility:hidden}
+.ihero{text-align:center;margin:0 16px;max-width:560px;padding:18px 16px 22px;background:rgba(255,255,255,.86);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:3px solid #fff;border-radius:28px;box-shadow:0 8px 0 rgba(43,58,90,.12)}
+@media(min-width:600px){.ihero{margin:0 auto}}
+.ispace{height:min(34vh,260px)}
+.icrew{display:flex;justify-content:center;align-items:flex-end;gap:2px;margin-bottom:6px}
+.icrew svg{animation:bob 2.6s ease-in-out infinite}.icrew svg:nth-child(2){animation-delay:-.9s}.icrew svg:nth-child(3){animation-delay:-1.7s}
+.intro h1{margin:0;font-family:var(--display);font-weight:800;font-size:2.6rem;line-height:1;text-shadow:0 3px 0 #fff}
+.isub{margin:10px auto 14px;max-width:320px;font-weight:800;font-size:1.15rem}
+.ifaces{display:flex;justify-content:center;gap:6px;margin:0 0 18px}
+.ihero .btn{min-width:220px}
+.ifeat{list-style:none;margin:6px 0 14px;padding:0;display:grid;gap:12px}
+@media(min-width:620px){.ifeat{grid-template-columns:1fr 1fr}}
+.ifoot{text-align:center;margin:0;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.ifoot a{color:#fff}
+.ifeat li{display:flex;gap:14px;align-items:flex-start;background:#fff;border:3px solid var(--line);border-radius:var(--radius);padding:12px 14px;box-shadow:0 5px 0 rgba(43,58,90,.06)}
+.fi{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#e64980;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.ifeat li:nth-child(2) .fi{background:#7950f2}.ifeat li:nth-child(3) .fi{background:#ff922b}.ifeat li:nth-child(4) .fi{background:#20c997}
+@media (prefers-reduced-motion:reduce){.icrew svg{animation:none}}
 /* ---------- Visual para crianças: cores por tela ---------- */
 #sheet{--th:#4dabf7;--th-bg:#e3f3ff;--th-dot:rgba(77,171,247,.14)}
 #sheet[data-theme=sun]{--th:#ff9f1c;--th-bg:#fff3d9;--th-dot:rgba(255,159,28,.16)}
@@ -797,15 +819,16 @@ function go(v,arg){
   render();
 }
 /* cada tela tem sua cor e um amiguinho no cantinho */
-var THEME={write:['sun','coelha'],day:['grape','ursinho'],days:['grape','ursinho'],friends:['sky','sapo'],reminders:['lemon','pintinho'],trash:['slate','gato'],mom:['mint',''],paywall:['grape','coelha'],consent:['mint',''],legal:['mint',''],yay:['party',''],welcome:['party','']};
+var THEME={write:['sun','coelha'],day:['grape','ursinho'],days:['grape','ursinho'],friends:['sky','sapo'],reminders:['lemon','pintinho'],trash:['slate','gato'],mom:['mint',''],paywall:['grape','coelha'],consent:['scenesoft',''],intro:['scene',''],legal:['mint',''],yay:['party',''],welcome:['party','']};
 function head(title,back){
   var th=THEME[view]||[];
   return '<header class="bar"><button class="back" data-act="go" data-v="'+(back||'park')+'"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b3a5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'+(back&&back!=='park'?'Voltar':cap(sceneInfo().name))+'</button><h2>'+title+'</h2>'+(th[1]?'<span class="mascot" aria-hidden="true">'+charSvg(th[1],54)+'</span>':'')+'</header>';
 }
 function render(){
   var sh=$('#sheet');
-  if(view==='park'){sh.hidden=true;sh.innerHTML='';sh.removeAttribute('data-theme');updatePark();return}
+  if(view==='park'){sh.hidden=true;sh.innerHTML='';sh.removeAttribute('data-theme');$('#app').classList.remove('cover');updatePark();return}
   sh.setAttribute('data-theme',(THEME[view]||['sky'])[0]);
+  $('#app').classList.toggle('cover',view==='intro'||view==='consent');
   sh.hidden=false;sh.innerHTML=VIEWS[view](vArg);sh.scrollTop=0;
   if(view==='write')renderVid();
   if(view==='day')loadDayVideo(vArg);
@@ -1146,10 +1169,30 @@ function loadLegal(sec){
     legalCache[sec]=s.innerHTML;put(s.innerHTML);
   }).catch(function(){put('<p>Não consegui abrir o texto agora. Ele também está em <a href="termos.html#'+sec+'" target="_blank" rel="noopener">termos.html</a>.</p>')});
 }
+VIEWS.intro=function(){
+  var faces=['feliz','animado','calmo','triste','bravo'].map(function(m){return face(m,46)}).join('');
+  function feat(ic,t,d){return '<li><span class="fi" aria-hidden="true">'+ic+'</span><span><b>'+t+'</b><br>'+d+'</span></li>'}
+  var CAM='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="3"/><path d="M16 10l6-3v10l-6-3z"/></svg>';
+  var PAL='<svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.4 0 2-1 2-2 0-.6-.3-1-.6-1.4-.3-.4-.6-.8-.6-1.4 0-1.1.9-2 2-2H17a4 4 0 0 0 4-4c0-4-4-7.2-9-7.2z" fill="#fff"/><circle cx="7.5" cy="11" r="1.6" fill="#ff6b6b"/><circle cx="10" cy="7" r="1.6" fill="#f59f00"/><circle cx="14.5" cy="6.8" r="1.6" fill="#40c057"/><circle cx="17.5" cy="10" r="1.6" fill="#339af0"/></svg>';
+  var CAL='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
+  var LOCK='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+  return '<div class="intro"><div class="ihero">'+
+    '<div class="icrew" aria-hidden="true">'+charSvg('coelha',78)+charSvg('ursinho',98)+charSvg('pintinho',78)+'</div>'+
+    '<h1>Meu Diário Amigo</h1><p class="isub">O diário das crianças para contar o dia do seu jeito.</p>'+
+    '<div class="ifaces" aria-hidden="true">'+faces+'</div>'+
+    '<button class="btn green big" data-act="go" data-v="consent">Começar</button>'+
+    '</div><div class="ispace" aria-hidden="true"></div><div class="wrap" style="padding-top:0"><ul class="ifeat">'+
+    feat(CAM,'Escrever, falar ou gravar','A criança conta o dia como preferir, com carinhas para dizer como se sentiu.')+
+    feat(CAL,'Um mês de carinhas','Calendário de humores, estrelas e dias seguidos para criar o hábito.')+
+    feat(PAL,'Um cenário só dela','Quarto, circo ou carrossel, com cores, dia e noite.')+
+    feat(LOCK,'Tudo fica no aparelho','Sem anúncios, sem cadastro e sem rastreamento. Os pais têm uma área protegida.')+
+    '</ul><p class="ifoot">'+STORE.trialDays+' dias grátis · <a href="termos.html" target="_blank" rel="noopener">Termos e privacidade</a></p></div></div>';
+};
 VIEWS.consent=function(){
   var again=!!S.consent;
   return '<div class="consent"><div class="wrap">'+
-   '<div class="ctop"><span aria-hidden="true">'+charSvg('coelha',64)+'</span><div><p class="kicker">Para o adulto responsável</p><h1>Antes de começar</h1></div></div>'+
+   (again?'':'<button class="linkbtn" style="padding:0 0 8px;min-height:0" data-act="go" data-v="intro">‹ Voltar</button>')+
+   '<div class="ctop"><span aria-hidden="true">'+charSvg('coelha',64)+'</span><div><p class="kicker">Para o adulto responsável</p><h1>Um adulto precisa autorizar</h1></div></div>'+
    (again?'<p class="draftnote">Os termos foram atualizados. Leia e aceite de novo para continuar.</p>':'')+
    '<div class="card"><ul class="cl">'+
      '<li><b>Tudo fica neste aparelho.</b> Não recebemos, não vemos e não vendemos o que a criança escreve ou grava.</li>'+
@@ -1565,7 +1608,7 @@ window.addEventListener('resize',fitTop);
 applyRoom();
 updatePark();fitTop();
 initBilling();
-if(!hasConsent())go('consent');
+if(!hasConsent())go(S.consent?'consent':'intro');
 else if(!S.settings.name)go('welcome');
 /* funciona sem internet depois da primeira visita */
 if('serviceWorker' in navigator&&location.protocol==='https:'){
