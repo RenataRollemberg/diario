@@ -225,28 +225,25 @@ label.f{display:block;font-weight:800;margin:14px 0 6px}
 .legal .card h3:first-child{margin-top:0}
 .legal .card ul{padding-left:20px}
 .legal .card .todo{background:#fff3bf;border-radius:4px;padding:0 4px}
-.intro{min-height:100%;padding:calc(env(safe-area-inset-top,0px) + 14px) 0 10px;background:linear-gradient(rgba(43,58,90,0) 0 45%,rgba(43,58,90,.35))}
+.intro{min-height:100%;display:flex;flex-direction:column}
 #sheet[data-theme=scene]{background:transparent}
 #sheet[data-theme=scenesoft]{background:rgba(243,249,255,.80);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 #app.cover .top{visibility:hidden}
 #app.cover .pill,#app.cover .signBadge,#app.cover .signText{visibility:hidden}
-.ihero{text-align:center;margin:0 16px;max-width:560px;padding:18px 16px 22px;background:rgba(255,255,255,.86);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:3px solid #fff;border-radius:28px;box-shadow:0 8px 0 rgba(43,58,90,.12)}
-@media(min-width:600px){.ihero{margin:0 auto}}
-.ispace{height:min(34vh,260px)}
-.icrew{display:flex;justify-content:center;align-items:flex-end;gap:2px;margin-bottom:6px}
-.icrew svg{animation:bob 2.6s ease-in-out infinite}.icrew svg:nth-child(2){animation-delay:-.9s}.icrew svg:nth-child(3){animation-delay:-1.7s}
-.intro h1{margin:0;font-family:var(--display);font-weight:800;font-size:2.6rem;line-height:1;text-shadow:0 3px 0 #fff}
-.isub{margin:10px auto 14px;max-width:320px;font-weight:800;font-size:1.15rem}
-.ifaces{display:flex;justify-content:center;gap:6px;margin:0 0 18px}
-.ihero .btn{min-width:220px}
+.ibar{margin:calc(env(safe-area-inset-top,0px) + 12px) 16px 0;align-self:center;max-width:520px;text-align:center;background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-radius:22px;padding:10px 18px 12px;box-shadow:0 5px 0 rgba(43,58,90,.1)}
+.ibar h1{margin:0;font-family:var(--display);font-weight:800;font-size:1.9rem;line-height:1.05}
+.ibar p{margin:4px 0 0;font-weight:800;color:var(--ink-soft);font-size:1rem}
+.iview{flex:none;height:calc(100vh - 110px);height:calc(100dvh - 110px)}
+.istart{position:sticky;bottom:0;z-index:3;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 16px calc(env(safe-area-inset-bottom,0px) + 14px);background:linear-gradient(rgba(43,58,90,0),rgba(43,58,90,.28))}
+.istart .btn{min-width:240px;box-shadow:0 5px 0 #14653a,0 10px 24px rgba(43,58,90,.3)}
+.imore{border:0;background:rgba(255,255,255,.85);border-radius:999px;padding:6px 16px;font-weight:800;min-height:40px;box-shadow:0 3px 0 rgba(43,58,90,.15)}
+.ifeatwrap{padding-top:6px;padding-bottom:20px;background:linear-gradient(rgba(243,249,255,0),rgba(243,249,255,.92) 40px)}
 .ifeat{list-style:none;margin:6px 0 14px;padding:0;display:grid;gap:12px}
 @media(min-width:620px){.ifeat{grid-template-columns:1fr 1fr}}
-.ifoot{text-align:center;margin:0;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
-.ifoot a{color:#fff}
+.ifoot{text-align:center;margin:0;font-weight:800;color:var(--ink-soft)}
 .ifeat li{display:flex;gap:14px;align-items:flex-start;background:#fff;border:3px solid var(--line);border-radius:var(--radius);padding:12px 14px;box-shadow:0 5px 0 rgba(43,58,90,.06)}
 .fi{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#e64980;box-shadow:0 3px 0 rgba(0,0,0,.15)}
 .ifeat li:nth-child(2) .fi{background:#7950f2}.ifeat li:nth-child(3) .fi{background:#ff922b}.ifeat li:nth-child(4) .fi{background:#20c997}
-@media (prefers-reduced-motion:reduce){.icrew svg{animation:none}}
 /* ---------- Visual para crianças: cores por tela ---------- */
 #sheet{--th:#4dabf7;--th-bg:#e3f3ff;--th-dot:rgba(77,171,247,.14)}
 #sheet[data-theme=sun]{--th:#ff9f1c;--th-bg:#fff3d9;--th-dot:rgba(255,159,28,.16)}
@@ -1170,23 +1167,21 @@ function loadLegal(sec){
   }).catch(function(){put('<p>Não consegui abrir o texto agora. Ele também está em <a href="termos.html#'+sec+'" target="_blank" rel="noopener">termos.html</a>.</p>')});
 }
 VIEWS.intro=function(){
-  var faces=['feliz','animado','calmo','triste','bravo'].map(function(m){return face(m,46)}).join('');
   function feat(ic,t,d){return '<li><span class="fi" aria-hidden="true">'+ic+'</span><span><b>'+t+'</b><br>'+d+'</span></li>'}
   var CAM='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="3"/><path d="M16 10l6-3v10l-6-3z"/></svg>';
   var PAL='<svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.4 0 2-1 2-2 0-.6-.3-1-.6-1.4-.3-.4-.6-.8-.6-1.4 0-1.1.9-2 2-2H17a4 4 0 0 0 4-4c0-4-4-7.2-9-7.2z" fill="#fff"/><circle cx="7.5" cy="11" r="1.6" fill="#ff6b6b"/><circle cx="10" cy="7" r="1.6" fill="#f59f00"/><circle cx="14.5" cy="6.8" r="1.6" fill="#40c057"/><circle cx="17.5" cy="10" r="1.6" fill="#339af0"/></svg>';
   var CAL='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
   var LOCK='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
-  return '<div class="intro"><div class="ihero">'+
-    '<div class="icrew" aria-hidden="true">'+charSvg('coelha',78)+charSvg('ursinho',98)+charSvg('pintinho',78)+'</div>'+
-    '<h1>Meu Diário Amigo</h1><p class="isub">O diário das crianças para contar o dia do seu jeito.</p>'+
-    '<div class="ifaces" aria-hidden="true">'+faces+'</div>'+
-    '<button class="btn green big" data-act="go" data-v="consent">Começar</button>'+
-    '</div><div class="ispace" aria-hidden="true"></div><div class="wrap" style="padding-top:0"><ul class="ifeat">'+
+  return '<div class="intro"><div class="ibar"><h1>Meu Diário Amigo</h1><p>O diário das crianças para contar o dia do seu jeito.</p></div>'+
+    '<div class="iview" aria-hidden="true"></div>'+
+    '<div class="wrap ifeatwrap" id="ifeat"><ul class="ifeat">'+
     feat(CAM,'Escrever, falar ou gravar','A criança conta o dia como preferir, com carinhas para dizer como se sentiu.')+
     feat(CAL,'Um mês de carinhas','Calendário de humores, estrelas e dias seguidos para criar o hábito.')+
     feat(PAL,'Um cenário só dela','Quarto, circo ou carrossel, com cores, dia e noite.')+
     feat(LOCK,'Tudo fica no aparelho','Sem anúncios, sem cadastro e sem rastreamento. Os pais têm uma área protegida.')+
-    '</ul><p class="ifoot">'+STORE.trialDays+' dias grátis · <a href="termos.html" target="_blank" rel="noopener">Termos e privacidade</a></p></div></div>';
+    '</ul><p class="ifoot">'+STORE.trialDays+' dias grátis · <a href="termos.html" target="_blank" rel="noopener">Termos e privacidade</a></p></div>'+
+    '<div class="istart"><button class="btn green big" data-act="go" data-v="consent">Começar</button>'+
+    '<button class="imore" data-act="intro-more">O que é? <span aria-hidden="true">↓</span></button></div></div>';
 };
 VIEWS.consent=function(){
   var again=!!S.consent;
@@ -1478,6 +1473,7 @@ document.addEventListener('click',function(ev){
   if(a==='vid-cancel'){stopCam();renderVid();return}
   if(a==='vid-remove'){draft.video=null;draft.videoTouched=true;if(!draft.id)vidDel('__draft');keepDraft();renderVid();return}
   if(a==='share-vid'){shareVideo(id);return}
+  if(a==='intro-more'){var fe=$('#ifeat');if(fe)fe.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'start'});return}
   if(a==='decor-open'){openDecor();return}
   if(a==='decor-close'){closeDecor();return}
   if(a==='room'){room()[el.dataset.k]=el.dataset.v;save();applyRoom();renderDecor();pop('tap');return}
