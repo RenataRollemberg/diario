@@ -207,6 +207,9 @@ label.f{display:block;font-weight:800;margin:14px 0 6px}
 .cday.future{opacity:.35;pointer-events:none}
 .cday .n{position:absolute;right:2px;bottom:0;font-size:.62rem;color:var(--ink-soft)}
 .streak{margin:10px 2px 0;font-weight:800;color:var(--ink-soft)}
+.codebox input{text-transform:uppercase;letter-spacing:.04em;font-weight:800}
+.codebox .inline{display:block}
+.codebox .inline .btn{margin-top:10px}
 .paytop{display:flex;align-items:center;gap:12px}
 .draftnote{background:#fff6c9;border:2px dashed #d9a441;border-radius:14px;padding:8px 12px;font-weight:700;margin:0 0 10px}
 
@@ -1091,6 +1094,23 @@ VIEWS.trash=function(){
 /* STORE.live: ligue (true) SÓ quando o app estiver publicado na Play Store. Antes disso o site fica livre. */
 var STORE={live:false,product:'diario_completo',trialDays:7,
   playUrl:'https://play.google.com/store/apps/details?id=br.com.meudiarioamigo.app'};
+/* códigos de liberação (só a impressão digital SHA-256 fica aqui; os códigos ficam com a responsável) */
+var CODE_HASHES=["ac8c99eff1426847e58af4a83800a19e5a6b96a015d0f6cab53821a03d7d67da", "9e2c0c32676234a98604e1185ace93536565506f961037173d48ddf79c2aa0e2", "8cd7a78b52871d84d6728d4ef5d8a022573bc9433e944e70fe8d26da841adb4c", "55d7cd5e819c163ad1091766d2cbfe7d5855d1adc0f715a87f4af56286defdae", "e6fb24299fc75b64832fe40d3c7c9f0fa0a2c054a8ba26fe121f279b6b45fb5f", "54a0f041b56961f27547106abf8aeb6003c59bc9d45e44c6d32776f696c600c4", "3df0da5f521e34477729ebbaa80dd0dc0419e6e9af13840faf4f8a335bafc099", "31eed723913befb1148bfef4198b11fb16a138d81fd4e077f7e1cffa281cf535", "61bd6e44e4fb098ea3ba42f719fa6843863ee62e23c9823e66c0858485a1dcf5", "256f4d326fb3e859b0dfe803e66b48ff2e9aa765d90ac73a1c2fecb8cb52afec"];
+function redeem(raw){
+  var n=String(raw||'').toUpperCase().replace(/[^0-9A-Z]/g,'');
+  if(n.length<8){toast('Digite o código completo.');return}
+  if(!(window.crypto&&crypto.subtle)){toast('Não consegui conferir o código neste navegador.');return}
+  crypto.subtle.digest('SHA-256',new TextEncoder().encode('mda1:'+n)).then(function(buf){
+    var hex=Array.prototype.map.call(new Uint8Array(buf),function(b){return ('0'+b.toString(16)).slice(-2)}).join('');
+    if(CODE_HASHES.indexOf(hex)<0){toast('Esse código não é válido. Confira as letras e os números.');return}
+    S.premium={at:new Date().toISOString(),source:'code'};save();confetti();pop('yay');
+    toast('Pronto! O diário está liberado para sempre neste aparelho.');
+    if(view==='paywall')go('park');else render();
+  });
+}
+function codeBox(){
+  return '<div class="codebox"><label class="f" for="rcode" style="margin-top:0">Tem um código de liberação?</label><div class="inline"><input type="text" id="rcode" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="AMIGO-XXXX-XXXX-XX"><button class="btn small" data-act="redeem">Usar código</button></div></div>';
+}
 var billing=null,priceText='',payGate=null,payOK=false,buying=false;
 function paywallActive(){return !!billing||STORE.live}
 function trialLeft(){
@@ -1149,7 +1169,8 @@ VIEWS.paywall=function(){
       '<p class="hint">Reembolsos seguem as regras da Google Play. Ao comprar, você concorda com os <a href="#" data-act="legal" data-v="termos">Termos de Uso</a>.</p></div>'
     :'<div class="card"><h3>Continue no app</h3><p style="margin-top:0">Para continuar escrevendo, baixe o <b>Meu Diário Amigo</b> na Google Play e libere com um pagamento único, sem mensalidade.</p>'+
       '<div class="actions"><a class="btn green big" href="'+STORE.playUrl+'" target="_blank" rel="noopener">Baixar na Google Play</a></div>'+
-      '<p class="hint">Para levar os dias escritos para o app: aqui, faça “Salvar cópia” na Área da mamãe; no app, use “Restaurar uma cópia”.</p></div>';
+      '<p class="hint">Para levar os dias escritos para o app: aqui, faça “Salvar cópia” na Área da mamãe; no app, use “Restaurar uma cópia”.</p></div>'+
+      '<div class="card" style="margin-top:12px">'+codeBox()+'</div>';
   return head('Continuar o diário')+'<div class="wrap">'+top+'<div style="margin-top:14px">'+body+'</div></div>';
 };
 
@@ -1229,7 +1250,11 @@ VIEWS.mom=function(){
    '<h3>WhatsApp da mamãe</h3><label class="f" for="mp" style="margin-top:0">Número com país e DDD</label><input type="tel" id="mp" inputmode="tel" value="'+esc(S.settings.momPhone)+'" placeholder="5511999998888">'+
    '<p class="hint">Quando a criança tocar em “Compartilhar com a mamãe”, o WhatsApp abre com o texto do dia pronto para enviar. Nada é enviado sozinho.</p>'+
    '<div class="actions"><button class="btn" data-act="save-mom">Guardar</button></div>'+
-   (paywallActive()?'<h3>Plano</h3><div class="card"><p style="margin:0">'+(S.premium?'<b>Liberado para sempre.</b> Obrigado!':(trialLeft()>0?'Período grátis: <b>falta'+(trialLeft()===1?'':'m')+' '+trialLeft()+' dia'+(trialLeft()===1?'':'s')+'</b>.':'O período grátis terminou.'))+'</p>'+(S.premium?'':'<div class="actions" style="margin-top:10px"><button class="btn green small" data-act="go" data-v="paywall">'+(billing?'Liberar para sempre':'Ver como continuar')+'</button></div>')+'</div>':'')+
+   ((paywallActive()||!billing)?'<h3>Plano</h3><div class="card"><p style="margin:0">'+
+     (S.premium?'<b>Liberado para sempre.</b> Obrigado!':!paywallActive()?'O diário está grátis por enquanto.':(trialLeft()>0?'Período grátis: <b>falta'+(trialLeft()===1?'':'m')+' '+trialLeft()+' dia'+(trialLeft()===1?'':'s')+'</b>.':'O período grátis terminou.'))+'</p>'+
+     ((!S.premium&&paywallActive())?'<div class="actions" style="margin-top:10px"><button class="btn green small" data-act="go" data-v="paywall">'+(billing?'Liberar para sempre':'Ver como continuar')+'</button></div>':'')+
+     ((!S.premium&&!billing)?'<div style="margin-top:14px">'+codeBox()+'</div>':'')+
+   '</div>':'')+
    '<h3>Sons</h3><button class="chip" data-act="sound" aria-pressed="'+(S.settings.sound!==false)+'">'+(S.settings.sound!==false?'Sons ligados':'Sons desligados')+'</button>'+
    '<h3>Onde os dias ficam guardados</h3><div class="card"><strong>Neste aparelho.</strong><p class="hint" style="margin:6px 0 10px">O diário fica salvo só neste navegador. Se limpar os dados do navegador ou trocar de aparelho, os dias se perdem — por isso, salve uma cópia de vez em quando. No celular, toque em “Salvar cópia” e escolha <b>Drive</b> para guardar na sua conta do Google. Os vídeos não entram na cópia (são grandes): para guardar um vídeo, use “Enviar o vídeo” na página do dia.</p>'+
    '<p class="hint" style="margin:0 0 4px">'+nLive+(nLive===1?' dia':' dias')+' no diário'+(nTrash?' · '+nTrash+' na lixeira':'')+(lastBk?' · última cópia em '+esc(shortDate(lastBk)):' · nenhuma cópia ainda')+'</p>'+
@@ -1566,6 +1591,7 @@ document.addEventListener('click',function(ev){
   if(a==='del-friend'){S.friends=S.friends.filter(function(f){return f.id!==id});S.entries.forEach(function(e){e.friends=(e.friends||[]).filter(function(x){return x!==id})});if(filt.friend===id)filt.friend='';save();render();return}
   if(a==='paygate'){var pv=parseInt($('#pans').value,10);if(pv===payGate.a*payGate.b){payOK=true;render()}else{newPayGate();toast('Ops, essa não é a resposta.');render()}return}
   if(a==='buy'){buy();return}
+  if(a==='redeem'){var rc=$('#rcode');redeem(rc&&rc.value);return}
   if(a==='gate'){var v=parseInt($('#ans').value,10);if(v===gate.a+gate.b){momOK=true;render()}else{gate=null;toast('Ops, essa não é a resposta.');render()}return}
   if(a==='save-mom'){S.settings.name=$('#cn').value.trim();S.settings.momPhone=$('#mp').value.trim();save();toast('Guardado!');go(S.settings.name?'park':'welcome');return}
 });
@@ -1592,6 +1618,7 @@ $$('.hot').forEach(function(h){
   h.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();open()}});
 });
 document.addEventListener('keydown',function(ev){
+  if(ev.key==='Enter'&&ev.target.id==='rcode'){ev.preventDefault();redeem(ev.target.value);return}
   if(ev.key==='Enter'&&view==='welcome'&&ev.target.id==='nm'){ev.preventDefault();var b=$('[data-act=enter]');if(b)b.click();return}
   if(!hasConsent())return;
   if(ev.key==='Escape'&&decorOpen){closeDecor();return}
