@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "br.com.meudiarioamigo.app",
+      "sha256_cert_fingerprints": [
+        "13:6F:A0:17:60:62:D3:60:38:6D:58:06:CD:FE:20:26:86:37:7B:87:B2:C9:2F:88:3D:8E:B9:01:95:CA:B8:9D"
+      ]
+    }
+  }
+]
