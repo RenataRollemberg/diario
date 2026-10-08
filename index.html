@@ -931,15 +931,15 @@ function initDraft(id){
   draftRestored=false;
   var e=id&&id.indexOf('d:')!==0&&entry(id),sv=S.draft,key=null;
   if(id&&id.indexOf('d:')===0){
-    draft={id:null,date:id.slice(2),text:'',mood:null,character:null,friends:[]};
+    draft={id:null,date:id.slice(2),text:'',moods:[],character:null,friends:[]};
   }else if(e){
-    draft={id:e.id,date:e.date,text:e.text,mood:e.mood,character:e.character,friends:(e.friends||[]).slice()};
+    draft={id:e.id,date:e.date,text:e.text,moods:moodsArr(e),character:e.character,friends:(e.friends||[]).slice()};
     if(e.hasVideo)key=e.id;
-  }else if(sv&&(sv.text||sv.mood||sv.video)){
-    draft={id:null,date:sv.date||dstr(),text:sv.text||'',mood:sv.mood||null,character:sv.character||null,friends:(sv.friends||[]).filter(friendName)};
+  }else if(sv&&(sv.text||sv.mood||sv.moods||sv.video)){
+    draft={id:null,date:sv.date||dstr(),text:sv.text||'',moods:moodsArr(sv),character:sv.character||null,friends:(sv.friends||[]).filter(friendName)};
     draftRestored=true;if(sv.video)key='__draft';
   }else{
-    draft={id:null,date:dstr(),text:'',mood:null,character:null,friends:[]};
+    draft={id:null,date:dstr(),text:'',moods:[],character:null,friends:[]};
   }
   draft.video=null;draft.videoTouched=false;vidState='idle';
   if(key){var d0=draft;vidGet(key).then(function(b){if(draft===d0&&!d0.videoTouched&&b){d0.video=b;renderVid()}})}
@@ -952,18 +952,19 @@ function keepDraft(){
   draftT=setTimeout(function(){
     var ta=$('#txt');if(ta)draft.text=ta.value;
     var dt=$('#dt');if(dt&&dt.value)draft.date=dt.value;
-    S.draft=(draft.text.trim()||draft.mood||draft.video)?{date:draft.date,text:draft.text,mood:draft.mood,character:draft.character,friends:draft.friends.slice(),video:!!draft.video}:null;
+    S.draft=(draft.text.trim()||draft.moods.length||draft.video)?{date:draft.date,text:draft.text,moods:draft.moods.slice(),character:draft.character,friends:draft.friends.slice(),video:!!draft.video}:null;
     save();
   },400);
 }
 var IDEAS=['A melhor parte do meu dia foi','Hoje eu aprendi','Uma coisa engraçada que aconteceu foi','Eu fiquei orgulhoso quando','Hoje eu brinquei de','Uma coisa difícil hoje foi','Amanhã eu quero','Hoje eu comi','Eu ajudei alguém quando','Se meu dia fosse um filme, ele se chamaria'];
 var SAY={feliz:'Que legal! Me conta tudo!',animado:'Uau! O que te deixou tão animado?',calmo:'Que dia tranquilo! Como foi?',medo:'Você é corajoso de contar. O que deu medo?',triste:'Tudo bem ficar triste. Quer me contar o que houve?',bravo:'Ficar bravo acontece. O que aconteceu?'};
-function bubbleText(){return draft&&draft.mood?SAY[draft.mood]:'Oi! Como foi o seu dia hoje?'}
+function moodsArr(e){if(!e)return[];if(Array.isArray(e.moods)&&e.moods.length)return e.moods.slice();if(e.mood)return[e.mood];return[];}
+function bubbleText(){return draft&&draft.moods&&draft.moods.length?SAY[draft.moods[0]]:'Oi! Como foi o seu dia hoje?'}
 function pickIdeas(){var a=IDEAS.slice(),out=[];while(out.length<3&&a.length)out.push(a.splice(Math.floor(Math.random()*a.length),1)[0]);return out}
 function ideaChips(){return pickIdeas().map(function(t){return '<button class="chip idea" data-act="idea" data-t="'+esc(t)+'">'+esc(t)+'…</button>'}).join('')+'<button class="chip shuffle" data-act="ideas-more" aria-label="Outras ideias">↻</button>'}
 function step(n,t){return '<h3 class="step"><span class="num">'+n+'</span>'+t+'</h3>'}
 VIEWS.write=function(){
-  var moods=MOODS.map(function(m){return '<button class="mood" data-act="mood" data-mood="'+m.id+'" aria-pressed="'+(draft.mood===m.id)+'">'+face(m.id,58)+'<span>'+m.label+'</span></button>'}).join('');
+  var moods=MOODS.map(function(m){return '<button class="mood" data-act="mood" data-mood="'+m.id+'" aria-pressed="'+(draft.moods.indexOf(m.id)>-1)+'">'+face(m.id,58)+'<span>'+m.label+'</span></button>'}).join('');
   var chars=CHARS.map(function(c){return '<button class="char" data-act="char" data-char="'+c.id+'" aria-pressed="'+(draft.character===c.id)+'">'+charSvg(c.id,64)+'<span>'+c.label+'</span></button>'}).join('');
   var fr=S.friends.length?S.friends.map(function(f){return '<button class="chip" data-act="fpick" data-id="'+f.id+'" aria-pressed="'+(draft.friends.indexOf(f.id)>-1)+'">'+esc(f.name)+'</button>'}).join(''):'<p class="hint">Você ainda não cadastrou amigos. Toque em Amigos, na tela inicial, para cadastrar.</p>';
   return head(draft.id?'Mudar meu dia':'Meu dia')+'<div class="wrap">'+
@@ -1000,9 +1001,11 @@ function calendar(){
   for(var i=0;i<first.getDay();i++)h+='<span></span>';
   for(var d=1;d<=days;d++){
     var ds=calMonth+'-'+z(d),es=byDay[ds],fut=ds>today;
-    var lab=longDate(ds)+(es?', me senti '+moodOf(es[0].mood).label:fut?'':', toque para escrever');
+    var entryMoods=es?moodsArr(es[0]):[];
+    var lab=longDate(ds)+(es?', me senti '+(entryMoods.map(function(id){var m=moodOf(id);return m?m.label:id}).join(' e ')):fut?'':', toque para escrever');
+    var calFace=es?(entryMoods.length>1?entryMoods.slice(0,2).map(function(id){return face(id,28)}).join('')+( entryMoods.length>2?'<span class="n">+</span>':''):face(entryMoods[0]||es[0].mood,40)):'';
     h+='<button class="cday'+(ds===today?' today':'')+(fut?' future':'')+'" data-act="cal-day" data-date="'+ds+'" data-has="'+(es?1:0)+'" aria-pressed="'+(filt.date===ds)+'" aria-label="'+esc(lab)+'"'+(fut?' tabindex="-1"':'')+'>'+
-      (es?face(es[0].mood,40)+(es.length>1?'<span class="n">'+es.length+'</span>':''):d)+'</button>';
+      (es?calFace+(es.length>1?'<span class="n">'+es.length+'</span>':''):d)+'</button>';
   }
   h+='</div>';
   var s=streak();
@@ -1012,12 +1015,13 @@ function calendar(){
 VIEWS.days=function(){
   var list=liveEntries();
   if(filt.date)list=list.filter(function(e){return e.date===filt.date});
-  if(filt.mood)list=list.filter(function(e){return e.mood===filt.mood});
+  if(filt.mood)list=list.filter(function(e){return moodsArr(e).indexOf(filt.mood)>-1});
   if(filt.friend)list=list.filter(function(e){return (e.friends||[]).indexOf(filt.friend)>-1});
   var mchips='<button class="chip" data-act="fmood" data-mood="" aria-pressed="'+(!filt.mood)+'">Todos</button>'+MOODS.map(function(m){return '<button class="chip" data-act="fmood" data-mood="'+m.id+'" aria-pressed="'+(filt.mood===m.id)+'" aria-label="'+m.label+'">'+face(m.id,30)+'</button>'}).join('');
   var fchips=S.friends.length?'<h3>Com quem</h3><div class="chips"><button class="chip" data-act="ffriend" data-id="" aria-pressed="'+(!filt.friend)+'">Todos</button>'+S.friends.map(function(f){return '<button class="chip" data-act="ffriend" data-id="'+f.id+'" aria-pressed="'+(filt.friend===f.id)+'">'+esc(f.name)+'</button>'}).join('')+'</div>':'';
   var rows=list.length?list.map(function(e){
-    return '<button class="row" data-act="go" data-v="day" data-id="'+e.id+'">'+face(e.mood,52)+'<span class="meta"><span class="d">'+esc(longDate(e.date))+(e.example?'<span class="tag">exemplo</span>':'')+(e.hasVideo?'<span class="tag vid">vídeo</span>':'')+'</span><br><span class="s">'+esc(e.text||'Dia contado em vídeo')+'</span></span>'+(e.character?charSvg(e.character,44):'')+'</button>';
+    var ems3=moodsArr(e),rowFace=ems3.length>1?'<span style="display:flex;gap:2px">'+ems3.slice(0,3).map(function(id){return face(id,34)}).join('')+'</span>':face(ems3[0]||e.mood,52);
+    return '<button class="row" data-act="go" data-v="day" data-id="'+e.id+'">'+rowFace+'<span class="meta"><span class="d">'+esc(longDate(e.date))+(e.example?'<span class="tag">exemplo</span>':'')+(e.hasVideo?'<span class="tag vid">vídeo</span>':'')+'</span><br><span class="s">'+esc(e.text||'Dia contado em vídeo')+'</span></span>'+(e.character?charSvg(e.character,44):'')+'</button>';
   }).join(''):'<div class="empty">Nenhum dia por aqui ainda.<br>Que tal escrever sobre hoje?</div>';
   var dchip=filt.date?'<div class="chips" style="margin-bottom:10px"><button class="chip" data-act="fdate" aria-pressed="true" aria-label="Só '+esc(longDate(filt.date))+'. Toque para ver todos os dias">'+esc(shortDate(filt.date))+' <span class="x" aria-hidden="true">×</span></button></div>':'';
   return head('Meus dias')+'<div class="wrap"><h3>Meu mês</h3>'+calendar()+'<p class="hint">Toque em uma carinha para ver o dia, ou em um número para escrever sobre ele.</p>'+
@@ -1025,9 +1029,10 @@ VIEWS.days=function(){
 };
 
 function shareText(e){
-  var m=moodOf(e.mood),quando=e.date===dstr()?'Hoje':'No dia '+shortDate(e.date);
+  var ems=moodsArr(e),quando=e.date===dstr()?'Hoje':'No dia '+shortDate(e.date);
   var fn=friendNames(e);
-  return 'Oi, mamãe! '+quando+' eu me senti: '+(m?m.label:'')+'.'+(e.text?'\n\n“'+e.text+'”':'')+(fn.length?'\n\nEstive com: '+fn.join(', ')+'.':'')+'\n\n— '+(S.settings.name?S.settings.name+', ':'')+'do meu Diário';
+  var mLabels=ems.map(function(id){var m=moodOf(id);return m?m.label:id}).join(' e ');
+  return 'Oi, mamãe! '+quando+' eu me senti: '+(mLabels||'')+'.'+(e.text?'\n\n”'+e.text+'”':'')+(fn.length?'\n\nEstive com: '+fn.join(', ')+'.':'')+'\n\n— '+(S.settings.name?S.settings.name+', ':'')+'do meu Diário';
 }
 function shareUrl(e){
   var phone=(S.settings.momPhone||'').replace(/\D/g,'');
@@ -1035,10 +1040,12 @@ function shareUrl(e){
 }
 VIEWS.day=function(id){
   var e=entry(id);if(!e||e.deletedAt)return head('Meu dia','days')+'<div class="wrap"><div class="empty">Esse dia não está mais aqui.</div></div>';
-  var m=moodOf(e.mood),fn=friendNames(e);
+  var ems2=moodsArr(e),fn=friendNames(e);
   var hasPhone=(S.settings.momPhone||'').replace(/\D/g,'').length>=8;
+  var mFaces=ems2.map(function(id){return face(id,ems2.length>1?60:84)}).join('');
+  var mLabels2=ems2.map(function(id){var m=moodOf(id);return m?'<strong>'+m.label+'</strong>':''}).join(' e ');
   return head('Meu dia','days')+'<div class="wrap">'+
-   '<div class="dayhead">'+face(e.mood,84)+'<div><h3>'+esc(longDate(e.date))+'</h3><div class="hint">Me senti: <strong>'+(m?m.label:'')+'</strong>'+(e.example?'<span class="tag">exemplo</span>':'')+'</div></div>'+(e.character?'<div style="margin-left:auto">'+charSvg(e.character,76)+'</div>':'')+'</div>'+
+   '<div class="dayhead"><div style="display:flex;gap:4px;align-items:center">'+mFaces+'</div><div><h3>'+esc(longDate(e.date))+'</h3><div class="hint">Me senti: '+mLabels2+(e.example?'<span class="tag">exemplo</span>':'')+'</div></div>'+(e.character?'<div style="margin-left:auto">'+charSvg(e.character,76)+'</div>':'')+'</div>'+
    (e.text?'<div class="diarytext notebook">'+esc(e.text)+'</div>':'')+
    (e.hasVideo?'<div class="vidwrap" id="dayVid" style="margin-top:12px"><div class="empty" style="padding:14px">Carregando o vídeo...</div></div>':'')+
    (fn.length?'<p class="hint" style="margin-top:12px">Estive com: <strong>'+fn.map(esc).join(', ')+'</strong></p>':'')+
@@ -1078,7 +1085,8 @@ VIEWS.trash=function(){
   var list=S.entries.filter(function(e){return e.deletedAt}).sort(function(a,b){return b.deletedAt-a.deletedAt});
   var rows=list.length?list.map(function(e){
     var d=daysLeft(e);
-    return '<button class="row" data-act="sel-trash" data-id="'+e.id+'" aria-pressed="'+(selTrash===e.id)+'">'+face(e.mood,48)+'<span class="meta"><span class="d">'+esc(longDate(e.date))+(e.example?'<span class="tag">exemplo</span>':'')+'</span><br><span class="s">'+esc(e.text)+'</span><span class="tag warn" style="margin:4px 0 0">Some de vez em '+d+(d===1?' dia':' dias')+'</span></span></button>';
+    var ems4=moodsArr(e),trashFace=ems4.length>1?'<span style="display:flex;gap:2px">'+ems4.slice(0,2).map(function(id){return face(id,30)}).join('')+'</span>':face(ems4[0]||e.mood,48);
+    return '<button class="row" data-act="sel-trash" data-id="'+e.id+'" aria-pressed="'+(selTrash===e.id)+'">'+trashFace+'<span class="meta"><span class="d">'+esc(longDate(e.date))+(e.example?'<span class="tag">exemplo</span>':'')+'</span><br><span class="s">'+esc(e.text)+'</span><span class="tag warn" style="margin:4px 0 0">Some de vez em '+d+(d===1?' dia':' dias')+'</span></span></button>';
   }).join(''):'<div class="empty">A lixeira está vazia.</div>';
   var sel=selTrash&&entry(selTrash);
   var micBlock='';
@@ -1483,7 +1491,7 @@ document.addEventListener('click',function(ev){
   if(!el)return;
   var a=el.dataset.act,id=el.dataset.id;
   if(a==='go'){go(el.dataset.v,id);return}
-  if(a==='mood'){draft.mood=el.dataset.mood;$$('.mood').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mood===draft.mood))});var bb=$('#bubble');if(bb){bb.textContent=bubbleText();bb.classList.remove('pop');void bb.offsetWidth;bb.classList.add('pop')}pop('tap');keepDraft();return}
+  if(a==='mood'){var mid=el.dataset.mood,mi=draft.moods.indexOf(mid);if(mi>-1)draft.moods.splice(mi,1);else draft.moods.push(mid);$$('.mood').forEach(function(b){b.setAttribute('aria-pressed',String(draft.moods.indexOf(b.dataset.mood)>-1))});var bb=$('#bubble');if(bb){bb.textContent=bubbleText();bb.classList.remove('pop');void bb.offsetWidth;bb.classList.add('pop')}pop('tap');keepDraft();return}
   if(a==='char'){draft.character=draft.character===el.dataset.char?null:el.dataset.char;$$('.char').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.char===draft.character))});var bp=$('#buddyPic');if(bp)bp.innerHTML=charSvg(draft.character||'coelha',72);pop('tap');keepDraft();return}
   if(a==='idea'){
     var tx=$('#txt'),t0=el.dataset.t+' ';
@@ -1546,13 +1554,13 @@ document.addEventListener('click',function(ev){
   if(a==='mic'){dictate();return}
   if(a==='save-entry'){
     var ta=$('#txt');draft.text=ta.value.trim();draft.date=$('#dt').value||dstr();
-    if(!draft.mood){toast('Escolha uma carinha: como você está?');return}
+    if(!draft.moods||!draft.moods.length){toast('Escolha uma carinha: como você está?');return}
     if(vidState==='rec'){toast('Termine de gravar o vídeo primeiro.');return}
     if(!draft.text&&!draft.video){toast('Escreva, fale ou grave um vídeo sobre o seu dia.');return}
     stopRec();stopCam();
     var isNew=!draft.id,e=draft.id&&entry(draft.id);
-    if(e){e.date=draft.date;e.text=draft.text;e.mood=draft.mood;e.character=draft.character;e.friends=draft.friends.slice();e.example=false}
-    else{e={id:uid(),date:draft.date,text:draft.text,mood:draft.mood,character:draft.character,friends:draft.friends.slice(),createdAt:Date.now(),deletedAt:null};S.entries.push(e);S.draft=null;clearTimeout(draftT)}
+    if(e){e.date=draft.date;e.text=draft.text;e.moods=draft.moods.slice();e.mood=draft.moods[0]||null;e.character=draft.character;e.friends=draft.friends.slice();e.example=false}
+    else{e={id:uid(),date:draft.date,text:draft.text,moods:draft.moods.slice(),mood:draft.moods[0]||null,character:draft.character,friends:draft.friends.slice(),createdAt:Date.now(),deletedAt:null};S.entries.push(e);S.draft=null;clearTimeout(draftT)}
     var vop=Promise.resolve(),vidChanged=draft.videoTouched||(isNew&&draft.video);
     if(vidChanged){
       vop=draft.video?vidPut(e.id,draft.video):vidDel(e.id);
