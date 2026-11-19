@@ -143,7 +143,8 @@ button{cursor:pointer}
 .scene[data-scene=circo]>polygon,.scene[data-scene=circo]>path,
 .scene[data-scene=circo]>g:not(.hot),.scene[data-scene=circo]>circle,.scene[data-scene=circo]>line{opacity:0!important}
 .scene[data-scene=carrossel]>rect,.scene[data-scene=carrossel]>ellipse,
-.scene[data-scene=carrossel]>g:not(.hot):not(.dim):not(.glow){opacity:0!important}
+.scene[data-scene=carrossel]>circle,.scene[data-scene=carrossel]>path,.scene[data-scene=carrossel]>line,.scene[data-scene=carrossel]>polyline,.scene[data-scene=carrossel]>polygon,
+.scene[data-scene=carrossel]>g:not(.hot):not(.dim):not(.glow){opacity:0!important;pointer-events:none!important}
 /* janela e outros elementos decorativos do quarto */
 #hotWindow>:not(.pill){opacity:0!important}
 /* mantém área clicável mas invisível na janela */
