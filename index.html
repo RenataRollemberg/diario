@@ -9,12 +9,12 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preload" href="fonts/baloo-2-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="img/quarto-dia.png" as="image">
-<link rel="preload" href="img/quarto-noite.png" as="image">
-<link rel="preload" href="img/circo-dia.png" as="image">
-<link rel="preload" href="img/circo-noite.png" as="image">
-<link rel="preload" href="img/carrossel-dia.png" as="image">
-<link rel="preload" href="img/carrossel-noite.png" as="image">
+<link rel="preload" href="img/quarto-dia.webp" as="image">
+<link rel="preload" href="img/quarto-noite.webp" as="image">
+<link rel="preload" href="img/circo-dia.webp" as="image">
+<link rel="preload" href="img/circo-noite.webp" as="image">
+<link rel="preload" href="img/carrossel-dia.webp" as="image">
+<link rel="preload" href="img/carrossel-noite.webp" as="image">
 <style>
 /* fontes guardadas no próprio site (nada é carregado do Google) */
 @font-face{font-family:'Baloo 2';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/baloo-2-latin-500-normal.woff2) format('woff2')}
@@ -403,8 +403,8 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
       <g class="scene" data-scene="quarto">
 
       <!-- fundo foto -->
-      <image class="bg-day"   href="img/quarto-dia.png"   x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice"/>
-      <image class="bg-night" href="img/quarto-noite.png" x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice" style="opacity:0"/>
+      <image class="bg-day"   href="img/quarto-dia.webp"   x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice"/>
+      <image class="bg-night" href="img/quarto-noite.webp" x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice" style="opacity:0"/>
 
       <!-- parede e chão (ocultos — fundo agora é a foto) -->
       <rect x="-2000" y="-2000" width="4400" height="2430" class="c-wall" style="opacity:0"/>
@@ -527,8 +527,8 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
       <g class="scene" data-scene="circo" style="display:none">
       <!-- CIRCO -->
       <!-- fundo foto -->
-      <image class="bg-day"   href="img/circo-dia.png"   x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice"/>
-      <image class="bg-night" href="img/circo-noite.png" x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice" style="opacity:0"/>
+      <image class="bg-day"   href="img/circo-dia.webp"   x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice"/>
+      <image class="bg-night" href="img/circo-noite.webp" x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice" style="opacity:0"/>
       <rect x="-2000" y="-2000" width="4400" height="2430" class="c-wall" style="opacity:0"/>
       <polygon class="c-bed" points="200,-80 -304,430 -248,430"/><polygon class="c-bed" points="200,-80 -192,430 -136,430"/><polygon class="c-bed" points="200,-80 -80,430 -24,430"/><polygon class="c-bed" points="200,-80 32,430 88,430"/><polygon class="c-bed" points="200,-80 144,430 200,430"/><polygon class="c-bed" points="200,-80 256,430 312,430"/><polygon class="c-bed" points="200,-80 368,430 424,430"/><polygon class="c-bed" points="200,-80 480,430 536,430"/><polygon class="c-bed" points="200,-80 592,430 648,430"/>
       <rect x="-2000" y="-2000" width="4400" height="2015" class="c-bed"/>
@@ -624,8 +624,8 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
       <g class="scene" data-scene="carrossel" style="display:none">
       <!-- CARROSSEL -->
       <!-- fundo foto -->
-      <image class="bg-day"   href="img/carrossel-dia.png"   x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice"/>
-      <image class="bg-night" href="img/carrossel-noite.png" x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice" style="opacity:0"/>
+      <image class="bg-day"   href="img/carrossel-dia.webp"   x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice"/>
+      <image class="bg-night" href="img/carrossel-noite.webp" x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice" style="opacity:0"/>
       <rect x="-2000" y="-2000" width="4400" height="2430" class="c-wall" style="opacity:0"/>
       <g class="sunG"><circle cx="330" cy="104" r="34" fill="#ffd43b" opacity=".35"/><circle cx="330" cy="104" r="22" fill="#ffd43b"/></g>
       <g class="moonG"><circle cx="330" cy="104" r="20" fill="#fff3bf"/><circle cx="340" cy="96" r="18" class="c-wall"/></g>
@@ -1672,7 +1672,7 @@ $$('.ball').forEach(function(bl){var play=function(){bl.classList.remove('bounce
 function fitTop(){var t=$('.top');if(t&&t.offsetHeight)$('#park').style.setProperty('--toph',(t.offsetHeight+4)+'px')}
 window.addEventListener('resize',fitTop);
 /* pré-carrega todas as imagens de cena na memória para troca instantânea */
-['img/quarto-dia.png','img/quarto-noite.png','img/circo-dia.png','img/circo-noite.png','img/carrossel-dia.png','img/carrossel-noite.png'].forEach(function(src){var i=new Image();i.src=src});
+['img/quarto-dia.webp','img/quarto-noite.webp','img/circo-dia.webp','img/circo-noite.webp','img/carrossel-dia.webp','img/carrossel-noite.webp'].forEach(function(src){var i=new Image();i.src=src});
 applyRoom();
 updatePark();fitTop();
 initBilling();

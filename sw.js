@@ -1,12 +1,12 @@
 // Meu Diário — guarda o app para abrir mesmo sem internet.
 // Páginas do próprio site: tenta a internet primeiro (para pegar novidades) e usa a cópia guardada se cair.
-const CACHE = 'diario-v18';
+const CACHE = 'diario-v19';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png', './icon-180.png',
   './fonts/baloo-2-latin-500-normal.woff2', './fonts/baloo-2-latin-700-normal.woff2', './fonts/baloo-2-latin-800-normal.woff2',
   './fonts/nunito-latin-500-normal.woff2', './fonts/nunito-latin-700-normal.woff2', './fonts/nunito-latin-800-normal.woff2', './termos.html',
-  './img/quarto-dia.png', './img/quarto-noite.png',
-  './img/circo-dia.png', './img/circo-noite.png',
-  './img/carrossel-dia.png', './img/carrossel-noite.png'];
+  './img/quarto-dia.webp', './img/quarto-noite.webp',
+  './img/circo-dia.webp', './img/circo-noite.webp',
+  './img/carrossel-dia.webp', './img/carrossel-noite.webp'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting()));
