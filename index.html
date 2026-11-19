@@ -101,15 +101,15 @@ button{cursor:pointer}
 .decobtn{border:0;border-radius:999px;background:#fff;box-shadow:0 3px 0 rgba(43,58,90,.18);display:flex;flex-direction:column;align-items:center;padding:6px 8px 4px;font-weight:800;font-size:.78rem;min-width:62px;min-height:56px;gap:1px}
 #app.decorating .top{display:none}
 #app.decorating #parkSvg{height:46%;margin-top:0}
+#app.decorating #parkBg{bottom:54%;background-size:contain;background-color:#1f2a5c}
+#app.decorating #parkSvg,#app.decorating #navpills{visibility:hidden}
 #decor{position:absolute;left:0;right:0;bottom:0;height:54%;background:#fff;border-radius:26px 26px 0 0;box-shadow:0 -6px 0 rgba(43,58,90,.1),0 -14px 30px rgba(43,58,90,.15);display:flex;flex-direction:column;z-index:4}
 #decor[hidden]{display:none}
 #decor .dhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px 10px;border-bottom:2px solid var(--line)}
 #decor .dhead h2{margin:0;font-family:var(--display);font-weight:800;font-size:1.4rem}
 #decor .scenes{display:flex;gap:10px;flex-wrap:wrap}
-.scenebtn{border:3px solid var(--line);background:#fff;border-radius:18px;padding:0;display:flex;flex-direction:column;align-items:center;gap:0;font-weight:800;box-shadow:0 4px 0 var(--line);min-width:96px;overflow:hidden}
-.scenebtn[aria-pressed=true]{border-color:var(--ink);box-shadow:0 4px 0 var(--ink)}
-.scenebtn .sthumb{width:100%;height:72px;background-size:cover;background-position:center top;border-radius:14px 14px 0 0;display:block}
-.scenebtn span{padding:5px 8px 7px;display:block;text-align:center}
+.scenebtn{border:3px solid var(--line);background:#fff;border-radius:18px;padding:6px 10px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:800;box-shadow:0 4px 0 var(--line);min-width:84px}
+.scenebtn[aria-pressed=true]{border-color:var(--ink);background:#fff6c9;box-shadow:0 4px 0 var(--ink)}
 .beam{opacity:.16;pointer-events:none}
 .horse{animation:horse 1.4s ease-in-out infinite alternate}
 .horse.b{animation-delay:-.7s}.horse.c{animation-delay:-.35s}
@@ -978,8 +978,7 @@ function renderDecor(){
   }).join('');
   var si=SCENES[r.scene],L=si.labels;
   var scenes=Object.keys(SCENES).map(function(k){
-    var img=r.night?'img/'+k+'-noite.webp':'img/'+k+'-dia.webp';
-    return '<button class="scenebtn" data-act="room-scene" data-v="'+k+'" aria-pressed="'+(r.scene===k)+'"><span class="sthumb" style="background-image:url('+img+')" aria-hidden="true"></span><span>'+cap(SCENES[k].name)+'</span></button>';
+    return '<button class="scenebtn" data-act="room-scene" data-v="'+k+'" aria-pressed="'+(r.scene===k)+'">'+SCENE_ICON[k]+'<span>'+cap(SCENES[k].name)+'</span></button>';
   }).join('');
   box.innerHTML='<div class="dhead"><h2>Decorar</h2><button class="btn small green" data-act="decor-close">Pronto!</button></div><div class="dbody">'+
     '<h3>Cenário</h3><div class="scenes">'+scenes+'</div>'+
