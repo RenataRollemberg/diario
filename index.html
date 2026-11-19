@@ -100,6 +100,16 @@ button{cursor:pointer}
 .topbtns{display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:auto}
 .decobtn{border:0;border-radius:999px;background:#fff;box-shadow:0 3px 0 rgba(43,58,90,.18);display:flex;flex-direction:column;align-items:center;padding:6px 8px 4px;font-weight:800;font-size:.78rem;min-width:62px;min-height:56px;gap:1px}
 #app.decorating .top{display:none}
+#stickers{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+#app.decorating #stickers{bottom:54%;pointer-events:auto;z-index:3}
+.stk{position:absolute;transform:translate(-50%,-50%);line-height:1;user-select:none;-webkit-user-select:none;touch-action:none;filter:drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 4px 4px rgba(0,0,0,.35))}
+#app.decorating .stk{cursor:grab}
+.stk .stkx{display:none;position:absolute;top:-6px;right:-10px;width:24px;height:24px;border-radius:50%;border:2px solid #fff;background:#e03131;color:#fff;font:800 14px/20px var(--body);text-align:center;padding:0;filter:none}
+#app.decorating .stk .stkx{display:block}
+.stkgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stkbtn{border:3px solid var(--line);background:#fff;border-radius:16px;font-size:2rem;line-height:1;padding:8px 0;box-shadow:0 3px 0 var(--line)}
+.stkbtn:active{transform:scale(.92)}
+.dhint{margin:4px 0 10px;color:var(--ink-soft);font-weight:700;font-size:.95rem}
 #app:has(#sheet:not([hidden])) .top,#app:has(#sheet:not([hidden])) #navpills{display:none}
 #app.decorating #parkSvg{height:46%;margin-top:0}
 #app.decorating #parkBg{bottom:54%;background-size:contain;background-color:#1f2a5c}
@@ -399,6 +409,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
 <div id="app">
   <main id="park" aria-label="Meu quarto">
     <div id="parkBg"></div>
+    <div id="stickers" aria-hidden="true"></div>
     <svg id="parkSvg" viewBox="0 0 400 640" preserveAspectRatio="xMidYMid slice" role="group" aria-label="Meu quarto">
       <defs>
         <linearGradient id="skyg" gradientUnits="userSpaceOnUse" x1="0" y1="68" x2="0" y2="188">
@@ -965,6 +976,7 @@ function applyRoom(){
   pk.style.setProperty('--bg-day-url','url(img/'+sc+'-dia.webp)');
   pk.style.setProperty('--bg-night-url','url(img/'+sc+'-noite.webp)');
   $$('.scene[data-scene="'+r.scene+'"] .hot').forEach(function(x){if(x._hit)x._hit()});
+  renderStickers();
 }
 var decorOpen=false;
 function swatches(k,round){
@@ -987,20 +999,62 @@ function renderDecor(){
   box.innerHTML='<div class="dhead"><h2>Decorar</h2><button class="btn small green" data-act="decor-close">Pronto!</button></div><div class="dbody">'+
     '<h3>Cenário</h3><div class="scenes">'+scenes+'</div>'+
     '<h3>'+(r.scene==='circo'?'Luzes':'Dia ou noite?')+'</h3><div class="chips"><button class="chip" data-act="room-night" data-v="0" aria-pressed="'+!r.night+'">'+si.night[0]+'</button><button class="chip" data-act="room-night" data-v="1" aria-pressed="'+!!r.night+'">'+si.night[1]+'</button></div>'+
-    '<h3>'+L.wall+'</h3>'+swatches('wall')+
-    (L.pat?'<h3>'+L.pat+'</h3><div class="chips">'+pats+'</div>':'')+
-    '<h3>'+L.bed+'</h3>'+swatches('bed',true)+
-    '<h3>'+L.rug+'</h3>'+swatches('rug',true)+
-    (L.floor?'<h3>'+L.floor+'</h3>'+swatches('floor'):'')+
+    '<h3>Adesivos</h3><p class="dhint">Toque num adesivo para colocar. Arraste para mudar de lugar. Toque no ✕ para tirar.</p>'+
+    '<div class="stkgrid">'+STICKERS.map(function(e){return '<button class="stkbtn" data-act="stk-add" data-v="'+e+'" aria-label="Colocar adesivo '+e+'">'+e+'</button>'}).join('')+'</div>'+
+    (myStickers().length?'<p><button class="linkbtn" data-act="stk-clear">Tirar todos os adesivos</button></p>':'')+
     '</div>';
 }
+var STICKERS=['🧸','🎈','⭐','🌸','🦋','🐱','🐶','🦄','🌈','🍦','🎀','⚽','🐰','🍭','👑','💖'];
+var STK_MAX=12,IMG_RATIO=1024/1536;
+function myStickers(){var r=room();if(!r.stickers)r.stickers={};return r.stickers[r.scene]||(r.stickers[r.scene]=[])}
+function imgRect(){
+  var b=$('#parkBg').getBoundingClientRect(),p=$('#park').getBoundingClientRect();
+  var contain=$('#app').classList.contains('decorating');
+  var sc=contain?Math.min(b.width/IMG_RATIO,b.height):Math.max(b.width/IMG_RATIO,b.height);
+  var h=sc,w=sc*IMG_RATIO;
+  return {x:b.left-p.left+(b.width-w)/2,y:b.top-p.top+(b.height-h)/2,w:w,h:h};
+}
+function visRange(){
+  var P=$('#park').getBoundingClientRect(),h=Math.max(P.width/IMG_RATIO,P.height),w=h*IMG_RATIO,fx=P.width/w,fy=P.height/h;
+  return {x0:(1-fx)/2+0.05,x1:(1+fx)/2-0.05,y0:(1-fy)/2+0.04,y1:(1+fy)/2-0.04};
+}
+function clampStk(s){var v=visRange();s.x=Math.max(v.x0,Math.min(v.x1,s.x));s.y=Math.max(v.y0,Math.min(v.y1,s.y))}
+function renderStickers(){
+  var box=$('#stickers');if(!box)return;
+  var list=myStickers(),R=imgRect(),L=$('#stickers').getBoundingClientRect(),P=$('#park').getBoundingClientRect();
+  var ox=L.left-P.left,oy=L.top-P.top,fs=Math.round(R.w*0.095);
+  box.innerHTML=list.map(function(s,i){
+    clampStk(s);
+    return '<div class="stk" data-i="'+i+'" style="left:'+(R.x-ox+s.x*R.w)+'px;top:'+(R.y-oy+s.y*R.h)+'px;font-size:'+fs+'px">'+s.e+'<button class="stkx" data-act="stk-del" data-i="'+i+'" aria-label="Tirar adesivo">✕</button></div>';
+  }).join('');
+}
+(function(){
+  var drag=null;
+  document.addEventListener('pointerdown',function(ev){
+    if(!decorOpen)return;var el=ev.target.closest&&ev.target.closest('.stk');
+    if(!el||ev.target.closest('.stkx'))return;
+    ev.preventDefault();drag={el:el,i:+el.dataset.i,id:ev.pointerId};
+    try{el.setPointerCapture(ev.pointerId)}catch(e){}
+  });
+  document.addEventListener('pointermove',function(ev){
+    if(!drag||ev.pointerId!==drag.id)return;
+    var R=imgRect(),P=$('#park').getBoundingClientRect(),s=myStickers()[drag.i];if(!s)return;
+    s.x=Math.max(0.03,Math.min(0.97,(ev.clientX-P.left-R.x)/R.w));
+    s.y=Math.max(0.03,Math.min(0.97,(ev.clientY-P.top-R.y)/R.h));clampStk(s);
+    var L=$('#stickers').getBoundingClientRect();
+    drag.el.style.left=(R.x-(L.left-P.left)+s.x*R.w)+'px';drag.el.style.top=(R.y-(L.top-P.top)+s.y*R.h)+'px';
+  });
+  function end(ev){if(drag&&ev.pointerId===drag.id){drag=null;save()}}
+  document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
+  window.addEventListener('resize',function(){renderStickers()});
+})();
 var SCENE_ICON={
   quarto:'<svg width="56" height="44" viewBox="0 0 56 44" aria-hidden="true"><rect width="56" height="44" rx="8" fill="#ffe3cc"/><rect x="6" y="18" width="5" height="20" rx="2" fill="#c98e57"/><rect x="8" y="26" width="42" height="9" rx="3" fill="#fff" stroke="#d0d7e2"/><rect x="24" y="23" width="26" height="12" rx="4" fill="#4dabf7"/><ellipse cx="17" cy="25" rx="6" ry="3.5" fill="#fff" stroke="#d0d7e2"/><rect x="34" y="5" width="16" height="13" rx="2" fill="#a5d8ff" stroke="#fff" stroke-width="2"/></svg>',
   circo:'<svg width="56" height="44" viewBox="0 0 56 44" aria-hidden="true"><rect width="56" height="44" rx="8" fill="#ffe3e3"/><path d="M28 5 L6 22 H50 Z" fill="#fa5252"/><path d="M28 5 L17 22 H22 Z M28 5 L34 22 H39 Z" fill="#fff"/><rect x="9" y="22" width="38" height="16" fill="#fff"/><g fill="#fa5252"><rect x="9" y="22" width="6" height="16"/><rect x="21" y="22" width="6" height="16"/><rect x="33" y="22" width="6" height="16"/></g><path d="M24 38 v-9 a4 4 0 0 1 8 0 v9z" fill="#2b3a5a"/><path d="M28 5 v-3 l6 2-6 2" fill="#ffd43b" stroke="#2b3a5a" stroke-width=".8"/></svg>',
   carrossel:'<svg width="56" height="44" viewBox="0 0 56 44" aria-hidden="true"><rect width="56" height="44" rx="8" fill="#d0ebff"/><path d="M28 6 L10 18 H46 Z" fill="#f783ac"/><path d="M28 6 L22 18 H28 Z M28 6 L34 18 H40 Z" fill="#fff"/><g stroke="#ffd43b" stroke-width="2"><line x1="16" y1="18" x2="16" y2="36"/><line x1="28" y1="18" x2="28" y2="36"/><line x1="40" y1="18" x2="40" y2="36"/></g><g fill="#fff" stroke="#2b3a5a" stroke-width="1"><rect x="11" y="24" width="10" height="6" rx="3"/><rect x="35" y="27" width="10" height="6" rx="3"/></g><ellipse cx="28" cy="37" rx="20" ry="4" fill="#ffc9de" stroke="#2b3a5a" stroke-width="1"/></svg>'
 };
-function openDecor(){decorOpen=true;renderDecor();$('#decor').hidden=false;$('#app').classList.add('decorating');pop('tap')}
-function closeDecor(){decorOpen=false;$('#decor').hidden=true;$('#app').classList.remove('decorating');fitTop();pop('yay');toast('Seu '+sceneInfo().name+' ficou lindo!')}
+function openDecor(){decorOpen=true;renderDecor();$('#decor').hidden=false;$('#app').classList.add('decorating');renderStickers();pop('tap')}
+function closeDecor(){decorOpen=false;$('#decor').hidden=true;$('#app').classList.remove('decorating');renderStickers();fitTop();pop('yay');toast('Seu '+sceneInfo().name+' ficou lindo!')}
 function toggleNight(){var r=room();r.night=!r.night;save();applyRoom();pop(r.night?'night':'tap');if(decorOpen)renderDecor()}
 
 /* ---------- Telas ---------- */
@@ -1561,6 +1615,9 @@ document.addEventListener('click',function(ev){
   if(a==='decor-close'){closeDecor();return}
   if(a==='room'){room()[el.dataset.k]=el.dataset.v;save();applyRoom();renderDecor();pop('tap');return}
   if(a==='room-scene'){room().scene=el.dataset.v;save();applyRoom();updatePark();renderDecor();pop('yay');return}
+  if(a==='stk-add'){var ls=myStickers();if(ls.length>=STK_MAX){toast('Já tem muitos adesivos! Tire um para colocar outro.');return}ls.push({e:el.dataset.v,x:0.25+Math.random()*0.5,y:0.2+Math.random()*0.3});save();renderStickers();renderDecor();pop('boing');return}
+  if(a==='stk-del'){myStickers().splice(+el.dataset.i,1);save();renderStickers();renderDecor();pop('tap');return}
+  if(a==='stk-clear'){var r0=room();r0.stickers[r0.scene]=[];save();renderStickers();renderDecor();pop('tap');return}
   if(a==='room-night'){if(!!room().night!==(el.dataset.v==='1'))toggleNight();return}
   if(a==='sound'){S.settings.sound=S.settings.sound===false;save();render();if(S.settings.sound!==false)pop('yay');return}
   if(a==='fpick'){var i=draft.friends.indexOf(id);if(i>-1)draft.friends.splice(i,1);else draft.friends.push(id);el.setAttribute('aria-pressed',String(i===-1));keepDraft();return}
