@@ -52,7 +52,8 @@ button{cursor:pointer}
 
 /* ---------- Quarto ---------- */
 #park{position:absolute;inset:0}
-#parkSvg{width:100%;height:100%;display:block;overflow:visible}
+#parkBg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0;transition:opacity .6s}
+#parkSvg{width:100%;height:100%;display:block;overflow:visible;position:relative;z-index:1}
 /* telas baixas: o cenário começa abaixo do título para nada ficar coberto */
 @media (max-height:760px){#parkSvg{height:calc(100% - var(--toph,118px));margin-top:var(--toph,118px)}}
 .hot{cursor:pointer;outline:none}
@@ -114,10 +115,10 @@ button{cursor:pointer}
 #park.night .bulb{filter:brightness(1.3)}
 #park.night .scene[data-scene=carrossel] .c-wall{fill:#1f2a5c}
 
-/* fundos fotográficos dia/noite */
-.bg-day,.bg-night{transition:opacity .6s}
-#park.night .bg-day{opacity:0}
-#park.night .bg-night{opacity:1!important}
+/* fundos fotográficos — agora via #parkBg CSS, não SVG image */
+.bg-day,.bg-night{display:none}
+#parkBg{background-image:var(--bg-day-url)}
+#park.night #parkBg{background-image:var(--bg-night-url)}
 
 /* pill labels ficam legíveis sobre as fotos */
 .pill rect{fill:rgba(43,58,90,.82)}
@@ -388,6 +389,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
 
 <div id="app">
   <main id="park" aria-label="Meu quarto">
+    <div id="parkBg"></div>
     <svg id="parkSvg" viewBox="0 0 400 640" preserveAspectRatio="xMidYMid slice" role="group" aria-label="Meu quarto">
       <defs>
         <linearGradient id="skyg" gradientUnits="userSpaceOnUse" x1="0" y1="68" x2="0" y2="188">
@@ -949,6 +951,10 @@ function applyRoom(){
   pk.classList.toggle('night',!!r.night);
   $$('.scene').forEach(function(g){g.style.display=g.dataset.scene===r.scene?'':'none'});
   $('#app').classList.add('has-bg-photo');
+  /* fundo via CSS para carregamento instantâneo */
+  var sc=r.scene||'quarto';
+  pk.style.setProperty('--bg-day-url','url(img/'+sc+'-dia.webp)');
+  pk.style.setProperty('--bg-night-url','url(img/'+sc+'-noite.webp)');
   $$('.scene[data-scene="'+r.scene+'"] .hot').forEach(function(x){if(x._hit)x._hit()});
 }
 var decorOpen=false;
