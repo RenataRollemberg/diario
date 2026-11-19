@@ -106,8 +106,10 @@ button{cursor:pointer}
 #decor .dhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px 10px;border-bottom:2px solid var(--line)}
 #decor .dhead h2{margin:0;font-family:var(--display);font-weight:800;font-size:1.4rem}
 #decor .scenes{display:flex;gap:10px;flex-wrap:wrap}
-.scenebtn{border:3px solid var(--line);background:#fff;border-radius:18px;padding:6px 10px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:800;box-shadow:0 4px 0 var(--line);min-width:84px}
-.scenebtn[aria-pressed=true]{border-color:var(--ink);background:#fff6c9;box-shadow:0 4px 0 var(--ink)}
+.scenebtn{border:3px solid var(--line);background:#fff;border-radius:18px;padding:0;display:flex;flex-direction:column;align-items:center;gap:0;font-weight:800;box-shadow:0 4px 0 var(--line);min-width:96px;overflow:hidden}
+.scenebtn[aria-pressed=true]{border-color:var(--ink);box-shadow:0 4px 0 var(--ink)}
+.scenebtn .sthumb{width:100%;height:72px;background-size:cover;background-position:center top;border-radius:14px 14px 0 0;display:block}
+.scenebtn span{padding:5px 8px 7px;display:block;text-align:center}
 .beam{opacity:.16;pointer-events:none}
 .horse{animation:horse 1.4s ease-in-out infinite alternate}
 .horse.b{animation-delay:-.7s}.horse.c{animation-delay:-.35s}
@@ -976,7 +978,8 @@ function renderDecor(){
   }).join('');
   var si=SCENES[r.scene],L=si.labels;
   var scenes=Object.keys(SCENES).map(function(k){
-    return '<button class="scenebtn" data-act="room-scene" data-v="'+k+'" aria-pressed="'+(r.scene===k)+'">'+SCENE_ICON[k]+'<span>'+cap(SCENES[k].name)+'</span></button>';
+    var img=r.night?'img/'+k+'-noite.webp':'img/'+k+'-dia.webp';
+    return '<button class="scenebtn" data-act="room-scene" data-v="'+k+'" aria-pressed="'+(r.scene===k)+'"><span class="sthumb" style="background-image:url('+img+')" aria-hidden="true"></span><span>'+cap(SCENES[k].name)+'</span></button>';
   }).join('');
   box.innerHTML='<div class="dhead"><h2>Decorar</h2><button class="btn small green" data-act="decor-close">Pronto!</button></div><div class="dbody">'+
     '<h3>Cenário</h3><div class="scenes">'+scenes+'</div>'+
