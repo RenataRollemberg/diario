@@ -9,6 +9,12 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preload" href="fonts/baloo-2-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="img/quarto-dia.png" as="image">
+<link rel="preload" href="img/quarto-noite.png" as="image">
+<link rel="preload" href="img/circo-dia.png" as="image">
+<link rel="preload" href="img/circo-noite.png" as="image">
+<link rel="preload" href="img/carrossel-dia.png" as="image">
+<link rel="preload" href="img/carrossel-noite.png" as="image">
 <style>
 /* fontes guardadas no próprio site (nada é carregado do Google) */
 @font-face{font-family:'Baloo 2';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/baloo-2-latin-500-normal.woff2) format('woff2')}
@@ -1665,6 +1671,8 @@ $$('.ball').forEach(function(bl){var play=function(){bl.classList.remove('bounce
   bl.addEventListener('click',play);bl.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();play()}});});
 function fitTop(){var t=$('.top');if(t&&t.offsetHeight)$('#park').style.setProperty('--toph',(t.offsetHeight+4)+'px')}
 window.addEventListener('resize',fitTop);
+/* pré-carrega todas as imagens de cena na memória para troca instantânea */
+['img/quarto-dia.png','img/quarto-noite.png','img/circo-dia.png','img/circo-noite.png','img/carrossel-dia.png','img/carrossel-noite.png'].forEach(function(src){var i=new Image();i.src=src});
 applyRoom();
 updatePark();fitTop();
 initBilling();
