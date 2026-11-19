@@ -100,6 +100,7 @@ button{cursor:pointer}
 .topbtns{display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:auto}
 .decobtn{border:0;border-radius:999px;background:#fff;box-shadow:0 3px 0 rgba(43,58,90,.18);display:flex;flex-direction:column;align-items:center;padding:6px 8px 4px;font-weight:800;font-size:.78rem;min-width:62px;min-height:56px;gap:1px}
 #app.decorating .top{display:none}
+#app:has(#sheet:not([hidden])) .top,#app:has(#sheet:not([hidden])) #navpills{display:none}
 #app.decorating #parkSvg{height:46%;margin-top:0}
 #app.decorating #parkBg{bottom:54%;background-size:contain;background-color:#1f2a5c}
 #app.decorating #parkSvg,#app.decorating #navpills{visibility:hidden}

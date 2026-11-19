@@ -1,7 +1,7 @@
 // Meu Diário — guarda o app para abrir mesmo sem internet.
 // Imagens e fontes: cache-first (abre do cache, atualiza por baixo)
 // HTML/JS: network-first (pega novidades, cai no cache se offline)
-const CACHE = 'diario-v24';
+const CACHE = 'diario-v25';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png', './icon-180.png',
   './fonts/baloo-2-latin-500-normal.woff2', './fonts/baloo-2-latin-700-normal.woff2', './fonts/baloo-2-latin-800-normal.woff2',
   './fonts/nunito-latin-500-normal.woff2', './fonts/nunito-latin-700-normal.woff2', './fonts/nunito-latin-800-normal.woff2', './termos.html',
