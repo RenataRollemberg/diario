@@ -42,6 +42,7 @@ button{cursor:pointer}
 :focus-visible{outline:4px solid #5c7cfa;outline-offset:2px}
 
 #app{position:relative;height:100%;overflow:hidden;background:linear-gradient(#ffe3cc 0 62%,#e8b980 62%)}
+#app.has-bg-photo{background:transparent}
 
 /* ---------- Quarto ---------- */
 #park{position:absolute;inset:0}
@@ -101,6 +102,40 @@ button{cursor:pointer}
 @keyframes horse{from{transform:translateY(-10px)}to{transform:translateY(10px)}}
 #park.night .bulb{filter:brightness(1.3)}
 #park.night .scene[data-scene=carrossel] .c-wall{fill:#1f2a5c}
+
+/* fundos fotográficos dia/noite */
+.bg-day,.bg-night{transition:opacity .6s}
+#park.night .bg-day{opacity:0}
+#park.night .bg-night{opacity:1!important}
+
+/* pill labels ficam legíveis sobre as fotos */
+.pill rect{fill:rgba(43,58,90,.82)}
+
+/* esconde fundos e decoração SVG — a foto é o fundo */
+.scene .c-wall,.scene .c-floor,.scene .c-fline{opacity:0}
+.scene .sky,.scene .sunG,.scene .moonG,.scene .starsG,.scene .cloud{display:none}
+#wallPat{display:none!important}
+/* esconde desenhos SVG decorativos — a foto é o visual */
+.scene .lift{opacity:0!important}
+.scene .ball,.scene .sway,.scene .horse{opacity:0!important}
+.scene .dim,.scene .glow,.scene .beam{opacity:0!important}
+/* tapete, curtinas, elementos avulsos do quarto */
+.scene ellipse.c-rug,.scene ellipse[class*=rug]{opacity:0!important}
+/* tapete tracejado do quarto */
+.scene[data-scene=quarto]>ellipse{opacity:0!important}
+/* elementos decorativos do circo e carrossel que ficam redundantes com a foto */
+.scene[data-scene=circo]>rect,.scene[data-scene=circo]>ellipse,
+.scene[data-scene=circo]>polygon,.scene[data-scene=circo]>path,
+.scene[data-scene=circo]>g:not(.hot),.scene[data-scene=circo]>circle,.scene[data-scene=circo]>line{opacity:0!important}
+.scene[data-scene=carrossel]>rect,.scene[data-scene=carrossel]>ellipse,
+.scene[data-scene=carrossel]>g:not(.hot):not(.dim):not(.glow){opacity:0!important}
+/* janela e outros elementos decorativos do quarto */
+#hotWindow>:not(.pill){opacity:0!important}
+/* mantém área clicável mas invisível na janela */
+#hotWindow{pointer-events:auto}
+/* pill labels visíveis com fundo escuro */
+.scene .hot .pill rect{fill:rgba(30,40,80,.82)!important}
+.scene .pill text{font-size:16px}
 @media (prefers-reduced-motion:reduce){.horse{animation:none}}
 #decor .dbody{overflow-y:auto;padding:4px 16px calc(env(safe-area-inset-bottom,0px) + 20px);overscroll-behavior:contain}
 #decor h3{font-family:var(--display);font-weight:700;font-size:1.15rem;margin:14px 0 8px}
@@ -353,8 +388,12 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
       </defs>
       <g class="scene" data-scene="quarto">
 
-      <!-- parede e chão -->
-      <rect x="-2000" y="-2000" width="4400" height="2430" class="c-wall"/>
+      <!-- fundo foto -->
+      <image class="bg-day"   href="img/quarto-dia.png"   x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice"/>
+      <image class="bg-night" href="img/quarto-noite.png" x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice" style="opacity:0"/>
+
+      <!-- parede e chão (ocultos — fundo agora é a foto) -->
+      <rect x="-2000" y="-2000" width="4400" height="2430" class="c-wall" style="opacity:0"/>
       <rect id="wallPat" x="-2000" y="-2000" width="4400" height="2430" fill="url(#pDots)"/>
       <rect x="-2000" y="430" width="4400" height="2400" class="c-floor"/>
       <g class="c-fline" stroke-width="3" opacity=".55">
@@ -473,7 +512,10 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
       </g>
       <g class="scene" data-scene="circo" style="display:none">
       <!-- CIRCO -->
-      <rect x="-2000" y="-2000" width="4400" height="2430" class="c-wall"/>
+      <!-- fundo foto -->
+      <image class="bg-day"   href="img/circo-dia.png"   x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice"/>
+      <image class="bg-night" href="img/circo-noite.png" x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice" style="opacity:0"/>
+      <rect x="-2000" y="-2000" width="4400" height="2430" class="c-wall" style="opacity:0"/>
       <polygon class="c-bed" points="200,-80 -304,430 -248,430"/><polygon class="c-bed" points="200,-80 -192,430 -136,430"/><polygon class="c-bed" points="200,-80 -80,430 -24,430"/><polygon class="c-bed" points="200,-80 32,430 88,430"/><polygon class="c-bed" points="200,-80 144,430 200,430"/><polygon class="c-bed" points="200,-80 256,430 312,430"/><polygon class="c-bed" points="200,-80 368,430 424,430"/><polygon class="c-bed" points="200,-80 480,430 536,430"/><polygon class="c-bed" points="200,-80 592,430 648,430"/>
       <rect x="-2000" y="-2000" width="4400" height="2015" class="c-bed"/>
       <g><path d="M4 26 l13 0 l-6.5 16z" fill="#ff6b6b"/><path d="M28 29 l13 0 l-6.5 16z" fill="#ffd43b"/><path d="M52 32 l13 0 l-6.5 16z" fill="#4dabf7"/><path d="M76 34 l13 0 l-6.5 16z" fill="#51cf66"/><path d="M100 36 l13 0 l-6.5 16z" fill="#b197fc"/><path d="M124 37 l13 0 l-6.5 16z" fill="#ff922b"/><path d="M148 39 l13 0 l-6.5 16z" fill="#ff6b6b"/><path d="M172 39 l13 0 l-6.5 16z" fill="#ffd43b"/><path d="M196 39 l13 0 l-6.5 16z" fill="#4dabf7"/><path d="M220 39 l13 0 l-6.5 16z" fill="#51cf66"/><path d="M244 39 l13 0 l-6.5 16z" fill="#b197fc"/><path d="M268 38 l13 0 l-6.5 16z" fill="#ff922b"/><path d="M292 37 l13 0 l-6.5 16z" fill="#ff6b6b"/><path d="M316 35 l13 0 l-6.5 16z" fill="#ffd43b"/><path d="M340 33 l13 0 l-6.5 16z" fill="#4dabf7"/><path d="M364 30 l13 0 l-6.5 16z" fill="#51cf66"/><path d="M388 27 l13 0 l-6.5 16z" fill="#b197fc"/></g>
@@ -567,7 +609,10 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
       </g>
       <g class="scene" data-scene="carrossel" style="display:none">
       <!-- CARROSSEL -->
-      <rect x="-2000" y="-2000" width="4400" height="2430" class="c-wall"/>
+      <!-- fundo foto -->
+      <image class="bg-day"   href="img/carrossel-dia.png"   x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice"/>
+      <image class="bg-night" href="img/carrossel-noite.png" x="0" y="0" width="400" height="640" preserveAspectRatio="xMidYMid slice" style="opacity:0"/>
+      <rect x="-2000" y="-2000" width="4400" height="2430" class="c-wall" style="opacity:0"/>
       <g class="sunG"><circle cx="330" cy="104" r="34" fill="#ffd43b" opacity=".35"/><circle cx="330" cy="104" r="22" fill="#ffd43b"/></g>
       <g class="moonG"><circle cx="330" cy="104" r="20" fill="#fff3bf"/><circle cx="340" cy="96" r="18" class="c-wall"/></g>
       <g class="starsG" fill="#fff"><circle cx="40" cy="200" r="2"/><circle cx="110" cy="120" r="1.6"/><circle cx="250" cy="90" r="2"/><circle cx="370" cy="220" r="1.6"/><circle cx="190" cy="110" r="1.4"/><circle cx="290" cy="180" r="1.4"/></g>
@@ -882,6 +927,7 @@ function applyRoom(){
   if(pu){wp.setAttribute('fill','url('+pu+')');wp.style.display=''}else wp.style.display='none';
   pk.classList.toggle('night',!!r.night);
   $$('.scene').forEach(function(g){g.style.display=g.dataset.scene===r.scene?'':'none'});
+  $('#app').classList.add('has-bg-photo');
   $$('.scene[data-scene="'+r.scene+'"] .hot').forEach(function(x){if(x._hit)x._hit()});
 }
 var decorOpen=false;
