@@ -85,10 +85,10 @@ button{cursor:pointer}
 .ball:focus-visible{outline:3px solid #5c7cfa}
 @media (prefers-reduced-motion:reduce){.curtain,.ball.bounce{animation:none}}
 
-/* botões de navegação sobre a foto */
-#navpills{position:absolute;left:0;right:0;bottom:52%;display:flex;flex-wrap:wrap;justify-content:space-between;padding:0 8px;gap:8px;pointer-events:none;z-index:3}
+/* quadrante de navegação sobre a foto */
+#navpills{position:absolute;left:12px;right:12px;bottom:22%;background:rgba(20,25,60,.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:20px;border:2px solid rgba(255,255,255,.18);padding:14px 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;pointer-events:none;z-index:3;box-shadow:0 8px 32px rgba(0,0,0,.4)}
 #navpills[hidden]{display:none}
-#navpills .npill{pointer-events:auto;border:0;border-radius:999px;background:rgba(30,40,80,.82);color:#fff;font-family:var(--display);font-weight:700;font-size:1rem;padding:8px 14px;display:flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(0,0,0,.3);cursor:pointer;flex:0 0 calc(50% - 4px)}
+#navpills .npill{pointer-events:auto;border:1px solid rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.13);color:#fff;font-family:var(--display);font-weight:700;font-size:1rem;padding:12px 10px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;text-shadow:0 1px 3px rgba(0,0,0,.5)}
 #navpills .npill:active{transform:scale(.96)}
 .topbtns{display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:auto}
 .decobtn{border:0;border-radius:999px;background:#fff;box-shadow:0 3px 0 rgba(43,58,90,.18);display:flex;flex-direction:column;align-items:center;padding:6px 8px 4px;font-weight:800;font-size:.78rem;min-width:62px;min-height:56px;gap:1px}
