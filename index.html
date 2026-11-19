@@ -52,7 +52,7 @@ button{cursor:pointer}
 
 /* ---------- Quarto ---------- */
 #park{position:absolute;inset:0}
-#parkBg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0;transition:opacity .6s}
+#parkBg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0;transition:opacity .6s;pointer-events:none}
 #parkSvg{width:100%;height:100%;display:block;overflow:visible;position:relative;z-index:1}
 /* telas baixas: o cenário começa abaixo do título para nada ficar coberto */
 @media (max-height:760px){#parkSvg{height:calc(100% - var(--toph,118px));margin-top:var(--toph,118px)}}
