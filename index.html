@@ -104,7 +104,7 @@ button{cursor:pointer}
 #app.decorating #stickers{bottom:54%;pointer-events:auto;z-index:3}
 .stk{position:absolute;transform:translate(-50%,-50%);line-height:1;user-select:none;-webkit-user-select:none;touch-action:none;filter:drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 4px 4px rgba(0,0,0,.35))}
 #app.decorating .stk{cursor:grab}
-.stk .stkx{display:none;position:absolute;top:-6px;right:-10px;width:24px;height:24px;border-radius:50%;border:2px solid #fff;background:#e03131;color:#fff;font:800 14px/20px var(--body);text-align:center;padding:0;filter:none}
+.stk .stkx{display:none;position:absolute;top:-12px;right:-14px;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:#e03131;color:#fff;font:800 14px/20px var(--body);text-align:center;padding:0;filter:none}
 #app.decorating .stk .stkx{display:block}
 .stkgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .stkbtn{border:3px solid var(--line);background:#fff;border-radius:16px;font-size:2rem;line-height:1;padding:8px 0;box-shadow:0 3px 0 var(--line)}
@@ -1022,29 +1022,36 @@ function clampStk(s){var v=visRange();s.x=Math.max(v.x0,Math.min(v.x1,s.x));s.y=
 function renderStickers(){
   var box=$('#stickers');if(!box)return;
   var list=myStickers(),R=imgRect(),L=$('#stickers').getBoundingClientRect(),P=$('#park').getBoundingClientRect();
-  var ox=L.left-P.left,oy=L.top-P.top,fs=Math.round(R.w*0.095);
+  var ox=L.left-P.left,oy=L.top-P.top,fs=Math.round(Math.max(R.w*0.095,decorOpen?40:0));
   box.innerHTML=list.map(function(s,i){
     clampStk(s);
-    return '<div class="stk" data-i="'+i+'" style="left:'+(R.x-ox+s.x*R.w)+'px;top:'+(R.y-oy+s.y*R.h)+'px;font-size:'+fs+'px">'+s.e+'<button class="stkx" data-act="stk-del" data-i="'+i+'" aria-label="Tirar adesivo">✕</button></div>';
+    return '<div class="stk" data-i="'+i+'" style="left:'+(R.x-ox+s.x*R.w)+'px;top:'+(R.y-oy+s.y*R.h)+'px;font-size:'+fs+'px">'+s.e+'<span class="stkx" role="button" aria-label="Tirar adesivo">✕</span></div>';
   }).join('');
 }
 (function(){
   var drag=null;
   document.addEventListener('pointerdown',function(ev){
     if(!decorOpen)return;var el=ev.target.closest&&ev.target.closest('.stk');
-    if(!el||ev.target.closest('.stkx'))return;
-    ev.preventDefault();drag={el:el,i:+el.dataset.i,id:ev.pointerId};
+    if(!el)return;
+    ev.preventDefault();drag={el:el,i:+el.dataset.i,id:ev.pointerId,sx:ev.clientX,sy:ev.clientY,moved:false,onX:!!ev.target.closest('.stkx')};
     try{el.setPointerCapture(ev.pointerId)}catch(e){}
   });
   document.addEventListener('pointermove',function(ev){
     if(!drag||ev.pointerId!==drag.id)return;
+    if(!drag.moved&&Math.abs(ev.clientX-drag.sx)+Math.abs(ev.clientY-drag.sy)<8)return;
+    drag.moved=true;
     var R=imgRect(),P=$('#park').getBoundingClientRect(),s=myStickers()[drag.i];if(!s)return;
     s.x=Math.max(0.03,Math.min(0.97,(ev.clientX-P.left-R.x)/R.w));
     s.y=Math.max(0.03,Math.min(0.97,(ev.clientY-P.top-R.y)/R.h));clampStk(s);
     var L=$('#stickers').getBoundingClientRect();
     drag.el.style.left=(R.x-(L.left-P.left)+s.x*R.w)+'px';drag.el.style.top=(R.y-(L.top-P.top)+s.y*R.h)+'px';
   });
-  function end(ev){if(drag&&ev.pointerId===drag.id){drag=null;save()}}
+  function end(ev){
+    if(!drag||ev.pointerId!==drag.id)return;
+    var d=drag;drag=null;
+    if(!d.moved&&d.onX&&ev.type==='pointerup'){myStickers().splice(d.i,1);save();renderStickers();renderDecor();pop('tap');return}
+    if(d.moved){save();pop('tap')}
+  }
   document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
   window.addEventListener('resize',function(){renderStickers()});
 })();
