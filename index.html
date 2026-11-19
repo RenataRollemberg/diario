@@ -374,7 +374,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
 
 <div id="app">
   <main id="park" aria-label="Meu quarto">
-    <svg id="parkSvg" viewBox="0 0 400 640" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Meu quarto">
+    <svg id="parkSvg" viewBox="0 0 400 640" preserveAspectRatio="xMidYMid slice" role="group" aria-label="Meu quarto">
       <defs>
         <linearGradient id="skyg" gradientUnits="userSpaceOnUse" x1="0" y1="68" x2="0" y2="188">
           <stop offset="0" stop-color="#74c0fc"/><stop offset="1" stop-color="#d0ebff"/>
@@ -446,7 +446,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <rect x="304" y="318" width="13" height="42" rx="2" fill="#b197fc"/><rect x="319" y="312" width="10" height="48" rx="2" fill="#ff6b6b"/><rect x="331" y="320" width="12" height="40" rx="2" fill="#3bc9db"/><circle cx="360" cy="348" r="12" fill="#74c0fc"/><path d="M350 344 q10 -6 20 0 M352 354 q8 4 16 0" stroke="#40c057" stroke-width="3" fill="none"/><rect x="356" y="358" width="8" height="4" fill="#495057"/>
           <rect x="306" y="376" width="44" height="40" rx="4" fill="#4c6ef5"/><rect x="310" y="380" width="36" height="32" rx="2" fill="#5c7cfa"/><path d="M328 386 l3 6 6.5.8-4.8 4.4 1.2 6.4-5.9-3.2-5.9 3.2 1.2-6.4-4.8-4.4 6.5-.8z" fill="#ffd43b"/><rect x="354" y="382" width="10" height="34" rx="2" fill="#f06595"/><rect x="366" y="386" width="7" height="30" rx="2" fill="#ffe066"/>
         </g>
-        <g class="pill"><rect x="290" y="434" width="96" height="26" rx="13"/><text x="338" y="453">Meus dias</text></g>
+        <g class="pill"><rect x="216" y="330" width="96" height="26" rx="13"/><text x="264" y="349">Meus dias</text></g>
       </g>
 
       <!-- escrivaninha: escrever -->
@@ -464,7 +464,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <line x1="128" y1="318" x2="156" y2="300" stroke="#ffd43b" stroke-width="5" stroke-linecap="round"/><path d="M128 318 l-5 4 2-6z" fill="#2b3a5a"/>
           <rect x="146" y="312" width="16" height="18" rx="3" fill="#ff8787"/><line x1="150" y1="312" x2="148" y2="298" stroke="#69db7c" stroke-width="3" stroke-linecap="round"/><line x1="156" y1="312" x2="159" y2="296" stroke="#4dabf7" stroke-width="3" stroke-linecap="round"/>
         </g>
-        <g class="pill"><rect x="47" y="434" width="96" height="26" rx="13"/><text x="95" y="453">Escrever</text></g>
+        <g class="pill"><rect x="6" y="330" width="96" height="26" rx="13"/><text x="54" y="349">Escrever</text></g>
       </g>
 
       <!-- tapete -->
@@ -485,7 +485,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <g fill="#fff" opacity=".35"><circle cx="210" cy="516" r="4"/><circle cx="240" cy="528" r="4"/><circle cx="270" cy="514" r="4"/><circle cx="300" cy="528" r="4"/></g>
           <rect x="314" y="484" width="16" height="80" rx="7" fill="#c98e57" stroke="#8f5a2a" stroke-width="3"/>
         </g>
-        <g class="pill"><rect x="176" y="584" width="88" height="26" rx="13"/><text x="220" y="603">Amigos</text></g>
+        <g class="pill"><rect x="116" y="365" width="88" height="26" rx="13"/><text x="160" y="384">Amigos</text></g>
       </g>
 
       <!-- bola -->
@@ -502,8 +502,8 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <path d="M333 549 H379 L373 600 H339 Z" fill="#5c7cfa"/>
           <line x1="347" y1="558" x2="349" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/><line x1="356" y1="558" x2="356" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/><line x1="365" y1="558" x2="363" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/>
         </g>
-        <g class="pill"><rect x="312" y="606" width="86" height="26" rx="13"/><text x="355" y="625">Lixeira</text></g>
       </g>
+      <g class="hot pill-trash" data-go="trash" tabindex="0" role="button" aria-label="Lixeira"><g class="pill"><rect x="270" y="365" width="86" height="26" rx="13"/><text x="313" y="384">Lixeira</text></g></g>
 
       <!-- noite -->
       <rect class="dim" x="-2000" y="-2000" width="4400" height="4400" fill="#0b1440"/>
@@ -564,7 +564,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <rect x="328" y="368" width="20" height="26" rx="4" fill="#ffd43b" stroke="#e67700" stroke-width="2"/><circle cx="338" cy="380" r="3" fill="#5f3dc4"/>
           <path d="M338 322 l3.5 7 7.6 1-5.6 5.2 1.4 7.5-6.9-3.7-6.9 3.7 1.4-7.5-5.6-5.2 7.6-1z" fill="#ffd43b" stroke="#e67700" stroke-width="1.5"/>
         </g>
-        <g class="pill"><rect x="290" y="434" width="96" height="26" rx="13"/><text x="338" y="453">Meus dias</text></g>
+        <g class="pill"><rect x="216" y="330" width="96" height="26" rx="13"/><text x="264" y="349">Meus dias</text></g>
       </g>
 
       <!-- palco: escrever -->
@@ -577,7 +577,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <path d="M70 328 Q82 318 95 326 Q108 318 120 328 Z" fill="#fff" stroke="#a5b4fc" stroke-width="2"/>
           <line x1="150" y1="398" x2="150" y2="330" stroke="#495057" stroke-width="4"/><rect x="144" y="314" width="12" height="20" rx="6" fill="#343a40"/>
         </g>
-        <g class="pill"><rect x="47" y="434" width="96" height="26" rx="13"/><text x="95" y="453">Escrever</text></g>
+        <g class="pill"><rect x="6" y="330" width="96" height="26" rx="13"/><text x="54" y="349">Escrever</text></g>
       </g>
 
       <!-- arquibancada: amigos -->
@@ -588,7 +588,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <line x1="284" y1="320" x2="284" y2="428" stroke="#495057" stroke-width="4"/><path d="M180 396 L216 372 L252 348 L284 324" stroke="#495057" stroke-width="3" fill="none"/>
           <path d="M284 320 v-22 l18 6 -18 6" fill="#ffd43b" stroke="#2b3a5a" stroke-width="1.5"/>
         </g>
-        <g class="pill"><rect x="186" y="434" width="88" height="26" rx="13"/><text x="230" y="453">Amigos</text></g>
+        <g class="pill"><rect x="116" y="365" width="88" height="26" rx="13"/><text x="160" y="384">Amigos</text></g>
       </g>
 
       <!-- pedestal com bola no picadeiro -->
@@ -604,8 +604,8 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <path d="M333 549 H379 L373 600 H339 Z" fill="#5c7cfa"/>
           <line x1="347" y1="558" x2="349" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/><line x1="356" y1="558" x2="356" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/><line x1="365" y1="558" x2="363" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/>
         </g>
-        <g class="pill"><rect x="312" y="606" width="86" height="26" rx="13"/><text x="355" y="625">Lixeira</text></g>
       </g>
+      <g class="hot pill-trash" data-go="trash" tabindex="0" role="button" aria-label="Lixeira"><g class="pill"><rect x="270" y="365" width="86" height="26" rx="13"/><text x="313" y="384">Lixeira</text></g></g>
       </g>
       <g class="scene" data-scene="carrossel" style="display:none">
       <!-- CARROSSEL -->
@@ -649,7 +649,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <path d="M96 240 a13 13 0 0 0 26 0z" fill="#fff"/><path d="M122 240 a13 13 0 0 0 26 0z" class="c-bed"/><path d="M148 240 a13 13 0 0 0 26 0z" fill="#fff"/><path d="M174 240 a13 13 0 0 0 26 0z" class="c-bed"/><path d="M200 240 a13 13 0 0 0 26 0z" fill="#fff"/><path d="M226 240 a13 13 0 0 0 26 0z" class="c-bed"/><path d="M252 240 a13 13 0 0 0 26 0z" fill="#fff"/><path d="M278 240 a13 13 0 0 0 26 0z" class="c-bed"/>
           <line x1="200" y1="150" x2="200" y2="122" stroke="#495057" stroke-width="3"/><path d="M200 122 l20 7 -20 7z" fill="#ff6b6b"/>
         </g>
-        <g class="pill"><rect x="156" y="502" width="88" height="26" rx="13"/><text x="200" y="521">Amigos</text></g>
+        <g class="pill"><rect x="116" y="365" width="88" height="26" rx="13"/><text x="160" y="384">Amigos</text></g>
       </g>
 
       <!-- barraquinha: escrever -->
@@ -665,7 +665,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <path d="M46 350 Q61 341 76 348 Q91 341 106 350 Z" fill="#fff" stroke="#a5b4fc" stroke-width="2"/>
           <text x="78" y="404" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#c92a2a" text-anchor="middle">DIÁRIO</text>
         </g>
-        <g class="pill"><rect x="30" y="434" width="96" height="26" rx="13"/><text x="78" y="453">Escrever</text></g>
+        <g class="pill"><rect x="6" y="330" width="96" height="26" rx="13"/><text x="54" y="349">Escrever</text></g>
       </g>
 
       <!-- banco: meus dias -->
@@ -675,7 +675,7 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <rect x="318" y="412" width="7" height="16" rx="2" fill="#8f5a2a"/><rect x="377" y="412" width="7" height="16" rx="2" fill="#8f5a2a"/>
           <rect x="330" y="384" width="44" height="20" rx="4" fill="#4c6ef5"/><rect x="333" y="387" width="18" height="14" rx="2" fill="#fff"/><rect x="353" y="387" width="18" height="14" rx="2" fill="#fff"/>
         </g>
-        <g class="pill"><rect x="292" y="434" width="96" height="26" rx="13"/><text x="340" y="453">Meus dias</text></g>
+        <g class="pill"><rect x="216" y="330" width="96" height="26" rx="13"/><text x="264" y="349">Meus dias</text></g>
       </g>
       
       <g class="ball" tabindex="0" role="button" aria-label="Bola: toque para quicar">
@@ -688,8 +688,8 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
           <path d="M333 549 H379 L373 600 H339 Z" fill="#5c7cfa"/>
           <line x1="347" y1="558" x2="349" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/><line x1="356" y1="558" x2="356" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/><line x1="365" y1="558" x2="363" y2="592" stroke="#b6c4ff" stroke-width="3" stroke-linecap="round"/>
         </g>
-        <g class="pill"><rect x="312" y="606" width="86" height="26" rx="13"/><text x="355" y="625">Lixeira</text></g>
       </g>
+      <g class="hot pill-trash" data-go="trash" tabindex="0" role="button" aria-label="Lixeira"><g class="pill"><rect x="270" y="365" width="86" height="26" rx="13"/><text x="313" y="384">Lixeira</text></g></g>
       <rect class="dim" x="-2000" y="-2000" width="4400" height="4400" fill="#0b1440"/>
       <g class="glow"><circle class="bulb" cx="12" cy="32" r="11" opacity=".55" fill="#ffd43b"/><circle class="bulb" cx="40" cy="38" r="11" opacity=".55" fill="#ff6b6b"/><circle class="bulb" cx="68" cy="43" r="11" opacity=".55" fill="#4dabf7"/><circle class="bulb" cx="96" cy="47" r="11" opacity=".55" fill="#51cf66"/><circle class="bulb" cx="124" cy="50" r="11" opacity=".55" fill="#b197fc"/><circle class="bulb" cx="152" cy="52" r="11" opacity=".55" fill="#ffd43b"/><circle class="bulb" cx="180" cy="53" r="11" opacity=".55" fill="#ff6b6b"/><circle class="bulb" cx="208" cy="53" r="11" opacity=".55" fill="#4dabf7"/><circle class="bulb" cx="236" cy="53" r="11" opacity=".55" fill="#51cf66"/><circle class="bulb" cx="264" cy="51" r="11" opacity=".55" fill="#b197fc"/><circle class="bulb" cx="292" cy="48" r="11" opacity=".55" fill="#ffd43b"/><circle class="bulb" cx="320" cy="45" r="11" opacity=".55" fill="#ff6b6b"/><circle class="bulb" cx="348" cy="40" r="11" opacity=".55" fill="#4dabf7"/><circle class="bulb" cx="376" cy="35" r="11" opacity=".55" fill="#51cf66"/><circle class="bulb" cx="12" cy="32" r="5" fill="#ffd43b"/><circle class="bulb" cx="40" cy="38" r="5" fill="#ff6b6b"/><circle class="bulb" cx="68" cy="43" r="5" fill="#4dabf7"/><circle class="bulb" cx="96" cy="47" r="5" fill="#51cf66"/><circle class="bulb" cx="124" cy="50" r="5" fill="#b197fc"/><circle class="bulb" cx="152" cy="52" r="5" fill="#ffd43b"/><circle class="bulb" cx="180" cy="53" r="5" fill="#ff6b6b"/><circle class="bulb" cx="208" cy="53" r="5" fill="#4dabf7"/><circle class="bulb" cx="236" cy="53" r="5" fill="#51cf66"/><circle class="bulb" cx="264" cy="51" r="5" fill="#b197fc"/><circle class="bulb" cx="292" cy="48" r="5" fill="#ffd43b"/><circle class="bulb" cx="320" cy="45" r="5" fill="#ff6b6b"/><circle class="bulb" cx="348" cy="40" r="5" fill="#4dabf7"/><circle class="bulb" cx="376" cy="35" r="5" fill="#51cf66"/></g>
       <circle class="glow" cx="200" cy="330" r="120" fill="url(#glowG)" opacity=".5"/>
