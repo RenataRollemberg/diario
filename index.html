@@ -167,10 +167,13 @@ button{cursor:pointer}
 .pat-coracoes .pv{background-image:radial-gradient(circle at 30% 40%,var(--d) 2.5px,transparent 3px),radial-gradient(circle at 70% 40%,var(--d) 2.5px,transparent 3px);background-size:11px 11px}
 .char.mini{padding:4px 2px;font-size:.8rem}
 
-.top{position:absolute;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top,0px) + 6px) 16px 0;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
+.top{position:absolute;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top,0px) + 6px) 16px 0;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:4}
 .top h1{margin:0;font-family:var(--display);font-weight:800;font-size:2.1rem;line-height:1.1;color:var(--ink);text-shadow:0 2px 0 rgba(255,255,255,.7)}
 .top p{margin:0;font-weight:700;color:var(--ink);opacity:.85}
 .gear{pointer-events:auto;width:48px;height:48px;border-radius:50%;border:0;background:#fff;box-shadow:0 3px 0 rgba(43,58,90,.18);display:grid;place-items:center}
+.gear svg,.decobtn svg,.decobtn span{pointer-events:none}
+#parkSvg{pointer-events:none}
+#parkSvg .hot{pointer-events:auto}
 
 /* ---------- Painéis ---------- */
 #sheet{position:absolute;inset:0;background:var(--paper);overflow-y:auto;overscroll-behavior:contain}
