@@ -85,6 +85,11 @@ button{cursor:pointer}
 .ball:focus-visible{outline:3px solid #5c7cfa}
 @media (prefers-reduced-motion:reduce){.curtain,.ball.bounce{animation:none}}
 
+/* botões de navegação sobre a foto */
+#navpills{position:absolute;left:0;right:0;bottom:52%;display:flex;flex-wrap:wrap;justify-content:space-between;padding:0 8px;gap:8px;pointer-events:none;z-index:3}
+#navpills[hidden]{display:none}
+#navpills .npill{pointer-events:auto;border:0;border-radius:999px;background:rgba(30,40,80,.82);color:#fff;font-family:var(--display);font-weight:700;font-size:1rem;padding:8px 14px;display:flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(0,0,0,.3);cursor:pointer;flex:0 0 calc(50% - 4px)}
+#navpills .npill:active{transform:scale(.96)}
 .topbtns{display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:auto}
 .decobtn{border:0;border-radius:999px;background:#fff;box-shadow:0 3px 0 rgba(43,58,90,.18);display:flex;flex-direction:column;align-items:center;padding:6px 8px 4px;font-weight:800;font-size:.78rem;min-width:62px;min-height:56px;gap:1px}
 #app.decorating .top{display:none}
@@ -111,6 +116,8 @@ button{cursor:pointer}
 /* pill labels ficam legíveis sobre as fotos */
 .pill rect{fill:rgba(43,58,90,.82)}
 .pill-icon{font-size:14px}
+/* oculta pills SVG — substituídos por #navpills HTML */
+.pill{display:none}
 
 /* esconde fundos e decoração SVG — a foto é o fundo */
 .scene .c-wall,.scene .c-floor,.scene .c-fline{opacity:0}
@@ -696,6 +703,12 @@ textarea.notebook{min-height:calc(1.6em * 7 + 16px)}
       <circle class="glow" cx="200" cy="330" r="120" fill="url(#glowG)" opacity=".5"/>
       </g>
     </svg>
+    <div id="navpills">
+      <button class="npill" data-go="write">✏️ Escrever</button>
+      <button class="npill" data-go="days">📅 Meus dias</button>
+      <button class="npill" data-go="friends">👫 Amigos</button>
+      <button class="npill" data-go="trash">🗑️ Lixeira</button>
+    </div>
     <div class="top">
       <div><h1>Meu Diário</h1><p id="hello">Toque nas coisas do quarto!</p><div id="stars" class="stars" role="status"></div></div>
       <div class="topbtns"><button class="gear" data-act="go" data-v="mom" aria-label="Área da mamãe">
@@ -869,7 +882,8 @@ function head(title,back){
 }
 function render(){
   var sh=$('#sheet');
-  if(view==='park'){sh.hidden=true;sh.innerHTML='';sh.removeAttribute('data-theme');$('#app').classList.remove('cover');updatePark();return}
+  if(view==='park'){sh.hidden=true;sh.innerHTML='';sh.removeAttribute('data-theme');$('#app').classList.remove('cover');var np=$('#navpills');if(np)np.hidden=false;updatePark();return}
+  var np2=$('#navpills');if(np2)np2.hidden=true;
   sh.setAttribute('data-theme',(THEME[view]||['sky'])[0]);
   $('#app').classList.toggle('cover',view==='intro'||view==='consent');
   sh.hidden=false;sh.innerHTML=VIEWS[view](vArg);sh.scrollTop=0;
@@ -1637,6 +1651,9 @@ $$('.hot').forEach(function(h){
   };
   h.addEventListener('click',open);
   h.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();open()}});
+});
+$$('#navpills .npill').forEach(function(btn){
+  btn.addEventListener('click',function(){if(!decorOpen)go(btn.dataset.go)});
 });
 document.addEventListener('keydown',function(ev){
   if(ev.key==='Enter'&&view==='welcome'&&ev.target.id==='nm'){ev.preventDefault();var b=$('[data-act=enter]');if(b)b.click();return}
